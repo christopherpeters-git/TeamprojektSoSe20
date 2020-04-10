@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	_ "time"
 )
@@ -17,14 +16,14 @@ var configSavePath = "./configs/"
 var configExtension = ".conf"
 
 type Config struct {
-	hash         uint64 `json:"hash"`
-	creationDate string `json:"creationDate"`
-	fileUrl      string `json:"fileUrl"`
+	Hash         uint64
+	Creationdate string
+	Fileurl      string
 }
 
 func ConfigInit(c *Config) {
-	c.hash = CalcHash(c)
-	c.fileUrl = configSavePath + strconv.FormatUint(c.hash, 10) + configExtension
+	c.Hash = CalcHash(c)
+	c.Fileurl = configSavePath + strconv.FormatUint(c.Hash, 10) + configExtension
 }
 
 func main() {
@@ -42,49 +41,43 @@ func CalcHash(c *Config) uint64 {
 
 func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//Load config-entry array from json
-	jsonFile, err := os.Open("configs.json")
+	jsonData, err := ioutil.ReadFile("configs.json")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	defer jsonFile.Close()
-
-	byteArray, err := ioutil.ReadAll(jsonFile)
+	var configEntries []Config
+	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
-	var configEntrys []Config
-	json.Unmarshal(byteArray, &configEntrys)
-	//TODO
 	//Create and init config-entry
 	var newConfig Config
 	ConfigInit(&newConfig)
 	//Add config-entry to config array
-	configEntrys = append(configEntrys, newConfig)
+	configEntries = append(configEntries, newConfig)
 	//write config-entry array to json
-	newJson, err := json.Marshal(configEntrys)
+	newJson, err := json.MarshalIndent(configEntries, "", " ")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	//save config to fileURL
 	ioutil.WriteFile("configs.json", newJson, 0644)
 	//create config file in configSavePath
-	fmt.Print(readRequestBody(r))
-	ioutil.WriteFile(newConfig.fileUrl, readRequestBody(r), 0644)
-
-	response, err := json.Marshal(newConfig)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	fmt.Fprint(w, string(response))
+	message := readRequestBody(r)
+	ioutil.WriteFile(newConfig.Fileurl, []byte(message), 0644)
+	fmt.Fprint(w, message)
 }
 
-func readRequestBody(r *http.Request) []byte {
-	bodyInBytes, err := ioutil.ReadAll(r.Body)
+func readRequestBody(r *http.Request) string {
+	message, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	return bodyInBytes
+	log.Print(r.ContentLength)
+	log.Print(r.Method)
+	log.Print(r.RequestURI)
+	log.Print(string(message))
+	return string(message)
 }
 
 func LoadConfig(w http.ResponseWriter, r *http.Request) {
