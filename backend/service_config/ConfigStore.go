@@ -10,20 +10,20 @@ import (
 	_ "time"
 )
 
-var saveUrlPattern = "/api/config/save/"
+var saveUrlPattern = "/api/config/save"
 var loadUrlPattern = "/api/config/load/"
 var configSavePath = "./configs/"
 var configExtension = ".conf"
 
 type Config struct {
 	Hash         uint64
-	Creationdate string
-	Fileurl      string
+	CreationDate string
+	FileUrl      string
 }
 
 func ConfigInit(c *Config) {
 	c.Hash = CalcHash(c)
-	c.Fileurl = configSavePath + strconv.FormatUint(c.Hash, 10) + configExtension
+	c.FileUrl = configSavePath + strconv.FormatUint(c.Hash, 10) + configExtension
 }
 
 func main() {
@@ -64,7 +64,7 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	ioutil.WriteFile("configs.json", newJson, 0644)
 	//create config file in configSavePath
 	message := readRequestBody(r)
-	ioutil.WriteFile(newConfig.Fileurl, []byte(message), 0644)
+	ioutil.WriteFile(newConfig.FileUrl, []byte(message), 0644)
 	fmt.Fprint(w, message)
 }
 
