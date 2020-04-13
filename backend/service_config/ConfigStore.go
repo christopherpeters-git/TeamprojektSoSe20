@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -79,9 +78,9 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//create config file in configSavePath
 	ioutil.WriteFile(newConfig.FileUrl, []byte(message), 0644)
 	//send back the new hash
-	b := make([]byte, 64)
-	binary.LittleEndian.PutUint64(b, newConfig.Hash)
-	w.Write(b)
+	strHash := strconv.FormatUint(newConfig.Hash, 10)
+	log.Print("Converted Hash: " + strHash)
+	w.Write([]byte(strHash))
 }
 
 func readRequestBody(r *http.Request) string {
