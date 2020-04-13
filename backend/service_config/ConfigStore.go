@@ -26,30 +26,7 @@ type Config struct {
 	FileUrl      string
 }
 
-func ConfigInit(c *Config, id uint64) {
-	//TODO save date in config
-	var time time.Time = time.Now()
-	c.CreationDate = time.String()
-	c.ID = id
-	c.FileUrl = configSavePath + strconv.FormatUint(c.ID, 10) + configExtension
-	c.Password = generatePassword(passwordLength)
-}
-
-func randomInt(min, max int) int {
-	return min + rand.Intn(max-min)
-}
-
-func generatePassword(len int) string {
-	rand.Seed(time.Now().Unix())
-	bytes := make([]byte, len)
-	for i := 0; i < len; i++ {
-		bytes[i] = byte(randomInt(65, 122))
-	}
-	return string(bytes)
-}
-
 func main() {
-
 	//Creates a log file
 	f, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -107,15 +84,7 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Answered save-request successfully...")
 }
 
-func readRequestBody(r *http.Request) (string, error) {
-	message, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Println("Request could not be read: " + err.Error())
-		return "Null", err
-	}
-	return string(message), err
-}
-
+//Returns the right file depending on the entries in config.json
 func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started answering load-request...")
 	//
@@ -179,8 +148,42 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Answered load-request successfully...")
 }
 
-func getDownloadLink() {
+func sendDownloadLinkOfConfig() {
 	//TODO
+}
+
+func readRequestBody(r *http.Request) (string, error) {
+	message, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Request could not be read: " + err.Error())
+		return "Null", err
+	}
+	return string(message), err
+}
+
+//Initalizes the config
+func ConfigInit(c *Config, id uint64) {
+	//TODO save date in config
+	var time time.Time = time.Now()
+	c.CreationDate = time.String()
+	c.ID = id
+	c.FileUrl = configSavePath + strconv.FormatUint(c.ID, 10) + configExtension
+	c.Password = generatePassword(passwordLength)
+}
+
+//Generates a random integer from min to max
+func randomInt(min, max int) int {
+	return min + rand.Intn(max-min)
+}
+
+//Generates a random password with length len
+func generatePassword(len int) string {
+	rand.Seed(time.Now().Unix())
+	bytes := make([]byte, len)
+	for i := 0; i < len; i++ {
+		bytes[i] = byte(randomInt(65, 122))
+	}
+	return string(bytes)
 }
 
 /*
