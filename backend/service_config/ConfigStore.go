@@ -16,6 +16,7 @@ var saveUrlPattern = "/api/config/save"
 var loadUrlPattern = "/api/config/load/"
 var configSavePath = "./configs/"
 var configExtension = ".conf"
+var configFileName = "config.json"
 
 type Config struct {
 	Hash         uint64
@@ -24,6 +25,7 @@ type Config struct {
 }
 
 func ConfigInit(c *Config, data string) {
+	//TODO save date in config
 	c.Hash = CalcHash(data)
 	c.FileUrl = configSavePath + strconv.FormatUint(c.Hash, 10) + configExtension
 }
@@ -50,17 +52,17 @@ func CalcHash(data string) uint64 {
 }
 
 func SaveConfig(w http.ResponseWriter, r *http.Request) {
-	//TODO improver error handling
 	//TODO send back creationDate
 	//Load config-entry array from json
-	jsonData, err := ioutil.ReadFile("configs.json")
+	log.Println("Starting answering request...")
+	jsonData, err := ioutil.ReadFile(configFileName)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println("No " + configFileName + " found: " + err.Error())
 	}
 	var configEntries []Config
 	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println("Unmarshaling failed: " + err.Error())
 	}
 	//Create and init config-entry
 	var newConfig Config
@@ -71,16 +73,19 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//write config-entry array to json
 	newJson, err := json.MarshalIndent(configEntries, "", " ")
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print("Failed marshaling the new Config-array: " + err.Error())
+		w.WriteHeader(500)
+		return
 	}
 	//save config to fileURL
-	ioutil.WriteFile("configs.json", newJson, 0644)
+	ioutil.WriteFile(configFileName, newJson, 0644)
 	//create config file in configSavePath
 	ioutil.WriteFile(newConfig.FileUrl, []byte(message), 0644)
 	//send back the new hash
 	strHash := strconv.FormatUint(newConfig.Hash, 10)
 	log.Print("Converted Hash: " + strHash)
 	w.Write([]byte(strHash))
+	log.Println("Answered request successfully...")
 }
 
 func readRequestBody(r *http.Request) string {
@@ -114,6 +119,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	jsonData, err := ioutil.ReadFile("configs.json")
 	if err != nil {
 		log.Println(err.Error())
+		w.WriteHeader(500)
 		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
 		return
 	}
@@ -122,6 +128,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
 		log.Println(err.Error())
+		w.WriteHeader(500)
 		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
 		return
 	}
@@ -146,6 +153,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadFile(*foundPath)
 	if err != nil {
 		log.Println("URL in json but not found: " + err.Error())
+		w.WriteHeader(500)
 		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
 		return
 	}
