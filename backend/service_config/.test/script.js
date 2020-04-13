@@ -9,8 +9,8 @@ function sendPostSaveRequest() {
             if(200 == this.status){
                 document.getElementById("saveTest").innerHTML = this.responseText;
                 console.log(this.responseText)
-            }else if(404 == this.status || 500 == this.status){
-                alert(this.responseText)
+            }else{
+                alert("" + this.status + ":" +this.responseText)
             }
         }
     }
@@ -28,8 +28,8 @@ function sendGetLoadRequest(){
             if(200 == this.status){
                 document.getElementById("loadTest").innerHTML = this.responseText;
                 console.log(this.responseText)
-            }else if(404 == this.status || 500 == this.status){
-                alert(this.responseText)
+            }else{
+                alert("" + this.status + ":" +this.responseText)
             }
         }
         console.log(this.status)
@@ -37,17 +37,4 @@ function sendGetLoadRequest(){
     request.open("GET",targetUrl,true)
     console.log(targetUrl)
     request.send()
-}
-
-function sendGetRequest() {
-    const request = new XMLHttpRequest();
-    const json = {"name1":"Hallo", "name2":"Welt"}
-    request.onreadystatechange = function () {
-        if(4 == this.readyState && 200 == this.status){
-            document.getElementById("testarea").innerHTML = this.responseText;
-        }
-        console.log(this.status)
-    }
-    request.open("GET","/api/config/save",true)
-    request.send(JSON.stringify(json))
 }

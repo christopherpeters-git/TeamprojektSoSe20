@@ -45,11 +45,13 @@ func main() {
 	http.ListenAndServe(":99", nil)
 }
 
-func CalcHash(data string) uint64 {
+//Calculates a hash depending on the date and the data
+func CalcHash(data string, time string) uint64 {
 	//TODO find a fitting hash function
 	return 0
 }
 
+//Creates a new .conf file and places an entry in configs.json
 func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//TODO send back creationDate
 	//Load config-entry array from json
@@ -65,7 +67,12 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create and init config-entry
 	var newConfig Config
-	message := readRequestBody(r)
+	message, err := readRequestBody(r)
+	if err != nil {
+		log.Print("could not read the request-body: " + err.Error())
+		w.WriteHeader(400)
+		return
+	}
 	ConfigInit(&newConfig, message)
 	//Add config-entry to config array
 	configEntries = append(configEntries, newConfig)
@@ -87,12 +94,13 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Answered save-request successfully...")
 }
 
-func readRequestBody(r *http.Request) string {
+func readRequestBody(r *http.Request) (string, err) {
 	message, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print()
+		return "Null", err
 	}
-	return string(message)
+	return string(message), err
 }
 
 func LoadConfig(w http.ResponseWriter, r *http.Request) {
@@ -162,9 +170,5 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 }
 
 func getDownloadLink() {
-	//TODO
-}
-
-func saveLogs() {
 	//TODO
 }
