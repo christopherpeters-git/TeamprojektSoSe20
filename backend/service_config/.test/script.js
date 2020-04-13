@@ -19,10 +19,11 @@ function sendPostSaveRequest() {
     request.send(JSON.stringify(json))
 }
 
-function sendGetLoadRequest(){
+function sendPostLoadRequest(){
     const request = new XMLHttpRequest();
-    const hash = 0;
-    const targetUrl = "/api/config/load/" + hash.toString()
+    const targetUrl = "/api/config/load"
+    const id = document.getElementById("id").value
+    const pwd = document.getElementById("pwd").value
     request.onreadystatechange = function () {
         if(4 == this.readyState){
             if(200 == this.status){
@@ -32,9 +33,8 @@ function sendGetLoadRequest(){
                 alert("" + this.status + ":" +this.responseText)
             }
         }
-        console.log(this.status)
     }
-    request.open("GET",targetUrl,true)
-    console.log(targetUrl)
-    request.send()
+    request.open("POST",targetUrl,true)
+    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+    request.send("id="+id+"&"+"pwd="+pwd)
 }
