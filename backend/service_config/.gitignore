@@ -1,2 +1,4 @@
 # .conf files
 *.conf
+log.txt
+configs.json

@@ -5,9 +5,13 @@ function sendPostSaveRequest() {
     const request = new XMLHttpRequest();
     const json = {"name1":"Hallo", "name2":"Welt"}
     request.onreadystatechange = function () {
-        if(4 == this.readyState && 200 == this.status){
-            document.getElementById("saveTest").innerHTML = this.responseText;
-            console.log(this.responseText)
+        if(4 == this.readyState){
+            if(200 == this.status){
+                document.getElementById("saveTest").innerHTML = this.responseText;
+                console.log(this.responseText)
+            }else if(404 == this.status || 500 == this.status){
+                alert(this.responseText)
+            }
         }
     }
     request.open("POST","/api/config/save",true)
@@ -20,9 +24,13 @@ function sendGetLoadRequest(){
     const hash = 0;
     const targetUrl = "/api/config/load/" + hash.toString()
     request.onreadystatechange = function () {
-        if(4 == this.readyState && 200 == this.status){
-            document.getElementById("loadTest").innerHTML = this.responseText;
-            console.log(this.responseText)
+        if(4 == this.readyState){
+            if(200 == this.status){
+                document.getElementById("loadTest").innerHTML = this.responseText;
+                console.log(this.responseText)
+            }else if(404 == this.status || 500 == this.status){
+                alert(this.responseText)
+            }
         }
         console.log(this.status)
     }

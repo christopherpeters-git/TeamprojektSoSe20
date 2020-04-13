@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,7 +15,7 @@ var saveUrlPattern = "/api/config/save"
 var loadUrlPattern = "/api/config/load/"
 var configSavePath = "./configs/"
 var configExtension = ".conf"
-var configFileName = "config.json"
+var configJsonPath = "configs.json"
 
 type Config struct {
 	Hash         uint64
@@ -31,7 +30,6 @@ func ConfigInit(c *Config, data string) {
 }
 
 func main() {
-	fmt.Printf("%s\n", "config-service has started...")
 	//Creates a log file
 	f, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -39,6 +37,7 @@ func main() {
 	}
 	defer f.Close()
 	log.SetOutput(f)
+	log.Print("config-service has started...")
 
 	http.HandleFunc(saveUrlPattern, SaveConfig)
 	http.HandleFunc(loadUrlPattern, LoadConfig)
@@ -54,10 +53,10 @@ func CalcHash(data string) uint64 {
 func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//TODO send back creationDate
 	//Load config-entry array from json
-	log.Println("Starting answering request...")
-	jsonData, err := ioutil.ReadFile(configFileName)
+	log.Println("Started answering save-request...")
+	jsonData, err := ioutil.ReadFile(configJsonPath)
 	if err != nil {
-		log.Println("No " + configFileName + " found: " + err.Error())
+		log.Println("No " + configJsonPath + " found: " + err.Error())
 	}
 	var configEntries []Config
 	err = json.Unmarshal(jsonData, &configEntries)
@@ -78,14 +77,14 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//save config to fileURL
-	ioutil.WriteFile(configFileName, newJson, 0644)
+	ioutil.WriteFile(configJsonPath, newJson, 0644)
 	//create config file in configSavePath
 	ioutil.WriteFile(newConfig.FileUrl, []byte(message), 0644)
 	//send back the new hash
 	strHash := strconv.FormatUint(newConfig.Hash, 10)
 	log.Print("Converted Hash: " + strHash)
 	w.Write([]byte(strHash))
-	log.Println("Answered request successfully...")
+	log.Println("Answered save-request successfully...")
 }
 
 func readRequestBody(r *http.Request) string {
@@ -97,6 +96,7 @@ func readRequestBody(r *http.Request) string {
 }
 
 func LoadConfig(w http.ResponseWriter, r *http.Request) {
+	log.Println("Started answering load-request...")
 	//Extract hash from request-url
 	urlString := r.URL.String()
 	stringParts := strings.Split(urlString, "/")
@@ -116,7 +116,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Load configs.json
-	jsonData, err := ioutil.ReadFile("configs.json")
+	jsonData, err := ioutil.ReadFile(configJsonPath)
 	if err != nil {
 		log.Println(err.Error())
 		w.WriteHeader(500)
@@ -158,6 +158,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(data)
+	log.Println("Answered load-request successfully...")
 }
 
 func getDownloadLink() {
