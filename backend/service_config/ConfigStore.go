@@ -1,12 +1,15 @@
 package main
 
 import (
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
+	"strings"
 	_ "time"
 )
 
@@ -21,25 +24,35 @@ type Config struct {
 	FileUrl      string
 }
 
-func ConfigInit(c *Config) {
-	c.Hash = CalcHash(c)
+func ConfigInit(c *Config, data string) {
+	c.Hash = CalcHash(data)
 	c.FileUrl = configSavePath + strconv.FormatUint(c.Hash, 10) + configExtension
 }
 
 func main() {
 	fmt.Printf("%s\n", "config-service has started...")
+	//Creates a log file
+	f, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
+
 	http.HandleFunc(saveUrlPattern, SaveConfig)
 	http.HandleFunc(loadUrlPattern, LoadConfig)
 	http.Handle("/", http.FileServer(http.Dir("./.test/"))) //For testing purposes
 	http.ListenAndServe(":99", nil)
 }
 
-func CalcHash(c *Config) uint64 {
-	//TODO
+func CalcHash(data string) uint64 {
+	//TODO find a fitting hash function
 	return 0
 }
 
 func SaveConfig(w http.ResponseWriter, r *http.Request) {
+	//TODO improver error handling
+	//TODO send back creationDate
 	//Load config-entry array from json
 	jsonData, err := ioutil.ReadFile("configs.json")
 	if err != nil {
@@ -52,7 +65,8 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create and init config-entry
 	var newConfig Config
-	ConfigInit(&newConfig)
+	message := readRequestBody(r)
+	ConfigInit(&newConfig, message)
 	//Add config-entry to config array
 	configEntries = append(configEntries, newConfig)
 	//write config-entry array to json
@@ -63,9 +77,11 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//save config to fileURL
 	ioutil.WriteFile("configs.json", newJson, 0644)
 	//create config file in configSavePath
-	message := readRequestBody(r)
 	ioutil.WriteFile(newConfig.FileUrl, []byte(message), 0644)
-	fmt.Fprint(w, message)
+	//send back the new hash
+	b := make([]byte, 64)
+	binary.LittleEndian.PutUint64(b, newConfig.Hash)
+	w.Write(b)
 }
 
 func readRequestBody(r *http.Request) string {
@@ -73,15 +89,68 @@ func readRequestBody(r *http.Request) string {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	log.Print(r.ContentLength)
-	log.Print(r.Method)
-	log.Print(r.RequestURI)
-	log.Print(string(message))
 	return string(message)
 }
 
 func LoadConfig(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	//Extract hash from request-url
+	urlString := r.URL.String()
+	stringParts := strings.Split(urlString, "/")
+	if len(urlString) <= 0 || len(stringParts) <= 1 {
+		log.Println(r.URL.String())
+		w.WriteHeader(404)
+		w.Write([]byte("Invalid Url: " + r.URL.String()))
+		return
+	}
+
+	hash, err := strconv.ParseUint(stringParts[len(stringParts)-1], 10, 64)
+	if err != nil {
+		log.Println(err.Error())
+		w.WriteHeader(404)
+		w.Write([]byte("Invalid Hash: " + r.URL.String()))
+		return
+	}
+
+	//Load configs.json
+	jsonData, err := ioutil.ReadFile("configs.json")
+	if err != nil {
+		log.Println(err.Error())
+		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
+		return
+	}
+
+	var configEntries []Config
+	err = json.Unmarshal(jsonData, &configEntries)
+	if err != nil {
+		log.Println(err.Error())
+		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
+		return
+	}
+	//Search for config with hash
+	var foundPath *string
+	for _, element := range configEntries {
+		if element.Hash == hash {
+			foundPath = &element.FileUrl
+			break
+		}
+	}
+	if foundPath == nil {
+		hashStr := strconv.FormatUint(hash, 10)
+		w.WriteHeader(404)
+		log.Println("No Element with hash " + hashStr + " found")
+		w.Write([]byte("No saved config found for hash " + hashStr))
+		return
+	}
+	log.Println("URL found: " + *foundPath)
+
+	//Read and return data from found path
+	data, err := ioutil.ReadFile(*foundPath)
+	if err != nil {
+		log.Println("URL in json but not found: " + err.Error())
+		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
+		return
+	}
+	w.Write(data)
 }
 
 func getDownloadLink() {
