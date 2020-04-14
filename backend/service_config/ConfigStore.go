@@ -38,7 +38,7 @@ func main() {
 
 	http.HandleFunc(saveUrlPattern, SaveConfig)
 	http.HandleFunc(loadUrlPattern, LoadConfig)
-	http.Handle("/", http.FileServer(http.Dir("./.test/"))) //For testing purposes
+	http.Handle("/", http.FileServer(http.Dir("/.test/"))) //For testing purposes
 	http.ListenAndServe(":99", nil)
 }
 
