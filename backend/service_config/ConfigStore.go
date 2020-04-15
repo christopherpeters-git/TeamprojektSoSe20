@@ -27,8 +27,10 @@ type Config struct {
 }
 
 func main() {
+	//Create config-dir if not exisiting
+	createConfigFolderIfNotExisting()
 	//Creates a log file
-	f, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("./log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
@@ -38,13 +40,22 @@ func main() {
 
 	http.HandleFunc(saveUrlPattern, SaveConfig)
 	http.HandleFunc(loadUrlPattern, LoadConfig)
-	http.Handle("/", http.FileServer(http.Dir("/.test/"))) //For testing purposes
+	http.Handle("/", http.FileServer(http.Dir("test/")))
 	http.ListenAndServe(":99", nil)
+}
+
+func createConfigFolderIfNotExisting() {
+	_, err := os.Stat("configs")
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll("configs", 0755)
+		if errDir != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 //Creates a new .conf file and places an entry in configs.json
 func SaveConfig(w http.ResponseWriter, r *http.Request) {
-	//TODO send back creationDate
 	//Load config-entry array from json
 	log.Println("Started answering save-request...")
 	log.Println("Msg: " + strconv.FormatInt(r.ContentLength, 10))

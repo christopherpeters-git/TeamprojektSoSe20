@@ -2,3 +2,4 @@
 *.conf
 log.txt
 configs.json
+configs/
