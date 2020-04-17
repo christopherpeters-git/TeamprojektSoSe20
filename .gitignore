@@ -26,4 +26,7 @@ hs_err_pid*
 .idea/
 
 # Build directories
-.build/
+build/
+
+#log files
+log.txt
