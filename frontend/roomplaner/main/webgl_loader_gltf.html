@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - glTF loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+
+	<body>
+		<div id="info">
+			Roomplaner
+
+			<button id ="myBtn"> Test</button>
+		</div>
+
+		<script type="module">
+
+			import * as THREE from '../build/three.module.js';
+
+			import { OrbitControls } from './jsm/controls/OrbitControls.js';
+			import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+			import { RGBELoader } from './jsm/loaders/RGBELoader.js';
+			import { RoughnessMipmapper } from './jsm/utils/RoughnessMipmapper.js';
+
+
+			var container, controls;
+			var camera, scene, renderer;
+			var mesh;
+			var room;
+			var loader;
+			var check =true;
+
+			//###############################Keys##################################################################
+			var isShiftDown= false;
+			var pfeiltaste_Oben=false,pfeiltaste_Unten=false,pfeiltaste_Links=false,pfeiltaste_Rechts =false;
+
+			init();
+			render();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
+				camera.position.set( 15, 5, 3 );
+
+				scene = new THREE.Scene();
+
+
+				new RGBELoader()
+						.setDataType( THREE.UnsignedByteType )
+						.setPath( 'textures/' )
+						.load( 'lebombo_2k.hdr', function ( texture ) {
+
+							var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+
+							scene.background = envMap;
+							scene.environment = envMap;
+
+							texture.dispose();
+							pmremGenerator.dispose();
+
+							render();
+
+							// model
+
+							// use of RoughnessMipmapper is optional
+							var roughnessMipmapper = new RoughnessMipmapper( renderer );
+
+							loader = new GLTFLoader();
+							loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
+								room = gltf.scene;
+								room.rotation.y +=-0.4;
+								room=room.children[2];
+								//room.scale.add(room.scale,room.scale); sehr wichtig*****
+								//room.visible=false; sehr wichtig***
+
+								console.log(room);
+
+
+								//room.nodes[1].scale(0,0,0);
+								scene.add( gltf.scene );
+								render();
+
+							} );
+						} );
+
+
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				renderer.toneMappingExposure = 0.8;
+				renderer.outputEncoding = THREE.sRGBEncoding;
+				container.appendChild( renderer.domElement );
+
+				var pmremGenerator = new THREE.PMREMGenerator( renderer );
+				pmremGenerator.compileEquirectangularShader();
+				controls = new OrbitControls( camera, renderer.domElement );
+				controls.addEventListener( 'change', render ); // use if there is no animation loop
+				controls.minDistance = 2;
+				controls.maxDistance = 15;
+				controls.target.set( 0, 0, - 0.2 );
+				controls.update();
+
+
+				window.addEventListener( 'resize', onWindowResize, false );
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				document.getElementById("myBtn").addEventListener("click",f,false);
+			    document.addEventListener( 'keydown', onDocumentKeyDown, false );
+				document.addEventListener( 'keyup', onDocumentKeyUp, false );
+				//document.addEventListener('mousemove',onDocumentMouseMove,false);
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				render();
+
+			}
+
+			function onDocumentMouseDown( event ) {
+				camera.updateMatrixWorld();
+				console.log(camera);
+				if(isShiftDown) {
+					mesh.rotation.y += 0.1;
+
+				}
+				else{
+					mesh.position.x +=0.1;
+
+					mesh.position.z += 0.1;
+
+				}
+				check = false;
+				render();
+			}
+
+
+
+			function handle_load(gltf) {
+
+				console.log(gltf);
+				mesh = gltf.scene;
+
+				mesh.position.y +=0.25;
+				scene.add( mesh );
+				render();
+			}
+
+			function f() {
+
+				loader.load('items/screen/screen_16x9/leinwand_test.gltf',handle_load);
+				render();
+
+			}
+
+
+			function onDocumentKeyDown( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = true; break;
+
+				}
+
+			}
+
+			function onDocumentKeyUp( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = false; break;
+
+				}
+
+			}
+			function  onDocumentMouseMove(event) {
+				var mouseX = event.pageX;
+
+				var mouseY = event.pageY;
+				var relMouseX = mouseX - offset.left;
+				var relMouseZ = mouseY - offset.top;
+
+				mesh.position.z = relMouseZ;
+				mesh.position.x=relMouseX;
+				render();
+
+			}
+
+			//
+
+			function render() {
+				renderer.setClearColor();
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>
