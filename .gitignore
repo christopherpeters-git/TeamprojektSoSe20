@@ -25,7 +25,8 @@ hs_err_pid*
 # JetBrains files
 .idea/
 
-
+# Build directories
+build/
 
 #log files
 log.txt
