@@ -13,11 +13,7 @@
 			<select id="placed" style="float: left">
 				<option value="">Select Placed</option>
 			</select>
-
-
-
 			<button id ="placeable" style="float: right"> Test</button>
-
 		</div>
 
 
@@ -36,6 +32,9 @@
 					this.id =counter;
 					this.name = name;
 					this.object = object;
+				}
+				get object_(){
+					return this.object;
 				}
 			}
 
@@ -125,7 +124,7 @@
 			    document.addEventListener( 'keydown', onDocumentKeyDown, false );
 				document.addEventListener( 'keyup', onDocumentKeyUp, false );
 
-				//document.addEventListener('mousemove',onDocumentMouseMove,false);
+				document.addEventListener('mousemove',onDocumentMouseMove,false);
 
 			}
 
@@ -155,7 +154,10 @@
 			function onDocumentKeyDown( event ) {
 
 				switch ( event.keyCode ) {
-					case 16: isShiftDown = true; break;
+					case 16: isShiftDown = true;
+						console.log("true")
+					break;
+
 					case 65: a_Links= true;
 						mesh.position.z -=0.01;
 						break;
@@ -180,20 +182,19 @@
 
 			function onDocumentKeyUp( event ) {
 				switch ( event.keyCode ) {
+
 					case 16: isShiftDown = false; break;
 					case 65: a_Links =false; break;
 				}
 
 			}
 			function  onDocumentMouseMove(event) {
-				var mouseX = event.pageX;
+			//todo set Visible Walls
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				raycaster.setFromCamera( mouse, camera );
+				console.log(raycaster);
 
-				var mouseY = event.pageY;
-				var relMouseX = mouseX - offset.left;
-				var relMouseZ = mouseY - offset.top;
-
-				mesh.position.z = relMouseZ;
-				mesh.position.x=relMouseX;
 				render();
 
 			}
@@ -209,12 +210,25 @@
 			}
 
 			function onDocumentMouseDown( event ) {
-				mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				raycaster.setFromCamera( mouse, camera );
 
-				var intersects = raycaster.intersectObjects( scene.children );
-
-
+				var intersects = raycaster.intersectObjects( scene.children, true );
+				if ( intersects.length > 0 ) {
+					if(isShiftDown) {
+						var intersect = intersects[0];
+						if(intersect.object !==room.children[2]&&intersect.object !==room.children[3]
+								&&intersect.object !==room.children[4]&&intersect.object !==room.children[5]) {
+							//Todo remove object from Array and Scene
+							//intersect.object.visible = false;
+							//intersect.object.remove();
+							console.log(intersect.object);
+						}
+					}
+				}
+				render();
 
 				//console.log(intersect);
 				//console.log(camera);
@@ -231,14 +245,13 @@
 				menue.add(option);
 
 			}
-			//getting an item
+			//getting an item by index
 			function selectOption() {
 				var selectedOption = this.options[this.selectedIndex].value;
 				mesh =items[this.options[this.selectedIndex].value].object;
 				console.log(mesh);
-
-
 			}
+
 
 
 //############################Roomfunctions##################################################################

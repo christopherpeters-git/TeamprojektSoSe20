@@ -9,6 +9,7 @@ body {
 	overscroll-behavior: none;
 }
 
+
 a {
 	color: #ff0;
 	text-decoration: none;
@@ -29,6 +30,9 @@ canvas {
 
 #info {
 	position: absolute;
+	font-size: 20pt;
+	font-family: Arial;
+	color:black;
 	top: 0px;
 	width: 100%;
 	padding: 10px;
