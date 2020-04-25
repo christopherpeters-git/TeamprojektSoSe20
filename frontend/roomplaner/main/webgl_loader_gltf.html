@@ -10,8 +10,8 @@
 	<body>
 		<div id="info">
 			Roomplaner
-
-			<button id ="myBtn"> Test</button>
+			<button id ="screen_btn" style="float: right"> Test</button>
+			<button id ="beamer_btn" style="float: right"> Test</button>
 		</div>
 
 		<script type="module">
@@ -23,17 +23,26 @@
 			import { RGBELoader } from './jsm/loaders/RGBELoader.js';
 			import { RoughnessMipmapper } from './jsm/utils/RoughnessMipmapper.js';
 
+			class items_object{
+				constructor(name,object) {
+					this.name = name;
+					this.object = object;
+				}
+			}
 
+
+			var mouse, raycaster;
 			var container, controls;
 			var camera, scene, renderer;
 			var mesh;
 			var room;
 			var loader;
 			var check =true;
+			var items =[];
 
 			//###############################Keys##################################################################
 			var isShiftDown= false;
-			var pfeiltaste_Oben=false,pfeiltaste_Unten=false,pfeiltaste_Links=false,pfeiltaste_Rechts =false;
+			var w_Oben=false,s_Unten=false,a_Links=false,d_Rechts =false,q_dreh_l=false,e_dreh_r=false;
 
 			init();
 			render();
@@ -47,7 +56,8 @@
 				camera.position.set( 15, 5, 3 );
 
 				scene = new THREE.Scene();
-
+				raycaster = new THREE.Raycaster();
+				mouse = new THREE.Vector2();
 
 				new RGBELoader()
 						.setDataType( THREE.UnsignedByteType )
@@ -72,12 +82,17 @@
 							loader = new GLTFLoader();
 							loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
 								room = gltf.scene;
-								room.rotation.y +=-0.4;
-								room=room.children[2];
-								//room.scale.add(room.scale,room.scale); sehr wichtig*****
-								//room.visible=false; sehr wichtig***
 
-								console.log(room);
+								room.rotation.y +=-0.4;
+								scalRoom();
+
+
+								//room.scale.add(room.scale,room.scale); sehr wichtig*****
+								//room.visible=false;
+								//room.scale.add(room.scale,vec23.scale);
+
+
+								//console.log(room);
 
 
 								//room.nodes[1].scale(0,0,0);
@@ -109,7 +124,8 @@
 
 				window.addEventListener( 'resize', onWindowResize, false );
 				//document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-				document.getElementById("myBtn").addEventListener("click",f,false);
+				document.getElementById("screen_btn").addEventListener("click",getItem,false);
+				//document.getElementById("beamer_btn").addEventListener("click",getItem(1),false);
 			    document.addEventListener( 'keydown', onDocumentKeyDown, false );
 				document.addEventListener( 'keyup', onDocumentKeyUp, false );
 				//document.addEventListener('mousemove',onDocumentMouseMove,false);
@@ -127,58 +143,63 @@
 			}
 
 			function onDocumentMouseDown( event ) {
-				camera.updateMatrixWorld();
-				console.log(camera);
-				if(isShiftDown) {
-					mesh.rotation.y += 0.1;
+				console.log("hier");
+				event.preventDefault();
+				mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+				raycaster.setFromCamera( mouse, camera );
+				var intersects = raycaster.intersectObjects( object );
+				var intersect = intersects[ 0 ];
+				console.log(intersect);
 
-				}
-				else{
-					mesh.position.x +=0.1;
-
-					mesh.position.z += 0.1;
-
-				}
-				check = false;
-				render();
 			}
 
 
 
 			function handle_load(gltf) {
 
-				console.log(gltf);
+				//console.log(gltf);
 				mesh = gltf.scene;
-
 				mesh.position.y +=0.25;
 				scene.add( mesh );
+				items.push(new items_object("Screen",mesh));
+				console.log(items);
 				render();
 			}
 
-			function f() {
-
-				loader.load('items/screen/screen_16x9/leinwand_test.gltf',handle_load);
-				render();
-
+			function getItem() {
+				loader.load('items/screen/screen_16x9/leinwand_test.gltf', handle_load);
 			}
 
 
 			function onDocumentKeyDown( event ) {
-
 				switch ( event.keyCode ) {
-
 					case 16: isShiftDown = true; break;
-
+					case 65: a_Links= true;
+						mesh.position.z -=0.01;
+						break;
+					case 68: d_Rechts=true;
+						mesh.position.z+=0.01;
+						break;
+					case 83: s_Unten =true;
+						mesh.position.x +=0.01;
+						break;
+					case 87: w_Oben =true;
+						mesh.position.x -= 0.01;
+						break;
+					case 81: q_dreh_l = true;
+						mesh.rotation.y += 0.01;
+						break;
+					case 69: q_dreh_l = true;
+						mesh.rotation.y -= 0.01;
+						break;
 				}
-
+				render();
 			}
 
 			function onDocumentKeyUp( event ) {
-
 				switch ( event.keyCode ) {
-
 					case 16: isShiftDown = false; break;
-
+					case 65: a_Links =false; break;
 				}
 
 			}
@@ -192,6 +213,24 @@
 				mesh.position.z = relMouseZ;
 				mesh.position.x=relMouseX;
 				render();
+
+			}
+			function scalRoom() {
+				room.children[2].scale.x+=1;
+				room.children[2].scale.z+=1;
+				room.children[2].position.x +=1;
+				room.children[2].position.z -=1;
+				room.children[2].position.y +=1;
+
+				room.children[3].scale.z+=1;
+				room.children[3].scale.x+=1;
+				room.children[3].position.y +=1;
+
+				room.children[4].scale.x+=1;
+				room.children[4].scale.z+=1;
+				room.children[4].position.y +=1;
+				room.children[4].position.z +=1;
+				room.children[4].position.x +=1;
 
 			}
 
