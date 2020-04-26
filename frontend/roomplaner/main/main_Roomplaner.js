@@ -65,7 +65,7 @@ function init() {
 			loader = new GLTFLoader();
 			loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
 				room = gltf.scene;
-				console.log(room);
+
 				room.rotation.y +=-0.4;
 
 				//room.scale.add(room.scale,room.scale); sehr wichtig*****
@@ -212,25 +212,12 @@ function onDocumentMouseDown( event ) {
 	//console.log(camera);
 
 }
-//adding items to the Dropdown menue
-function addItemToList(items) {
-	var menue= document.getElementById("placed");
-	var option = document.createElement("option");
-	option.text=items.name+items.id;
-	option.value =items.id;
-	//todo set icons
-	option.style.backgroundImage= "icon.png";
 
-	menue.add(option);
-
-}
 //getting an item by index
 function selectOption() {
 	var selectedOption = this.options[this.selectedIndex].value;
 	mesh =items[this.options[this.selectedIndex].value].object;
 	console.log(mesh);
-
-
 }
 
 
@@ -268,42 +255,6 @@ function render() {
 function loadItems() {
 	loader.load(this.options[this.selectedIndex].value,handle_load);
 	name = this.options[this.selectedIndex].text;
-	let dropdown = document.getElementById('items-dropdown');
-	dropdown.selectedIndex = 0;
-}
+	this.selectedIndex=0;
 
-function fillItemList() {
-	let dropdown = document.getElementById('items-dropdown');
-	dropdown.length = 0;
-
-	let defaultOption = document.createElement('option');
-	defaultOption.text = 'Items';
-
-	dropdown.add(defaultOption);
-	dropdown.selectedIndex = 0;
-
-	const url = './items.json';
-
-	const request = new XMLHttpRequest();
-	request.open('GET', url, true);
-
-	request.onload = function() {
-		if (request.status === 200) {
-			const data = JSON.parse(request.responseText);
-			let option;
-			for (let i = 0; i < data.length; i++) {
-				option = document.createElement('option');
-				option.text = data[i].ID +"_"+data[i].Name;
-				option.value = data[i].FileUrl;
-				dropdown.add(option);
-			}
-		} else {
-			// Reached the server, but it returned an error
-		}
-	}
-	request.onerror = function() {
-		console.error('An error occurred fetching the JSON from ' + url);
-	};
-
-	request.send();
 }
