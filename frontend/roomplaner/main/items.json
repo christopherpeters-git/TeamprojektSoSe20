@@ -1,0 +1,19 @@
+[
+  {
+    "ID":0,
+    "Name":"Beamer",
+    "FileUrl":"items/beamer/basic_beamer/beamer.gltf"
+  },
+  {
+    "ID": 1,
+    "Name":"Sofa",
+    "FileUrl":"items/chairs/_noLicense/sofa.gltf"
+  },
+  {
+    "ID": 2,
+    "Name":"Screen",
+    "FileUrl":"items/screen/screen_16x9/leinwand_test.gltf"
+  }
+
+
+]

@@ -45,19 +45,19 @@
         camera.lookAt( 0, 0, 0 );
 
         scene = new THREE.Scene();
-        scene.background = new THREE.Color( 0xffffff );
+        scene.background = new THREE.Color( );
 
         // roll-over helpers
         // Objekt-Preview des Voxels bevor es gesetzt wird
         var rollOverGeo = new THREE.BoxBufferGeometry( 50, 50, 50 );
-        rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.5, transparent: true } );
+        rollOverMaterial = new THREE.MeshLambertMaterial();
         rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
         scene.add( rollOverMesh );
 
         // cubes
         // Teil des Voxels- könnte benutzt werden um objekte zu erstellen
         cubeGeo = new THREE.BoxBufferGeometry( 50, 50, 50 );
-        cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xf0f0f0, map: new THREE.TextureLoader().load( './media/harold.png' ) } );
+        cubeMaterial = new THREE.MeshLambertMaterial();
 
         // grid
         // X und Y-Achse des Netzgitters am Boden
@@ -119,6 +119,7 @@
 
         raycaster.setFromCamera( mouse, camera );
 
+
         var intersects = raycaster.intersectObjects( objects );
 
         if ( intersects.length > 0 ) {
@@ -142,12 +143,13 @@
 
         raycaster.setFromCamera( mouse, camera );
 
+
         var intersects = raycaster.intersectObjects( objects );
 
         if ( intersects.length > 0 ) {
 
             var intersect = intersects[ 0 ];
-
+            console.log(intersects);
             // delete cube
 
             if ( isShiftDown ) {
@@ -172,7 +174,7 @@
                 objects.push( voxel );
 
             }
-
+            console.log(objects);
             render();
 
         }

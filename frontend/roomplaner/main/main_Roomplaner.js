@@ -1,9 +1,13 @@
+
+
+
 import * as THREE from '../build/three.module.js';
 
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from './jsm/loaders/RGBELoader.js';
 import { RoughnessMipmapper } from './jsm/utils/RoughnessMipmapper.js';
+
 
 var counter =0;
 class items_object{
@@ -12,15 +16,15 @@ class items_object{
 		this.name = name;
 		this.object = object;
 	}
+
 	get object_(){
 		return this.object;
 	}
 }
 
-
 var mouse, raycaster;
 var container, controls;
-var camera, scene, renderer;
+var camera, scene, renderer,name;
 var mesh;
 var room;
 var loader;
@@ -77,7 +81,6 @@ function init() {
 		} );
 
 
-
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -94,15 +97,15 @@ function init() {
 	controls.maxDistance = 15;
 	controls.target.set( 0, 0, - 0.2 );
 	controls.update();
+	fillItemList()
 
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.getElementById("placeable").addEventListener("click",getItem,false);
+	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
-
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
 
 }
@@ -115,19 +118,15 @@ function handle_load(gltf) {
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
-	items.push(new items_object("Screen",mesh));
+	items.push(new items_object(name,mesh));
 	console.log(items);
 	//items.push(mesh);
 	addItemToList(items[counter]);
 	counter++;
-
+	name =null;
 	render();
 }
 
-//todo change into select
-function getItem() {
-	loader.load('items/screen/screen_16x9/leinwand_test.gltf', handle_load);
-}
 //####################################Eventhandler###########################################################################
 
 function onDocumentKeyDown( event ) {
@@ -172,7 +171,7 @@ function  onDocumentMouseMove(event) {
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
-	console.log(raycaster);
+	//console.log(raycaster);
 
 	render();
 
@@ -221,6 +220,7 @@ function addItemToList(items) {
 	option.value =items.id;
 	//todo set icons
 	option.style.backgroundImage= "icon.png";
+
 	menue.add(option);
 
 }
@@ -229,6 +229,8 @@ function selectOption() {
 	var selectedOption = this.options[this.selectedIndex].value;
 	mesh =items[this.options[this.selectedIndex].value].object;
 	console.log(mesh);
+
+
 }
 
 
@@ -261,4 +263,47 @@ function render() {
 	renderer.setClearColor();
 	renderer.render( scene, camera );
 
+}
+
+function loadItems() {
+	loader.load(this.options[this.selectedIndex].value,handle_load);
+	name = this.options[this.selectedIndex].text;
+	let dropdown = document.getElementById('items-dropdown');
+	dropdown.selectedIndex = 0;
+}
+
+function fillItemList() {
+	let dropdown = document.getElementById('items-dropdown');
+	dropdown.length = 0;
+
+	let defaultOption = document.createElement('option');
+	defaultOption.text = 'Items';
+
+	dropdown.add(defaultOption);
+	dropdown.selectedIndex = 0;
+
+	const url = './items.json';
+
+	const request = new XMLHttpRequest();
+	request.open('GET', url, true);
+
+	request.onload = function() {
+		if (request.status === 200) {
+			const data = JSON.parse(request.responseText);
+			let option;
+			for (let i = 0; i < data.length; i++) {
+				option = document.createElement('option');
+				option.text = data[i].ID +"_"+data[i].Name;
+				option.value = data[i].FileUrl;
+				dropdown.add(option);
+			}
+		} else {
+			// Reached the server, but it returned an error
+		}
+	}
+	request.onerror = function() {
+		console.error('An error occurred fetching the JSON from ' + url);
+	};
+
+	request.send();
 }
