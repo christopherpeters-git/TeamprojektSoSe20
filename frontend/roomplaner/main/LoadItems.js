@@ -24,7 +24,6 @@ function fillItemList() {
 				option.text = data[i].ID +"_"+data[i].Name;
 				option.value = data[i].FileUrl;
 				dropdown.add(option);
-
 			}
 		} else {
 			// Reached the server, but it returned an error
@@ -38,14 +37,18 @@ function fillItemList() {
 }
 
 
-function addItemToList(items) {
-	var menue= document.getElementById("placed");
-	var option = document.createElement("option");
-	option.text=items.name+items.id;
-	option.value =items.id;
-	//todo set icons
-	option.style.backgroundImage= "icon.png";
+function FillListWithItems(items) {
+	const menue= document.getElementById("placed");
+	const childBackup = menue.firstChild;
+	menue.innerHTML = "";
+	menue.appendChild(childBackup);
 
-	menue.add(option);
-
+	for(let i = 0; i < items.length; i++){
+		const option = document.createElement("option");
+		option.text=items[i].name+items[i].id;
+		option.value =items[i].id;
+		//todo set icons
+		option.style.backgroundImage= "icon.png";
+		menue.add(option);
+	}
 }

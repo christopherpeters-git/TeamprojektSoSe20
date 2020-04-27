@@ -31,7 +31,7 @@ var loader;
 var check =true;
 var items =[];
 //###############################Keys##################################################################
-var isShiftDown= false;
+var isRKeyDown= false;
 var w_Oben=false,s_Unten=false,a_Links=false,d_Rechts =false,q_dreh_l=false,e_dreh_r=false;
 //###############################################################################################
 init();
@@ -119,9 +119,9 @@ function handle_load(gltf) {
 	mesh.position.y +=0.25;
 	scene.add( mesh );
 	items.push(new items_object(name,mesh));
-	console.log(items);
+	// console.log(items);
 	//items.push(mesh);
-	addItemToList(items[counter]);
+	FillListWithItems(items);
 	counter++;
 	name =null;
 	render();
@@ -132,8 +132,8 @@ function handle_load(gltf) {
 function onDocumentKeyDown( event ) {
 
 	switch ( event.keyCode ) {
-		case 16: isShiftDown = true;
-			console.log("true")
+		case 82: isRKeyDown = true;
+			// console.log("true")
 			break;
 
 		case 65: a_Links= true;
@@ -161,7 +161,7 @@ function onDocumentKeyDown( event ) {
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
 
-		case 16: isShiftDown = false; break;
+		case 16: isRKeyDown = false; break;
 		case 65: a_Links =false; break;
 	}
 
@@ -187,22 +187,33 @@ function onWindowResize() {
 
 }
 
+//Removing an object with r + mouse0
 function onDocumentMouseDown( event ) {
 
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 
-	var intersects = raycaster.intersectObjects( scene.children, true );
-	if ( intersects.length > 0 ) {
-		if(isShiftDown) {
-			var intersect = intersects[0];
-			if(intersect.object !==room.children[2]&&intersect.object !==room.children[3]
-				&&intersect.object !==room.children[4]&&intersect.object !==room.children[5]) {
-				//Todo remove object from Array and Scene
-				//intersect.object.visible = false;
-				//intersect.object.remove();
-				console.log(intersect.object);
+	const intersects = raycaster.intersectObjects( scene.children, true );
+	if (intersects.length > 0) {
+		if (isRKeyDown) {
+			const intersect = intersects[0];
+			let isFirstIntersectAWall = false;
+			for (let i = 0; i < room.children.length; i++) {
+				if (intersect.object == room.children[i]) {
+					isFirstIntersectAWall = true;
+					break;
+				}
+			}
+			if (isFirstIntersectAWall) {
+				console.log("Walls can not be deleted");
+			} else {
+				console.log("Object hit!");
+				scene.remove(intersect.object.parent);
+				if(!removeItemByObjectScene(intersect.object.parent)){
+					console.log("Could not find object in the item array");
+				}
+				FillListWithItems(items);
 			}
 		}
 	}
@@ -215,9 +226,7 @@ function onDocumentMouseDown( event ) {
 
 //getting an item by index
 function selectOption() {
-	var selectedOption = this.options[this.selectedIndex].value;
 	mesh =items[this.options[this.selectedIndex].value].object;
-	console.log(mesh);
 }
 
 
@@ -258,3 +267,16 @@ function loadItems() {
 	this.selectedIndex=0;
 
 }
+
+//##############################################Others###############################################################
+function removeItemByObjectScene(object){
+	console.log(object);
+	for(let i = 0; i < items.length; i++){
+		if(object == items[i].object){
+			items.splice(i,1);
+			return true;
+		}
+	}
+	return false;
+}
+
