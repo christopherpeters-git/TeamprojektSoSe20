@@ -43,7 +43,7 @@ function init() {
 	document.body.appendChild( container );
 
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.set( 15, 5, 3 );
+	camera.position.set( 5, 4, 3 );
 
 	scene = new THREE.Scene();
 	raycaster = new THREE.Raycaster();
@@ -66,7 +66,7 @@ function init() {
 			loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
 				room = gltf.scene;
 
-				room.rotation.y +=-0.4;
+				//room.rotation.y +=-0.4;
 
 				//room.scale.add(room.scale,room.scale); sehr wichtig*****
 				//room.visible=false;
@@ -130,7 +130,7 @@ function handle_load(gltf) {
 //####################################Eventhandler###########################################################################
 
 function onDocumentKeyDown( event ) {
-
+	console.log(camera);
 	switch ( event.keyCode ) {
 		case 16: isShiftDown = true;
 			console.log("true")
@@ -196,13 +196,13 @@ function onDocumentMouseDown( event ) {
 	var intersects = raycaster.intersectObjects( scene.children, true );
 	if ( intersects.length > 0 ) {
 		if(isShiftDown) {
-			var intersect = intersects[0];
+			//var intersect = intersects[0];
 			if(intersect.object !==room.children[2]&&intersect.object !==room.children[3]
 				&&intersect.object !==room.children[4]&&intersect.object !==room.children[5]) {
 				//Todo remove object from Array and Scene
 				//intersect.object.visible = false;
 				//intersect.object.remove();
-				console.log(intersect.object);
+				 //console.log(intersect.object);
 			}
 		}
 	}
