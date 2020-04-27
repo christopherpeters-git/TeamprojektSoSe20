@@ -13,7 +13,22 @@
     "ID": 2,
     "Name":"Screen",
     "FileUrl":"items/screen/screen_16x9/leinwand_test.gltf"
-  }
+  },
+  {
+    "ID": 3,
+    "Name":"Tisch",
+    "FileUrl":"items/tables/Tisdh01.gltf"
+  },
+  {
+    "ID": 4,
+    "Name":"Sideboard",
+    "FileUrl":"items/closet/Sideboard.gltf"
+  },
 
+  {
+    "ID": 5,
+    "Name":"Beamer_2",
+    "FileUrl":"items/beamer/Beamer_2.gltf"
+  }
 
 ]

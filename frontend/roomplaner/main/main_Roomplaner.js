@@ -43,7 +43,7 @@ function init() {
 	document.body.appendChild( container );
 
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.set( 15, 5, 3 );
+	camera.position.set( 5, 4, 3 );
 
 	scene = new THREE.Scene();
 	raycaster = new THREE.Raycaster();
@@ -66,7 +66,7 @@ function init() {
 			loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
 				room = gltf.scene;
 
-				room.rotation.y +=-0.4;
+				//room.rotation.y +=-0.4;
 
 				//room.scale.add(room.scale,room.scale); sehr wichtig*****
 				//room.visible=false;
