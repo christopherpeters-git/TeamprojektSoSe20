@@ -63,9 +63,9 @@ function init() {
 			// use of RoughnessMipmapper is optional
 			var roughnessMipmapper = new RoughnessMipmapper( renderer );
 			loader = new GLTFLoader();
-			loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
+			loader.load( 'items/room/room_1x1.gltf', function ( gltf ) {
 				room = gltf.scene;
-
+				scaleRoom(room,4,7);
 				//room.rotation.y +=-0.4;
 
 				//room.scale.add(room.scale,room.scale); sehr wichtig*****
@@ -119,7 +119,7 @@ function handle_load(gltf) {
 	mesh.position.y +=0.25;
 	scene.add( mesh );
 	items.push(new items_object(name,mesh));
-	// console.log(items);
+	console.log(items);
 	//items.push(mesh);
 	FillListWithItems(items);
 	counter++;
@@ -131,28 +131,14 @@ function handle_load(gltf) {
 
 function onDocumentKeyDown( event ) {
 
+	let code = event.keyCode;
+	itemMovment(mesh,room,code);
 	switch ( event.keyCode ) {
+		case 16:
+			isShiftDown = true;
+			console.log("true")
 		case 82: isRKeyDown = true;
 			// console.log("true")
-			break;
-
-		case 65: a_Links= true;
-			mesh.position.z -=0.01;
-			break;
-		case 68: d_Rechts=true;
-			mesh.position.z+=0.01;
-			break;
-		case 83: s_Unten =true;
-			mesh.position.x +=0.01;
-			break;
-		case 87: w_Oben =true;
-			mesh.position.x -= 0.01;
-			break;
-		case 81: q_dreh_l = true;
-			mesh.rotation.y += 0.01;
-			break;
-		case 69: q_dreh_l = true;
-			mesh.rotation.y -= 0.01;
 			break;
 	}
 	render();
@@ -201,6 +187,7 @@ function onDocumentMouseDown( event ) {
 			let isFirstIntersectAWall = false;
 			for (let i = 0; i < room.children.length; i++) {
 				if (intersect.object == room.children[i]) {
+
 					isFirstIntersectAWall = true;
 					break;
 				}
@@ -208,6 +195,7 @@ function onDocumentMouseDown( event ) {
 			if (isFirstIntersectAWall) {
 				console.log("Walls can not be deleted");
 			} else {
+				console.log(intersect.object);
 				scene.remove(intersect.object.parent);
 				if(!removeItemByObjectScene(intersect.object.parent)){
 					console.log("Could not find object in the item array");
@@ -225,33 +213,13 @@ function onDocumentMouseDown( event ) {
 
 //getting an item by index
 function selectOption() {
+	var selectedOption = this.options[this.selectedIndex].value;
 	mesh =items[this.options[this.selectedIndex].value].object;
+	console.log(mesh);
 }
 
 
 
-//############################Roomfunctions##################################################################
-//todo scaling over buttons or input
-function scalRoom() {
-
-	room.children[2].scale.x += 1;
-	room.children[2].scale.z += 1;
-
-	room.children[2].position.x += 1;
-	room.children[2].position.z -= 1;
-	room.children[2].position.y += 1;
-
-	room.children[3].scale.z += 1;
-	room.children[3].scale.x += 1;
-	room.children[3].position.y += 1;
-
-	room.children[4].scale.x += 1;
-	room.children[4].scale.z += 1;
-	room.children[4].position.y += 1;
-	room.children[4].position.z += 1;
-	room.children[4].position.x += 1;
-
-}
 
 //##############################################Render###############################################################
 function render() {

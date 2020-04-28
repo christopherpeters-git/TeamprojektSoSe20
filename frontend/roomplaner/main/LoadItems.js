@@ -26,6 +26,7 @@ function fillItemList() {
 				option.text = data[i].ID +"_"+data[i].Name;
 				option.value = data[i].FileUrl;
 				dropdown.add(option);
+
 			}
 		} else {
 			// Reached the server, but it returned an error
@@ -54,6 +55,6 @@ function FillListWithItems(items) {
 		option.style.backgroundImage= "icon.png";
 		menue.add(option);
 	}
-	menue.SetSelectedIndex = menue.length - 1;
+	//menue.SetSelectedIndex = menue.length - 1;
 }
 
