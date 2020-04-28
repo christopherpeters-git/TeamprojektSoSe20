@@ -40,6 +40,7 @@ func main() {
 
 //writes the request object in the response-stream
 func getObject(w http.ResponseWriter, r *http.Request) {
+	log.Println("Started answering an object request...")
 	//Read the parameter of the request
 	queryResults, ok := r.URL.Query()[indexUrlParameter]
 	if !ok || len(queryResults) < 1 {
@@ -103,5 +104,14 @@ func getObject(w http.ResponseWriter, r *http.Request) {
 }
 
 func getJson(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("Started answering a json request...")
+	data, err := ioutil.ReadFile(jsonName)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	w.Write(data)
+	log.Println("Answered json request successfully")
 }
