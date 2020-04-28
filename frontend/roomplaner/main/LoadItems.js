@@ -1,4 +1,4 @@
-
+/* For offline use
 function fillItemList() {
 
 	let dropdown = document.getElementById('items-dropdown');
@@ -35,6 +35,43 @@ function fillItemList() {
 	};
 
 	request.send();
+}
+
+ */
+let jsonArrived = false;
+let jsonContent = "";
+
+function setJsonArrived(set, content){
+	jsonContent = content;
+	jsonArrived = set;
+}
+
+async function fillItemList() {
+	//Preparing the dropdown list
+	let dropdown = document.getElementById('items-dropdown');
+	dropdown.length = 0;
+	let defaultOption = document.createElement('option');
+	defaultOption.text = 'Items';
+	dropdown.add(defaultOption);
+	dropdown.selectedIndex = 0;
+	//Sending the request
+	sendGetLoadJson();
+	const promise = new Promise(((resolve, reject) => {
+		if(jsonArrived){
+			resolve("Json-Array arrived from Service");
+		}
+	}))
+	console.log(await promise);
+	//Process arrived data
+	const entries = JSON.parse(jsonContent);
+	let option;
+	for (let i = 0; i < data.length; i++) {
+		option = document.createElement('option');
+		option.text = entries[i].ID +"_"+entries[i].Name;
+		option.value = entries[i].FileUrl;
+		dropdown.add(option);
+	}
+	setJsonArrived(false,"");
 }
 
 
