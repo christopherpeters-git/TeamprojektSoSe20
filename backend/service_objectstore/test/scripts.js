@@ -1,12 +1,11 @@
-function sendGetObject(){
+function sendGetLoadObject(){
     const request = new XMLHttpRequest();
     const targetUrl = "/api/getObject"
     const id = document.getElementById("id").value
     request.onreadystatechange = function () {
         if(4 === this.readyState){
             if(200 === this.status){
-
-                document.getElementById("loadTest").innerHTML = this.responseText;
+                document.getElementById("objectTest").innerHTML = this.responseText;
                 alert(this.responseText)
             }else{
                 alert("" + this.status + ":" +this.responseText)
