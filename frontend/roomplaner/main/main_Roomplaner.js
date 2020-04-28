@@ -268,9 +268,8 @@ function loadItems() {
 }
 
 //##############################################Others###############################################################
+//Removes an item in the item-array, which holds the reference to object
 function removeItemByObjectScene(object){
-	console.log(items);
-	console.log(object);
 	for(let i = 0; i < items.length; i++){
 		if(object.uuid == items[i].object.uuid){
 			items.splice(i,1);

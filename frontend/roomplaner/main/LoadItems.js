@@ -38,7 +38,7 @@ function fillItemList() {
 	request.send();
 }
 
-
+//Refills the list with all items in items-array
 function FillListWithItems(items) {
 	const menue= document.getElementById("placed");
 	menue.innerHTML = "";
