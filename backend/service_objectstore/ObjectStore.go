@@ -49,7 +49,7 @@ func getObject(w http.ResponseWriter, r *http.Request) {
 		log.Println("Cant find parameter " + indexUrlParameter)
 		return
 	}
-
+	//Extrac index parameter
 	strIndex := queryResults[0]
 	incomingIndex, err := strconv.ParseUint(strIndex, 10, 64)
 	if err != nil {
@@ -68,7 +68,7 @@ func getObject(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
-
+	//Parsing the json file
 	var configEntries []Item
 	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
@@ -83,7 +83,7 @@ func getObject(w http.ResponseWriter, r *http.Request) {
 		log.Println("Index out of range")
 		return
 	}
-
+	//Get fileUrl by index
 	var foundPath = &configEntries[incomingIndex].FileUrl
 	if foundPath == nil {
 		w.WriteHeader(404)
@@ -91,7 +91,7 @@ func getObject(w http.ResponseWriter, r *http.Request) {
 		log.Println("Object at index " + strconv.FormatUint(incomingIndex, 10) + " not found")
 		return
 	}
-
+	//Read data from found file
 	data, err := ioutil.ReadFile(itemFolderPath + *foundPath)
 	if err != nil {
 		w.WriteHeader(500)
@@ -99,12 +99,14 @@ func getObject(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
+	//Send data
 	w.Write(data)
 	log.Println("Answered object request successfully, object send: " + *foundPath)
 }
 
 func getJson(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started answering a json request...")
+	//Reading json
 	data, err := ioutil.ReadFile(jsonName)
 	if err != nil {
 		w.WriteHeader(500)
@@ -112,6 +114,7 @@ func getJson(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
+	//Sending json content
 	w.Write(data)
 	log.Println("Answered json request successfully")
 }
