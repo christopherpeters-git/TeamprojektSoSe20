@@ -208,7 +208,6 @@ function onDocumentMouseDown( event ) {
 			if (isFirstIntersectAWall) {
 				console.log("Walls can not be deleted");
 			} else {
-				console.log("Object hit!");
 				scene.remove(intersect.object.parent);
 				if(!removeItemByObjectScene(intersect.object.parent)){
 					console.log("Could not find object in the item array");
@@ -270,9 +269,10 @@ function loadItems() {
 
 //##############################################Others###############################################################
 function removeItemByObjectScene(object){
+	console.log(items);
 	console.log(object);
 	for(let i = 0; i < items.length; i++){
-		if(object == items[i].object){
+		if(object.uuid == items[i].object.uuid){
 			items.splice(i,1);
 			return true;
 		}

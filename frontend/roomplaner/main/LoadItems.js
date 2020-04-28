@@ -1,4 +1,6 @@
 
+const standardListMessage = "Select an item";
+
 function fillItemList() {
 
 	let dropdown = document.getElementById('items-dropdown');
@@ -39,9 +41,10 @@ function fillItemList() {
 
 function FillListWithItems(items) {
 	const menue= document.getElementById("placed");
-	const childBackup = menue.firstChild;
 	menue.innerHTML = "";
-	menue.appendChild(childBackup);
+	const newOption = document.createElement("option");
+	newOption.innerHTML = standardListMessage;
+	menue.appendChild(newOption);
 
 	for(let i = 0; i < items.length; i++){
 		const option = document.createElement("option");
@@ -51,5 +54,6 @@ function FillListWithItems(items) {
 		option.style.backgroundImage= "icon.png";
 		menue.add(option);
 	}
+	menue.SetSelectedIndex = menue.length - 1;
 }
 
