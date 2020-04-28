@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var getObjectUrl = "/api/getObject/"
+var getObjectUrl = "/api/getObjectByIndex/"
 var getJsonFileUrl = "/api/getJson"
 var itemFolderName = "items"
 var itemFolderPath = itemFolderName + "/"
@@ -33,13 +33,13 @@ func main() {
 	log.Print("Object-service has started...")
 
 	http.Handle("/", http.FileServer(http.Dir("test/")))
-	http.HandleFunc(getObjectUrl, getObject)
+	http.HandleFunc(getObjectUrl, getObjectByIndex)
 	http.HandleFunc(getJsonFileUrl, getJson)
 	http.ListenAndServe(":100", nil)
 }
 
 //writes the request object in the response-stream
-func getObject(w http.ResponseWriter, r *http.Request) {
+func getObjectByIndex(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started answering an object request...")
 	//Read the parameter of the request
 	queryResults, ok := r.URL.Query()[indexUrlParameter]
