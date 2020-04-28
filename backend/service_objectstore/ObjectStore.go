@@ -31,23 +31,10 @@ func main() {
 	log.SetOutput(f)
 	log.Print("Object-service has started...")
 
-	createConfigFolderIfNotExisting()
-
 	http.Handle("/", http.FileServer(http.Dir("test/")))
 	http.HandleFunc(getObjectUrl, getObject)
 	http.HandleFunc(getJsonFileUrl, getJson)
 	http.ListenAndServe(":100", nil)
-}
-
-//Folder will be created if not existing
-func createConfigFolderIfNotExisting() {
-	_, err := os.Stat(itemFolderName)
-	if os.IsNotExist(err) {
-		errDir := os.MkdirAll(itemFolderName, 0755)
-		if errDir != nil {
-			log.Fatal(err)
-		}
-	}
 }
 
 //writes the request object in the response-stream
