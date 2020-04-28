@@ -1,7 +1,7 @@
 function sendGetLoadObject(){
     const request = new XMLHttpRequest();
     const targetUrl = "/api/getObject"
-    const id = document.getElementById("id").value
+    const index = document.getElementById("index").value
     request.onreadystatechange = function () {
         if(4 === this.readyState){
             if(200 === this.status){
@@ -12,9 +12,8 @@ function sendGetLoadObject(){
             }
         }
     }
-    request.open("POST",targetUrl,true)
-    request.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
-    request.send("id="+id)
+    request.open("GET",targetUrl,true)
+    request.send("index="+index) //TODO add to parameters
 }
 
 function sendGetLoadJson(){
