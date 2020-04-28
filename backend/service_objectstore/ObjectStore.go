@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var getObjectUrl = "/api/getObject"
+var getObjectUrl = "/api/getObject/"
 var getJsonFileUrl = "/api/getJson"
 var itemFolderName = "items"
 var itemFolderPath = itemFolderName + "/"
@@ -41,49 +41,65 @@ func main() {
 //writes the request object in the response-stream
 func getObject(w http.ResponseWriter, r *http.Request) {
 	//Read the parameter of the request
-	queryResult := r.URL.Query()
-	strIndex := queryResult.Get(indexUrlParameter)
-	if strIndex == "" {
+	queryResults, ok := r.URL.Query()[indexUrlParameter]
+	if !ok || len(queryResults) < 1 {
 		w.WriteHeader(400)
 		w.Write([]byte("url parameter unkown"))
-		log.Fatal("'" + indexUrlParameter + "'" + "' not found as parameter:" + queryResult.Encode())
+		log.Println("Cant find parameter " + indexUrlParameter)
+		return
 	}
-	log.Println("Request index: " + strIndex)
+
+	strIndex := queryResults[0]
 	incomingIndex, err := strconv.ParseUint(strIndex, 10, 64)
 	if err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("Input is not an integer"))
-		log.Fatal("Failed to parse uint: " + err.Error())
+		log.Println("Failed to parse uint: " + err.Error())
+		return
 	}
-	log.Println("index: " + strIndex + " " + strconv.FormatInt(r.ContentLength, 10) + "index:" + r.FormValue("index"))
+
+	log.Println("Requested index: " + strconv.FormatUint(incomingIndex, 10))
 	//Read & parse the .json file
-	jsonData, err := ioutil.ReadFile(itemFolderName + jsonName)
+	jsonData, err := ioutil.ReadFile(jsonName)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))
-		log.Fatal(err.Error())
+		log.Println(err.Error())
+		return
 	}
+
 	var configEntries []Item
 	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))
-		log.Fatal(err.Error())
+		log.Println(err.Error())
+		return
 	}
+	if incomingIndex > (uint64)(len(configEntries))-1 || incomingIndex < 0 {
+		w.WriteHeader(404)
+		w.Write([]byte("Index out of range"))
+		log.Println("Index out of range")
+		return
+	}
+
 	var foundPath = &configEntries[incomingIndex].FileUrl
-	if foundPath == nil { //TODO
+	if foundPath == nil {
 		w.WriteHeader(404)
 		w.Write([]byte("Requested index not found"))
-		log.Fatal("Object at index " + strconv.FormatUint(incomingIndex, 10) + " not found")
+		log.Println("Object at index " + strconv.FormatUint(incomingIndex, 10) + " not found")
+		return
 	}
-	data, err := ioutil.ReadFile(*foundPath)
+
+	data, err := ioutil.ReadFile(itemFolderPath + *foundPath)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))
-		log.Fatal(err.Error())
+		log.Println(err.Error())
+		return
 	}
 	w.Write(data)
-	log.Println("Answered object request successfully")
+	log.Println("Answered object request successfully, object send: " + *foundPath)
 }
 
 func getJson(w http.ResponseWriter, r *http.Request) {

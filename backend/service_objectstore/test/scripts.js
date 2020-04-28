@@ -6,14 +6,14 @@ function sendGetLoadObject(){
         if(4 === this.readyState){
             if(200 === this.status){
                 document.getElementById("objectTest").innerHTML = this.responseText;
-                alert(this.responseText)
             }else{
                 alert("" + this.status + ":" +this.responseText)
             }
         }
     }
-    request.open("GET",targetUrl,true)
-    request.send("index="+index) //TODO add to parameters
+    console.log(targetUrl + "/?" + "index=" + index);
+    request.open("GET",targetUrl + "/?" + "index=" + index,true)
+    request.send() //TODO add to parameters
 }
 
 function sendGetLoadJson(){
@@ -23,7 +23,6 @@ function sendGetLoadJson(){
         if(4 === this.readyState){
             if(200 === this.status){
                 document.getElementById("jsonTest").innerHTML = this.responseText;
-                alert(this.responseText)
             }else{
                 alert("" + this.status + ":" +this.responseText)
             }
