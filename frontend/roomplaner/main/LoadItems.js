@@ -46,7 +46,7 @@ function setJsonArrived(set, content){
 	jsonArrived = set;
 }
 
-async function fillItemList() {
+function sendFillitemListRequest() {
 	//Preparing the dropdown list
 	let dropdown = document.getElementById('items-dropdown');
 	dropdown.length = 0;
@@ -55,13 +55,10 @@ async function fillItemList() {
 	dropdown.add(defaultOption);
 	dropdown.selectedIndex = 0;
 	//Sending the request
-	sendGetLoadJson();
-	const promise = new Promise(((resolve, reject) => {
-		if(jsonArrived){
-			resolve("Json-Array arrived from Service");
-		}
-	}))
-	console.log(await promise);
+	sendGetLoadJson(fillItemListWithJson);
+}
+
+function fillItemListWithJson(jsonData){
 	//Process arrived data
 	const entries = JSON.parse(jsonContent);
 	let option;
@@ -71,7 +68,6 @@ async function fillItemList() {
 		option.value = entries[i].FileUrl;
 		dropdown.add(option);
 	}
-	setJsonArrived(false,"");
 }
 
 

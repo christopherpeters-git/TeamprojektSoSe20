@@ -33,16 +33,18 @@ function sendGetLoadObject(index){
 	request.send()
 }
 
-function sendGetLoadJson(){
+function sendGetLoadJson(functionToCalOnSuccess){
 	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
 		if(4 === this.readyState){
 			if(200 === this.status){
-
+				functionToCalOnSuccess(this.responseText);
 			}else{
+				alert(this.status + ":" + this.responseText);
 			}
 		}
 	}
-	request.open("GET",getJsonTargetUrl,true)
+	console.log(getJsonTargetUrl);
+	request.open("GET",getJsonTargetUrl,true);
 	request.send();
 }

@@ -97,7 +97,7 @@ function init() {
 	controls.maxDistance = 15;
 	controls.target.set( 0, 0, - 0.2 );
 	controls.update();
-	fillItemList()
+	sendFillitemListRequest();
 
 
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -160,7 +160,6 @@ function onDocumentKeyDown( event ) {
 
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
-
 		case 16: isShiftDown = false; break;
 		case 65: a_Links =false; break;
 	}
