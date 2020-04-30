@@ -252,8 +252,8 @@ function render() {
 }
 
 function loadItems() {
-	loader.load(this.options[this.selectedIndex].value,handle_load);
+	loader.load("" + getGetObjectTargetUrl() + '/' + this.selectedIndex,handle_load);
+	console.log("Load item url: " + getGetObjectTargetUrl() + '/' + this.selectedIndex);
 	name = this.options[this.selectedIndex].text;
 	this.selectedIndex=0;
-
 }

@@ -47,7 +47,7 @@ function sendFillitemListRequest() {
 	dropdown.add(defaultOption);
 	dropdown.selectedIndex = 0;
 	//Sending the request
-	sendGetLoadJson(fillItemListWithJson);
+	sendGetRequest(fillItemListWithJson);
 }
 
 function fillItemListWithJson(jsonData){
@@ -59,7 +59,7 @@ function fillItemListWithJson(jsonData){
 	for (let i = 0; i < entries.length; i++) {
 		option = document.createElement('option');
 		option.text = entries[i].ID +"_"+entries[i].Name;
-		option.value = entries[i].FileUrl;
+		// option.value = entries[i].FileUrl;
 		dropdown.add(option);
 	}
 }

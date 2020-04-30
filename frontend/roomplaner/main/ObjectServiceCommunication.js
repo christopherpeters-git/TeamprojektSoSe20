@@ -1,6 +1,10 @@
 const getObjectTargetUrl = "/proxy/getObjectById";
 const getJsonTargetUrl = "/proxy/getJson";
 
+function getGetObjectTargetUrl(){
+	return getObjectTargetUrl;
+}
+
 function createAjaxRequest(){
 	let request;
 	if(window.XMLHttpRequest){
@@ -30,7 +34,7 @@ function sendGetLoadObject(index){
 	request.send()
 }
 
-function sendGetLoadJson(functionToCalOnSuccess){
+function sendGetRequest(functionToCalOnSuccess){
 	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
 		if(4 === this.readyState){
