@@ -9,7 +9,7 @@ import (
 )
 
 //Proxy adresses
-const proxyGetObjectUrl = "/proxy/getObject"
+const proxyGetObjectUrl = "/proxy/getObject/"
 const proxyGetJsonUrl = "/proxy/getJson"
 
 //Service adresses
@@ -35,6 +35,7 @@ func main() {
 
 func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting object request...")
+	//Extracting the request id
 	parts := strings.Split(r.URL.String(), "/")
 	id := parts[len(parts)-1]
 	if id == "" {
@@ -44,13 +45,29 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("Requested id: " + id)
-	resp, err := http.Get(getObjectUrl)
+
+	//Creating the request to the service
+	client := http.Client{}
+	req, err := http.NewRequest("GET",getObjectUrl,nil)
+	if err != nil{
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	q := req.URL.Query()
+	q.Add("index", id)
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
 	if err != nil {
 		w.WriteHeader(500)
 		log.Println(err.Error())
 		return
 	}
 	defer resp.Body.Close()
+
+	//Reading and returning the content of the response
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		w.WriteHeader(500)

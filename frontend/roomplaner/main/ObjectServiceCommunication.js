@@ -1,8 +1,12 @@
-const getObjectTargetUrl = "/proxy/getObjectById";
+const getObjectTargetUrl = "/proxy/getObject";
 const getJsonTargetUrl = "/proxy/getJson";
 
 function getGetObjectTargetUrl(){
 	return getObjectTargetUrl;
+}
+
+function getGetJsonTargetUrl(){
+	return getJsonTargetUrl;
 }
 
 function createAjaxRequest(){
@@ -15,15 +19,14 @@ function createAjaxRequest(){
 	return request;
 }
 
-function sendGetLoadObject(index){
+function sendGetLoadObject(index,functionToCallOnSuccess){
 	let data = "";
 	let dataArrived = false;
 	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
 		if(4 === this.readyState){
 			if(200 === this.status){
-				data = this.responseText;
-				dataArrived = true;
+				functionToCallOnSuccess(this.responseText);
 			}else{
 				alert("" + this.status + ":" +this.responseText)
 			}
@@ -34,12 +37,12 @@ function sendGetLoadObject(index){
 	request.send()
 }
 
-function sendGetRequest(functionToCalOnSuccess){
+function sendGetLoadJson(functionToCallOnSuccess){
 	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
 		if(4 === this.readyState){
 			if(200 === this.status){
-				functionToCalOnSuccess(this.responseText);
+				functionToCallOnSuccess(this.responseText);
 			}else{
 				alert(this.status + ":" + this.responseText);
 			}

@@ -38,6 +38,7 @@ function fillItemList() {
 }
 
  */
+
 function sendFillitemListRequest() {
 	//Preparing the dropdown list
 	let dropdown = document.getElementById('items-dropdown');
@@ -47,19 +48,17 @@ function sendFillitemListRequest() {
 	dropdown.add(defaultOption);
 	dropdown.selectedIndex = 0;
 	//Sending the request
-	sendGetRequest(fillItemListWithJson);
+	sendGetLoadJson(fillItemListWithJson);
 }
 
 function fillItemListWithJson(jsonData){
 	//Process arrived data
-	console.log(jsonData);
 	const dropdown = document.getElementById("items-dropdown");
 	const entries = JSON.parse(jsonData);
 	let option;
 	for (let i = 0; i < entries.length; i++) {
 		option = document.createElement('option');
-		option.text = entries[i].ID +"_"+entries[i].Name;
-		// option.value = entries[i].FileUrl;
+		option.text = entries[i].ID +"_"+entries[i].FileUrl;
 		dropdown.add(option);
 	}
 }
