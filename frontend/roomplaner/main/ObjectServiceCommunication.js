@@ -1,8 +1,5 @@
-const configServicePort = 99;
-const objectServicePort = 100;
-
-const getObjectTargetUrl = "localhost:" + objectServicePort +  "/api/getObject";
-const getJsonTargetUrl = "localhost:" + objectServicePort + "/api/getJson"
+const getObjectTargetUrl = "/proxy/getObjectById";
+const getJsonTargetUrl = "/proxy/getJson";
 
 function createAjaxRequest(){
 	let request;
