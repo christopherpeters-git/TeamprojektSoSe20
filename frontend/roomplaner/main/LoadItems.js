@@ -25,16 +25,22 @@ function fillItemListWithJson(jsonData){
 	}
 }
 
+//Refills the list with all items in items-array
+function FillListWithItems(items) {
+	const menue= document.getElementById("placed");
+	menue.innerHTML = "";
+	const newOption = document.createElement("option");
+	newOption.innerHTML = standardListMessage;
+	menue.appendChild(newOption);
 
-function addItemToList(items) {
-	var menue= document.getElementById("placed");
-	var option = document.createElement("option");
-	option.text=items.name+items.id;
-	option.value =items.id;
-	//todo set icons
-	option.style.backgroundImage= "icon.png";
-
-	menue.add(option);
-
+	for(let i = 0; i < items.length; i++){
+		const option = document.createElement("option");
+		option.text=items[i].name+items[i].id;
+		option.value =items[i].id;
+		//todo set icons
+		option.style.backgroundImage= "icon.png";
+		menue.add(option);
+	}
+	menue.SetSelectedIndex = menue.length - 1;
 }
 
