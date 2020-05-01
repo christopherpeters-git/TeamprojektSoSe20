@@ -48,8 +48,8 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 
 	//Creating the request to the service
 	client := http.Client{}
-	req, err := http.NewRequest("GET",getObjectUrl,nil)
-	if err != nil{
+	req, err := http.NewRequest("GET", getObjectUrl, nil)
+	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))
 		log.Println(err.Error())
@@ -74,7 +74,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
-	w.Write(body)
+	w.Write([]byte(string(body)))
 	log.Println("Finished redirecting object request...")
 }
 
