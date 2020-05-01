@@ -102,7 +102,7 @@ function init() {
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.getElementById("items-dropdown").addEventListener('change', loadItems_offline, false);
+	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
@@ -114,13 +114,11 @@ function init() {
 
 function handle_load(gltf) {
 
-	//console.log(gltf);
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
 	items.push(new items_object(name,mesh));
 	console.log(items);
-	//items.push(mesh);
 	addItemToList(items[counter]);
 	counter++;
 	name =null;
@@ -251,21 +249,28 @@ function render() {
 
 }
 
-function loadItems_offline() {
-	loader.load(this.options[this.selectedIndex].value,handle_load);
-	name = this.options[this.selectedIndex].text;
-	this.selectedIndex=0;
+function loadItems(){
+	if(isOnlineMode_mathu()){
+		loadItemsOnline(this);
+	}else{
+		loadItemsOffline(this);
+	}
+}
 
+function loadItemsOffline(dropdown) {
+	loader.load(dropdown.options[dropdown.selectedIndex].value,handle_load);
+	name = dropdown.options[dropdown.selectedIndex].text;
+	dropdown.selectedIndex=0;
 }
 
 //For online use
-function loadItems() {
-	const path = "" + getGetObjectTargetUrl() + "/" + (this.selectedIndex - 1);
-	loader.load("items/closet/Sideboard",handle_load);
+function loadItemsOnline(dropdown) {
+	const path = "" + getGetObjectTargetUrl() + "/" + (dropdown.selectedIndex - 1);
 	loader.load(path,handle_load);
 	console.log(path);
-	name = this.options[this.selectedIndex].text;
-	this.selectedIndex=0;
+	name = dropdown.options[dropdown.selectedIndex].text;
+	dropdown.selectedIndex=0;
 }
+
 
 

@@ -1,5 +1,12 @@
-const getObjectTargetUrl = "/proxy/getObject";
 const getJsonTargetUrl = "/proxy/getJson";
+const getObjectTargetUrl = "/proxy/getObject";
+const getJsonTargetUrlOffline = "items.json";
+
+const isOnline = false;
+
+function isOnlineMode_mathu(){
+	return isOnline;
+}
 
 function getGetObjectTargetUrl(){
 	return getObjectTargetUrl;
@@ -19,24 +26,6 @@ function createAjaxRequest(){
 	return request;
 }
 
-function sendGetLoadObject(index,functionToCallOnSuccess){
-	let data = "";
-	let dataArrived = false;
-	const request = createAjaxRequest();
-	request.onreadystatechange = function () {
-		if(4 === this.readyState){
-			if(200 === this.status){
-				functionToCallOnSuccess(this.responseText);
-			}else{
-				alert("" + this.status + ":" +this.responseText)
-			}
-		}
-	}
-	console.log(getObjectTargetUrl + "/?" + "index=" + index);
-	request.open("GET",getObjectTargetUrl + "/?" + "index=" + index,true)
-	request.send()
-}
-
 function sendGetLoadJson(functionToCallOnSuccess){
 	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
@@ -48,7 +37,11 @@ function sendGetLoadJson(functionToCallOnSuccess){
 			}
 		}
 	}
-	console.log(getJsonTargetUrl);
-	request.open("GET",getJsonTargetUrl,true);
+
+	if(isOnlineMode_mathu()){
+		request.open("GET",getJsonTargetUrl,true);
+	}else{
+		request.open("GET",getJsonTargetUrlOffline,true);
+	}
 	request.send();
 }
