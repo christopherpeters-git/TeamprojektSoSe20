@@ -252,24 +252,12 @@ function render() {
 }
 
 function loadItems() {
-	const path = "" + getGetObjectTargetUrl() + "/" + this.selectedIndex;
-	let request = createAjaxRequest();
-	request = createAjaxRequest();
-	request.onreadystatechange = function () {
-		if(4 === this.readyState){
-			if(200 === this.status){
-				console.log(JSON.parse(path));
-			}else{
-				alert("" + this.status + ":" +this.responseText)
-			}
-		}
-	}
-	//getGetObjectTargetUrl() + "/" + this.selectedIndex
-	request.open("GET",path,true);
-	request.send();
-
+	const path = "" + getGetObjectTargetUrl() + "/" + (this.selectedIndex - 1);
+	loader.load("items/closet/Sideboard",handle_load);
 	loader.load(path,handle_load);
-	console.log(getGetObjectTargetUrl() + "/" + this.selectedIndex + "|" + (this.selectedIndex - 1));
+	console.log(path);
 	name = this.options[this.selectedIndex].text;
 	this.selectedIndex=0;
 }
+
+
