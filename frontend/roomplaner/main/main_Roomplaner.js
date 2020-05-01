@@ -1,14 +1,7 @@
-
-
-
 import * as THREE from '../build/three.module.js';
-
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from './jsm/loaders/RGBELoader.js';
-import { RoughnessMipmapper } from './jsm/utils/RoughnessMipmapper.js';
-
-
 var counter =0;
 class items_object{
 	constructor(name,object) {
@@ -43,7 +36,7 @@ function init() {
 	document.body.appendChild( container );
 
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.set( 5, 4, 3 );
+	camera.position.set( 0, 10, 5 );
 
 	scene = new THREE.Scene();
 	raycaster = new THREE.Raycaster();
@@ -59,20 +52,11 @@ function init() {
 			texture.dispose();
 			pmremGenerator.dispose();
 			render();
-			// model
-			// use of RoughnessMipmapper is optional
-			var roughnessMipmapper = new RoughnessMipmapper( renderer );
 			loader = new GLTFLoader();
-			loader.load( 'items/room/_firstroom/room_test.gltf', function ( gltf ) {
+			loader.load( 'items/room/room_1x1.gltf', function ( gltf ) {
 				room = gltf.scene;
-
-				//room.rotation.y +=-0.4;
-
-				//room.scale.add(room.scale,room.scale); sehr wichtig*****
-				//room.visible=false;
-				//room.scale.add(room.scale,vec23.scale);
-				//console.log(room);
-				//room.nodes[1].scale(0,0,0);
+				initRoom(room);
+				scaleRoom(room);
 				scene.add( gltf.scene );
 
 				render();
@@ -94,16 +78,18 @@ function init() {
 	controls = new OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', render ); // use if there is no animation loop
 	controls.minDistance = 2;
-	controls.maxDistance = 15;
+	controls.maxDistance = 20;
 	controls.target.set( 0, 0, - 0.2 );
 	controls.update();
-	fillItemList()
+	sendFillitemListRequest();
 
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
+	document.getElementById("wall_1").addEventListener('input', setRoomSize, false);
+	document.getElementById("wall_2").addEventListener('input', setRoomSize, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
@@ -114,7 +100,6 @@ function init() {
 
 function handle_load(gltf) {
 
-	//console.log(gltf);
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
@@ -130,38 +115,20 @@ function handle_load(gltf) {
 //####################################Eventhandler###########################################################################
 
 function onDocumentKeyDown( event ) {
-
 	switch ( event.keyCode ) {
 		case 82: isRKeyDown = true;
 			// console.log("true")
 			break;
-
-		case 65: a_Links= true;
-			mesh.position.z -=0.01;
-			break;
-		case 68: d_Rechts=true;
-			mesh.position.z+=0.01;
-			break;
-		case 83: s_Unten =true;
-			mesh.position.x +=0.01;
-			break;
-		case 87: w_Oben =true;
-			mesh.position.x -= 0.01;
-			break;
-		case 81: q_dreh_l = true;
-			mesh.rotation.y += 0.01;
-			break;
-		case 69: q_dreh_l = true;
-			mesh.rotation.y -= 0.01;
-			break;
 	}
+	let code = event.keyCode;
+	itemMovment(mesh,room,code);
 	render();
 }
 
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
 
-		case 16: isRKeyDown = false; break;
+		case 82: isRKeyDown = false; break;
 		case 65: a_Links =false; break;
 	}
 
@@ -230,29 +197,6 @@ function selectOption() {
 
 
 
-//############################Roomfunctions##################################################################
-//todo scaling over buttons or input
-function scalRoom() {
-
-	room.children[2].scale.x += 1;
-	room.children[2].scale.z += 1;
-
-	room.children[2].position.x += 1;
-	room.children[2].position.z -= 1;
-	room.children[2].position.y += 1;
-
-	room.children[3].scale.z += 1;
-	room.children[3].scale.x += 1;
-	room.children[3].position.y += 1;
-
-	room.children[4].scale.x += 1;
-	room.children[4].scale.z += 1;
-	room.children[4].position.y += 1;
-	room.children[4].position.z += 1;
-	room.children[4].position.x += 1;
-
-}
-
 //##############################################Render###############################################################
 function render() {
 	renderer.setClearColor();
@@ -260,11 +204,27 @@ function render() {
 
 }
 
-function loadItems() {
-	loader.load(this.options[this.selectedIndex].value,handle_load);
-	name = this.options[this.selectedIndex].text;
-	this.selectedIndex=0;
+function loadItems(){
+	if(isOnlineMode_mathu()){
+		loadItemsOnline(this);
+	}else{
+		loadItemsOffline(this);
+	}
+}
 
+function loadItemsOffline(dropdown) {
+	loader.load(dropdown.options[dropdown.selectedIndex].value,handle_load);
+	name = dropdown.options[dropdown.selectedIndex].text;
+	dropdown.selectedIndex=0;
+}
+
+//For online use
+function loadItemsOnline(dropdown) {
+	const path = "" + getGetObjectTargetUrl() + "/" + (dropdown.selectedIndex - 1);
+	loader.load(path,handle_load);
+	console.log(path);
+	name = dropdown.options[dropdown.selectedIndex].text;
+	dropdown.selectedIndex=0;
 }
 
 //##############################################Others###############################################################

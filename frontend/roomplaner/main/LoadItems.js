@@ -1,41 +1,28 @@
-
 const standardListMessage = "Select an item";
 
-function fillItemList() {
-
+function sendFillitemListRequest() {
+	//Preparing the dropdown list
 	let dropdown = document.getElementById('items-dropdown');
 	dropdown.length = 0;
-
 	let defaultOption = document.createElement('option');
 	defaultOption.text = 'Items';
-
 	dropdown.add(defaultOption);
 	dropdown.selectedIndex = 0;
+	//Sending the request
+	sendGetLoadJson(fillItemListWithJson);
+}
 
-	const url = './items.json';
-
-	const request = new XMLHttpRequest();
-	request.open('GET', url, true);
-
-	request.onload = function() {
-		if (request.status === 200) {
-			const data = JSON.parse(request.responseText);
-			let option;
-			for (let i = 0; i < data.length; i++) {
-				option = document.createElement('option');
-				option.text = data[i].ID +"_"+data[i].Name;
-				option.value = data[i].FileUrl;
-				dropdown.add(option);
-			}
-		} else {
-			// Reached the server, but it returned an error
-		}
+function fillItemListWithJson(jsonData){
+	//Process arrived data
+	const dropdown = document.getElementById("items-dropdown");
+	const entries = JSON.parse(jsonData);
+	let option;
+	for (let i = 0; i < entries.length; i++) {
+		option = document.createElement('option');
+		option.text = entries[i].ID +"_"+entries[i].FileUrl;
+		option.value = entries[i].FileUrl;
+		dropdown.add(option);
 	}
-	request.onerror = function() {
-		console.error('An error occurred fetching the JSON from ' + url);
-	};
-
-	request.send();
 }
 
 //Refills the list with all items in items-array

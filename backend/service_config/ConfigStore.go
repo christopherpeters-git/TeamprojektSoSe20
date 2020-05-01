@@ -30,6 +30,7 @@ func main() {
 	//Create config-dir if not exisiting
 	createConfigFolderIfNotExisting()
 	//Creates a log file
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	f, err := os.OpenFile("./log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
