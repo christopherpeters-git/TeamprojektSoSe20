@@ -102,7 +102,7 @@ function init() {
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
+	document.getElementById("items-dropdown").addEventListener('change', loadItems_offline, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
@@ -251,6 +251,14 @@ function render() {
 
 }
 
+function loadItems_offline() {
+	loader.load(this.options[this.selectedIndex].value,handle_load);
+	name = this.options[this.selectedIndex].text;
+	this.selectedIndex=0;
+
+}
+
+//For online use
 function loadItems() {
 	const path = "" + getGetObjectTargetUrl() + "/" + (this.selectedIndex - 1);
 	loader.load("items/closet/Sideboard",handle_load);
