@@ -1,6 +1,30 @@
+let test;
+
+
+function initRoom(room) {
+	test = room;
+
+}
+
+function saveRoomSize() {
+	document.getElementById("items-dropdown").style.visibility="visible";
+	document.getElementById("placed").style.visibility="visible";
+	document.getElementById("Room").style.visibility="hidden";
+	document.getElementById("wall_1").value=5;
+	document.getElementById("wall_2").value=5;
+}
+
+function setRoomSize() {
+	let wall_1 =document.getElementById("wall_1");
+	let wall_2 =document.getElementById("wall_2");
+	scaleRoom(test, parseFloat(wall_1.value), parseFloat(wall_2.value));
+	document.getElementById("wall_1_value").innerHTML=wall_1.value;
+	document.getElementById("wall_2_value").innerHTML=wall_2.value;
+
+
+}
 
 function scaleRoom(room,wall1=5,wall2=5) {
-
 	const diff_blend = 0.1;
 	const length_Wall_1 =wall1;
 	const length_Wall_2 =wall2;
