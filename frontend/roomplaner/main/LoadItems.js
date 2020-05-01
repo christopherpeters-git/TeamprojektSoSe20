@@ -1,4 +1,4 @@
-
+const standardListMessage = "Select an item";
 
 function sendFillitemListRequest() {
 	//Preparing the dropdown list
