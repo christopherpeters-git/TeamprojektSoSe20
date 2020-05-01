@@ -120,6 +120,8 @@ function onDocumentKeyDown( event ) {
 			// console.log("true")
 			break;
 	}
+	let code = event.keyCode;
+	itemMovment(mesh,room,code);
 	render();
 }
 
