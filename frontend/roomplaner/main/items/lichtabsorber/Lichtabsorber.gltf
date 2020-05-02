@@ -8,44 +8,13 @@
         {
             "name" : "Scene",
             "nodes" : [
+                0,
                 1,
-                2,
-                3
+                2
             ]
         }
     ],
     "nodes" : [
-        {
-            "mesh" : 0,
-            "name" : "Cube.001",
-            "scale" : [
-                0.08000000566244125,
-                5,
-                3
-            ],
-            "translation" : [
-                -3.275876760482788,
-                2.3139195442199707,
-                0.18846511840820312
-            ]
-        },
-        {
-            "children" : [
-                0
-            ],
-            "mesh" : 1,
-            "name" : "Cube",
-            "scale" : [
-                0.029999999329447746,
-                0.05000000074505806,
-                0.05000000074505806
-            ],
-            "translation" : [
-                0.0948067158460617,
-                0.13958854973316193,
-                -0.014622300863265991
-            ]
-        },
         {
             "name" : "Light",
             "rotation" : [
@@ -73,6 +42,20 @@
                 4.958309173583984,
                 6.925790786743164
             ]
+        },
+        {
+            "mesh" : 0,
+            "name" : "Cube.001",
+            "scale" : [
+                0.03999999910593033,
+                2.5,
+                1.5
+            ],
+            "translation" : [
+                -1.7268043756484985,
+                2.4949207305908203,
+                0.06941843032836914
+            ]
         }
     ],
     "materials" : [
@@ -92,25 +75,6 @@
                 "metallicFactor" : 0,
                 "roughnessFactor" : 0.4000000059604645
             }
-        },
-        {
-            "doubleSided" : true,
-            "emissiveFactor" : [
-                0,
-                0,
-                0
-            ],
-            "name" : "Material",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.800000011920929,
-                    0.800000011920929,
-                    0.800000011920929,
-                    1
-                ],
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.4000000059604645
-            }
         }
     ],
     "meshes" : [
@@ -125,20 +89,6 @@
                     },
                     "indices" : 3,
                     "material" : 0
-                }
-            ]
-        },
-        {
-            "name" : "Cube",
-            "primitives" : [
-                {
-                    "attributes" : {
-                        "POSITION" : 4,
-                        "NORMAL" : 5,
-                        "TEXCOORD_0" : 6
-                    },
-                    "indices" : 7,
-                    "material" : 1
                 }
             ]
         }
@@ -189,40 +139,6 @@
             "componentType" : 5123,
             "count" : 36,
             "type" : "SCALAR"
-        },
-        {
-            "bufferView" : 4,
-            "componentType" : 5126,
-            "count" : 24,
-            "max" : [
-                -3.238983392715454,
-                5.506091594696045,
-                1.3498144149780273
-            ],
-            "min" : [
-                -3.3043298721313477,
-                -0.3152812719345093,
-                -1.2180166244506836
-            ],
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 5,
-            "componentType" : 5126,
-            "count" : 24,
-            "type" : "VEC3"
-        },
-        {
-            "bufferView" : 6,
-            "componentType" : 5126,
-            "count" : 24,
-            "type" : "VEC2"
-        },
-        {
-            "bufferView" : 7,
-            "componentType" : 5123,
-            "count" : 36,
-            "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
@@ -245,31 +161,11 @@
             "buffer" : 0,
             "byteLength" : 72,
             "byteOffset" : 768
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 288,
-            "byteOffset" : 840
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 288,
-            "byteOffset" : 1128
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 192,
-            "byteOffset" : 1416
-        },
-        {
-            "buffer" : 0,
-            "byteLength" : 72,
-            "byteOffset" : 1608
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 1680,
+            "byteLength" : 840,
             "uri" : "Lichtabsorber.bin"
         }
     ]
