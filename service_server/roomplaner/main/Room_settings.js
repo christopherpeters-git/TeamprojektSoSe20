@@ -61,7 +61,7 @@ function setVisibleWalls(wall,room){
 }
 
 function itemMovment(item,room,code) {
-	if(room.children[2].visible==false) {
+	if(true) {										//room.children[2].visible==false
 		switch (code) {
 			case 65:
 				item.position.x -= 0.01;
