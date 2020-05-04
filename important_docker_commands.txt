@@ -1,0 +1,14 @@
+Building a container:
+docker build --no-cache --tag NAME DIRECTORY
+
+Running a container:
+docker run --publish PORT_OUTSIDE:PORT_INSIDE --detach --name RUNNING_ID CONTAINER_NAME
+
+Navigating in running container:         
+docker exec -t -i RUNNING_ID /bin/bash        
+(Qutting: exit)
+
+List running containers: docker ps
+
+Stop running container:
+docker rm --force RUNNING_ID
