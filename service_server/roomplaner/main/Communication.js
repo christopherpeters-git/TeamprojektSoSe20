@@ -39,5 +39,6 @@ function sendGetLoadJson(functionToCallOnSuccess){
 	}else{
 		request.open("GET",getJsonTargetUrlOffline,true);
 	}
+	console.log("Online: " + getIsOnline());
 	request.send();
 }
