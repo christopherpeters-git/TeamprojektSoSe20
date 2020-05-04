@@ -28,7 +28,7 @@ var isRKeyDown= false;
 var w_Oben=false,s_Unten=false,a_Links=false,d_Rechts =false,q_dreh_l=false,e_dreh_r=false;
 //###############################################################################################
 init();
-render();
+
 
 function init() {
 
@@ -51,7 +51,6 @@ function init() {
 			scene.environment = envMap;
 			texture.dispose();
 			pmremGenerator.dispose();
-			render();
 			loader = new GLTFLoader();
 			loader.load( 'items/room/room_1x1.gltf', function ( gltf ) {
 				room = gltf.scene;
@@ -139,7 +138,23 @@ function  onDocumentMouseMove(event) {
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	//console.log(raycaster);
-
+	var intersects = raycaster.intersectObjects(scene.children, true);
+	if(scene.children[0] != null) {
+		//console.log(intersects);
+		scene.children[0].children.forEach(function (child) {
+			if (child instanceof THREE.Mesh) {
+				child.visible = true;
+			}
+		})
+	}
+	if(intersects.length > 0) {
+		let firstObj = intersects[0];
+		for(let i = 0;i < room.children.length;i++) {
+			if(firstObj.object == room.children[i] && "Cube005".localeCompare(firstObj.object.name)) {
+				firstObj.object.visible = false;
+			}
+		}
+	}
 	render();
 
 }
