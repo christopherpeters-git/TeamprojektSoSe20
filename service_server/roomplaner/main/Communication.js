@@ -4,16 +4,12 @@ const getJsonTargetUrlOffline = "items.json";
 
 const isOnline = false;
 
-function isOnlineMode_mathu(){
+function getIsOnline(){
 	return isOnline;
 }
 
 function getGetObjectTargetUrl(){
 	return getObjectTargetUrl;
-}
-
-function getGetJsonTargetUrl(){
-	return getJsonTargetUrl;
 }
 
 function createAjaxRequest(){
@@ -38,7 +34,7 @@ function sendGetLoadJson(functionToCallOnSuccess){
 		}
 	}
 
-	if(isOnlineMode_mathu()){
+	if(getIsOnline()){
 		request.open("GET",getJsonTargetUrl,true);
 	}else{
 		request.open("GET",getJsonTargetUrlOffline,true);

@@ -205,7 +205,7 @@ function render() {
 }
 
 function loadItems(){
-	if(isOnlineMode_mathu()){
+	if(getIsOnline()){
 		loadItemsOnline(this);
 	}else{
 		loadItemsOffline(this);
