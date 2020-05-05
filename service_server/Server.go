@@ -11,10 +11,15 @@ import (
 //Proxy adresses
 const proxyGetObjectUrl = "/proxy/getObject/"
 const proxyGetJsonUrl = "/proxy/getJson"
+const proxyLoadConfigUrl = "/proxy/loadConfig"
+const proxySaveConfigUrl = "/proxy/saveConfig"
 
 //Service adresses
 const getObjectUrl = "http://127.0.0.1:100/api/getObjectByIndex"
 const getJsonUrl = "http://127.0.0.1:100/api/getJson"
+const loadConfigUrl = "http://127.0.0.1:99/api/config/load"
+const saveConfigUrl = "http://127.0.0.1:99/api/config/save"
+
 
 func main() {
 	//Creates a log file
@@ -30,7 +35,25 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("roomplaner/")))
 	http.HandleFunc(proxyGetJsonUrl, handleJsonRequest)
 	http.HandleFunc(proxyGetObjectUrl, handleGetObjectById)
+	http.HandleFunc(proxyLoadConfigUrl, handleLoadConfig)
+	http.HandleFunc(proxySaveConfigUrl, handleSaveConfig)
 	http.ListenAndServe(":12345", nil)
+}
+
+func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
+	log.Println("Started redirecting save-config request...")
+
+	http.Redirect(w,r,saveConfigUrl,307)
+
+	log.Println("Finished redirecting save-config request...")
+}
+
+func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
+	log.Println("Started redirecting load-config request...")
+
+	http.Redirect(w,r,proxyLoadConfigUrl,307)
+
+	log.Println("Finished redirecting load-config request...")
 }
 
 func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
