@@ -47,7 +47,7 @@ func prepareServerStart() {
 	//Stopping server if item folder doesnt exist
 	_, err = os.Stat(itemFolderName)
 	if os.IsNotExist(err) {
-		log.Fatal(serverStartFailedMsg + "")
+		log.Fatal(serverStartFailedMsg + "Couldn't find " + itemFolderName)
 	}
 }
 
