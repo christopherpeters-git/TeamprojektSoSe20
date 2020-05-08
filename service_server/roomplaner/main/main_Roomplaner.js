@@ -2,6 +2,7 @@ import * as THREE from '../build/three.module.js';
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from './jsm/loaders/RGBELoader.js';
+import { DragControls } from './jsm/controls/DragControls.js';
 var counter =0;
 class items_object{
 	constructor(name,object) {
@@ -14,7 +15,7 @@ class items_object{
 		return this.object;
 	}
 }
-
+var dragObjects = [];
 var mouse, raycaster;
 var container, controls;
 var camera, scene, renderer,name;
@@ -82,6 +83,10 @@ function init() {
 	controls.update();
 	sendFillitemListRequest();
 
+	const dragControls = new DragControls(dragObjects,camera,renderer.domElement);
+	dragControls.addEventListener('dragstart',function () { controls.enabled=false; });
+	dragControls.addEventListener('dragend',function () { controls.enabled=true; });
+	dragControls.addEventListener('drag', function (event) {event.object.position.x = 0;})
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -102,7 +107,14 @@ function handle_load(gltf) {
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
+	console.log(mesh);
 	items.push(new items_object(name,mesh));
+	for(let i = 0;i < mesh.children.length;i++) {
+		if(mesh.children[i] instanceof THREE.Mesh) {
+			dragObjects.push(mesh.children[i]);
+		}
+	}
+	console.log(dragObjects);
 	// console.log(items);
 	//items.push(mesh);
 	FillListWithItems(items);
