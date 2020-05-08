@@ -1,7 +1,7 @@
 #Importing a prebuild environment with go installed
 FROM golang
 #Adding everything in the current directory to given path
-ADD . /go/src/config_service/
+ADD ./ConfigStore.go /go/src/config_service/
 #Adding everything in the current directory to given path
 RUN go install config_service/
 #Adding the contents from src to dest
