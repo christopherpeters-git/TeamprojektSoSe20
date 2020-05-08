@@ -25,16 +25,6 @@ type Item struct {
 }
 
 func main() {
-	prepareServerStart()
-	http.Handle("/", http.FileServer(http.Dir("test/")))
-	http.HandleFunc(getObjectUrl, getObjectByIndex)
-	http.HandleFunc(getJsonFileUrl, getJson)
-	http.ListenAndServe(":100", nil)
-	log.Print("Object-service has started...")
-}
-
-//Prepares the server start
-func prepareServerStart() {
 	//Creates a log file
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	f, err := os.OpenFile(logName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -49,6 +39,11 @@ func prepareServerStart() {
 	if os.IsNotExist(err) {
 		log.Fatal(serverStartFailedMsg + "Couldn't find " + itemFolderName)
 	}
+	http.Handle("/", http.FileServer(http.Dir("test/")))
+	http.HandleFunc(getObjectUrl, getObjectByIndex)
+	http.HandleFunc(getJsonFileUrl, getJson)
+	http.ListenAndServe(":100", nil)
+	log.Print("Object-service has started...")
 }
 
 //writes the request object in the response-stream
