@@ -103,7 +103,7 @@ function saveConfig() {
 }
 
 function loadRoom_render() {
-	loadRoom();
+	sendPostLoadRequest("0","u^]_hd]yEC",loadRoom);
 	render();
 }
 
@@ -272,14 +272,15 @@ function loadRoom(config) {
 	document.getElementById("test_btn").style.visibility="visible";
 	const dropdown = document.getElementById("items-dropdown");
 	//testJsonObject
-	let test_Object = '[{"wall1":9,"wall2":7},[{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":5},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2}]]'
-	let data = JSON.parse(test_Object);
+	// let test_Object = '[{"wall1":9,"wall2":7},[{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":5},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2}]]'
+	let data = JSON.parse(config);
 	const wall1= data[0].wall1;
 	const wall2=data[0].wall2;
 	//console.log(dropdown);
 	//console.log(data);
 	scaleRoom(getRoom(),wall1,wall2);
 	loadRoomItems(data, dropdown,0);
+	console.log("Loaded data: " + config);
 }
 
 function loadRoomItems(data, dropdown, currentIndex) {
