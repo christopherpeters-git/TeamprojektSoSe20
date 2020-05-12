@@ -5,7 +5,6 @@ function initRoom(room) {
 	test = room;
 
 }
-
 function saveRoomSize() {
 	document.getElementById("items-dropdown").style.visibility="visible";
 	document.getElementById("placed").style.visibility="visible";
@@ -13,24 +12,18 @@ function saveRoomSize() {
 	document.getElementById("test_btn").style.visibility="visible";
 
 }
-
 function setRoomSize() {
 	let wall_1 =document.getElementById("wall_1");
 	let wall_2 =document.getElementById("wall_2");
 	scaleRoom(test, parseFloat(wall_1.value), parseFloat(wall_2.value));
 	document.getElementById("wall_1_value").innerHTML=wall_1.value;
 	document.getElementById("wall_2_value").innerHTML=wall_2.value;
-
-
 }
-
-
 function scaleRoom(room,wall1=5,wall2=5) {
 	const diff_blend = 0.1;
 	const length_Wall_1 =wall1;
 	const length_Wall_2 =wall2;
 	let parts= room.children;
-	console.log(room);
 	//scaling Walls
 	parts[2].scale.x = length_Wall_2;
 	parts[2].visible=false;
@@ -39,13 +32,11 @@ function scaleRoom(room,wall1=5,wall2=5) {
 	parts[4].scale.z = length_Wall_1;
 	// bottom
 	parts[6].scale.set(length_Wall_2, 0.1, length_Wall_1);
-
 		//position of Walls
 		parts[2].position.z = (length_Wall_1 + diff_blend);
 		parts[5].position.z = -(length_Wall_1 + diff_blend);
 		parts[3].position.x = length_Wall_2 + diff_blend;
 		parts[4].position.x = -(length_Wall_2 + diff_blend);
-
 }
 function setVisibleWalls(wall,room){
 	let parts= room.children;

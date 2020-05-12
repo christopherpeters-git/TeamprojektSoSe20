@@ -12,8 +12,7 @@ class RoomObj{
 	}
 }
 
-function save_Room(items) {
-	const room = getRoom();
+function saveRoom(items) {
 	console.log(items);
 	let room_setting=[];
 	let room_objects=[];
@@ -21,7 +20,6 @@ function save_Room(items) {
 	const[wall1,wall2]=getRoomsize();
 	let s_Room= new Room(wall1,wall2);
 	room_setting.push(s_Room);
-
 	//saving objects
 	for(let i =0;i<items.length;i++){
 		let Roomobj = new RoomObj(items[i].object_ID);
@@ -35,7 +33,8 @@ function save_Room(items) {
 		room_objects.push(Roomobj);
 	}
 	room_setting.push(room_objects);
-
 	let data= JSON.stringify(room_setting);
 	console.log(data);
+	return data;
 }
+
