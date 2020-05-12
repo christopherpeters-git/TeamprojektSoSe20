@@ -1,12 +1,12 @@
 [
   {
     "ID":0,
-    "Name":"Beamer",
-    "FileUrl":"items/beamer/basic_beamer/beamer.gltf"
+    "Name":"Sofa1",
+    "FileUrl":"items/chairs/_noLicense/sofa.gltf"
   },
   {
     "ID": 1,
-    "Name":"Sofa",
+    "Name":"Sofa2",
     "FileUrl":"items/sofa_DD/sofa_DD.glb"
   },
   {
