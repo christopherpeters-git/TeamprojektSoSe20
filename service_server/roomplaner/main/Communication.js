@@ -6,7 +6,7 @@ const getSaveConfigUrl = "/proxy/SaveConfig"
 //Offline URL's
 const getJsonTargetUrlOffline = "items.json";
 
-const isOnline = false;
+const isOnline = true;
 
 function getIsOnline(){
 	return isOnline;

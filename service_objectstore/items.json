@@ -1,10 +1,37 @@
 [
   {
     "ID": 0,
-    "FileUrl": "Beamer_2.gltf"
+    "Name":"Sofa2",
+    "FileUrl":"sofa_DD.glb"
   },
   {
     "ID": 1,
-    "FileUrl": "untitled.glb"
+    "Name":"Beamer_2",
+    "FileUrl":"Beamer_Sony_VW1100.glb"
+  },
+  {
+    "ID": 2,
+    "Name":"Kinositz",
+    "FileUrl":"kinositz.glb"
+  },
+  {
+    "ID": 3,
+    "Name":"Akustikabsorber-Grau",
+    "FileUrl":"akustikabsorber_Grau.glb"
+  },
+  {
+    "ID": 4,
+    "Name":"Akustikabsorber-Weiss",
+    "FileUrl":"akustikabsorber_Weiss.glb"
+  },
+  {
+    "ID": 5,
+    "Name":"Akustikabsorber-Schwarz",
+    "FileUrl":"akustikabsorber_Schwarz.glb"
+  },
+  {
+    "ID": 6,
+    "Name":"Lichtabsorber",
+    "FileUrl":"Lichtabsorber.glb"
   }
 ]
