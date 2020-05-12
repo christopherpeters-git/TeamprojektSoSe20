@@ -7,7 +7,7 @@
   {
     "ID": 1,
     "Name":"Sofa",
-    "FileUrl":"items/chairs/_noLicense/sofa.gltf"
+    "FileUrl":"items/sofa_DD/sofa_DD.glb"
   },
   {
     "ID": 2,
@@ -28,7 +28,37 @@
   {
     "ID": 5,
     "Name":"Beamer_2",
-    "FileUrl":"items/beamer/Beamer_2.gltf"
+    "FileUrl":"items/beamer_sonyvw1100/Beamer_Sony_VW1100.glb"
+  },
+
+  {
+    "ID": 6,
+    "Name":"Kinositz",
+    "FileUrl":"items/kinositz/kinositz.glb"
+  },
+
+  {
+    "ID": 7,
+    "Name":"Akustikabsorber-Grau",
+    "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe1.glb"
+  },
+
+  {
+    "ID": 8,
+    "Name":"Akustikabsorber-Weiß",
+    "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe2.glb"
+  },
+
+  {
+    "ID": 9,
+    "Name":"Akustikabsorber-Schwarz",
+    "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe3.glb"
+  },
+
+  {
+    "ID": 10,
+    "Name":"Lichtabsorber",
+    "FileUrl":"items/lichtabsorber/Lichtabsorber.glb"
   }
 
 ]
