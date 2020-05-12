@@ -23,6 +23,7 @@ var room;
 var loader;
 var check =true;
 var items =[];
+let itemLoaded;
 //###############################Keys##################################################################
 var isRKeyDown= false;
 
@@ -116,6 +117,8 @@ function handle_load(gltf) {
 	counter++;
 	name =null;
 	objID=null;
+	itemLoaded = true;
+	console.log(itemLoaded)
 	render();
 }
 
@@ -259,6 +262,7 @@ function removeItemByObjectScene(object){
 	return false;
 }
 
+
 //Loads items out of a Json
 function loadRoom(config) {
 	//hidding Setter Show Room
@@ -275,10 +279,18 @@ function loadRoom(config) {
 	//console.log(dropdown);
 	//console.log(data);
 	scaleRoom(getRoom(),wall1,wall2);
-	for(let i =0;i<data[1].length;i++){
-		console.log("first");
-		name = dropdown[data[1][i].ID].value;
-		objID= data[1][i].ID;
-		loader.load(dropdown[data[1][i].ID].value,handle_load);
-	}
+	loadRoomItems(data, dropdown,0);
 }
+
+function loadRoomItems(data, dropdown, currentIndex) {
+		if(currentIndex >= data[1].length){
+			return;
+		}
+		console.log("first");
+		name = dropdown[data[1][currentIndex].ID].value;
+		objID = data[1][currentIndex].ID;
+		itemLoaded = false;
+		loader.load(dropdown[data[1][currentIndex].ID].value, handle_load);
+		setTimeout(function() {loadRoomItems(data,dropdown,currentIndex + 1)}, 100);
+}
+
