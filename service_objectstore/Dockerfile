@@ -1,18 +1,16 @@
 #Importing a prebuild environment with go installed
 FROM golang
 #Adding everything in the current directory to given path
-ADD ./ObjectStore.go /go/src/object_service/
+ADD ./Server.go /go/src/server_service/
 #Adding everything in the current directory to given path
-RUN go install object_service/
+RUN go install server_service/
 #Adding the contents from src to dest
-ADD ./test/ /go/bin/test/
-ADD ./items/ /go/bin/items/
-ADD ./items.json /go/bin/
+ADD ./roomplaner/ /go/bin/roomplaner/
 #Change the working directory (like cd)
 WORKDIR /go/bin/
 #Change permissions due to windows compilation
-RUN chmod -R -v u+rwx test
+RUN chmod -R -v u+rwx roomplaner
 #Binary to start on container start
-ENTRYPOINT /go/bin/object_service
+ENTRYPOINT /go/bin/server_service
 #Port inside the container
-EXPOSE 100
+EXPOSE 101

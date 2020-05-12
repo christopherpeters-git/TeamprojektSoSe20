@@ -12,3 +12,6 @@ List running containers: docker ps
 
 Stop running container:
 docker rm --force RUNNING_ID
+
+Docker container ip:
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' RUNNING_ID
