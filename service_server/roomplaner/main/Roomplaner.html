@@ -5,13 +5,17 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="main.css">
+		<link type="text/css" rel="stylesheet" href="setter.css">
 		<script type="module" src="main_Roomplaner.js"></script>
+		<script src="SaveInKonfig.js"></script>
 		<script src="LoadItems.js"></script>
 		<script src="Room_settings.js"></script>
 		<script src="Communication.js"></script>
+
 	</head>
 
 	<body>
+
 		<div id="info">
 			Roomplaner
 			<select id="placed" style="float: left;visibility: hidden">
@@ -19,10 +23,16 @@
 			</select>
 			<select id="items-dropdown" name="Items" style="float: right;visibility: hidden" >
 			</select>
-			<select id="test-dropdown" name="Items" style="float: right;visibility: hidden" >
-			</select>
+			<button id="test_btn" style="visibility: hidden"> test_save</button>
 
-			<div id="Room">
+
+
+			<div id="setter">
+				<div class="tab">
+					<button id="defaultOpen" class="tablinks" onclick="openSet(event, 'Room')">RoomSettings</button>
+					<button class="tablinks" onclick="openSet(event, 'load')">Load ROOm</button>
+				</div>
+			<div id="Room" class="tabcontent">
 				<br>
 				Roomsettings
 				<br><br>
@@ -36,10 +46,15 @@
 					<input id="save_btn" type="button" value ="Save" onclick="saveRoomSize()"><br><br>
 				</form>
 			</div>
-
-			<button id="test_btn"> test_save</button>
-
+			<div id="load"class="tabcontent">
+			</div>
 		</div>
+	</div>
+		<script>
+			// Get the element with id="defaultOpen" and click on it
+			document.getElementById("defaultOpen").click();
+		</script>
 	</body>
+
 </html>
 

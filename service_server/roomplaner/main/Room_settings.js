@@ -9,9 +9,9 @@ function initRoom(room) {
 function saveRoomSize() {
 	document.getElementById("items-dropdown").style.visibility="visible";
 	document.getElementById("placed").style.visibility="visible";
-	document.getElementById("Room").style.visibility="hidden";
-	document.getElementById("wall_1").value=5;
-	document.getElementById("wall_2").value=5;
+	document.getElementById("setter").style.visibility="hidden";
+	document.getElementById("test_btn").style.visibility="visible";
+
 }
 
 function setRoomSize() {
@@ -23,6 +23,7 @@ function setRoomSize() {
 
 
 }
+
 
 function scaleRoom(room,wall1=5,wall2=5) {
 	const diff_blend = 0.1;
@@ -83,4 +84,39 @@ function itemMovment(item,room,code) {
 				break;
 		}
 	}
+}
+
+function openSet(evt, Name) {
+	// Declare all variables
+	var i, tabcontent, tablinks;
+
+	// Get all elements with class="tabcontent" and hide them
+	tabcontent = document.getElementsByClassName("tabcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	}
+
+	// Get all elements with class="tablinks" and remove the class "active"
+	tablinks = document.getElementsByClassName("tablinks");
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" active", "");
+	}
+
+	// Show the current tab, and add an "active" class to the button that opened the tab
+	document.getElementById(Name).style.display = "block";
+	evt.currentTarget.className += " active";
+}
+
+function getRoomsize() {
+	let wall_1 =document.getElementById("wall_1");
+	let wall_2 =document.getElementById("wall_2");
+	wall_1 = parseFloat(wall_1.value);
+	wall_2 = parseFloat(wall_2.value);
+
+	return [wall_1,wall_2];
+
+}
+
+function getRoom() {
+	return test;
 }

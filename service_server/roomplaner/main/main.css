@@ -56,11 +56,11 @@ canvas {
 	z-index: 1; /* TODO Solve this in HTML */
 }
 
-#Room{
+#setter{
 	width: 15em;
 	position: absolute;
 	border: 3px solid black;
-	border-radius: 1em;
+	//border-radius: 1em;
 	background: white;
 }
 

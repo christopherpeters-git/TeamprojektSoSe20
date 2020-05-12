@@ -4,20 +4,22 @@ import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from './jsm/loaders/RGBELoader.js';
 var counter =0;
 class items_object{
-	constructor(name,object) {
+	constructor(name,object,objID) {
 		this.id =counter;
 		this.name = name;
+		this.object_ID= objID;
 		this.object = object;
 	}
 
 	get object_(){
 		return this.object;
 	}
+
 }
 
 var mouse, raycaster;
 var container, controls;
-var camera, scene, renderer,name;
+var camera, scene, renderer,name,objID;
 var mesh;
 var room;
 var loader;
@@ -25,7 +27,7 @@ var check =true;
 var items =[];
 //###############################Keys##################################################################
 var isRKeyDown= false;
-var w_Oben=false,s_Unten=false,a_Links=false,d_Rechts =false,q_dreh_l=false,e_dreh_r=false;
+
 //###############################################################################################
 init();
 
@@ -88,6 +90,7 @@ function init() {
 	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.getElementById("wall_1").addEventListener('input', setRoomSize, false);
+	document.getElementById("test_btn").addEventListener('click', saveConfig, false);
 	document.getElementById("wall_2").addEventListener('input', setRoomSize, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
@@ -95,7 +98,9 @@ function init() {
 
 }
 
-
+function saveConfig() {
+	save_Room(items);
+}
 
 function handle_load(gltf) {
 
@@ -108,6 +113,7 @@ function handle_load(gltf) {
 	FillListWithItems(items);
 	counter++;
 	name =null;
+	objID=null;
 	render();
 }
 
@@ -128,7 +134,7 @@ function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
 
 		case 82: isRKeyDown = false; break;
-		case 65: a_Links =false; break;
+
 	}
 
 }
@@ -158,6 +164,7 @@ function  onDocumentMouseMove(event) {
 	render();
 
 }
+
 
 function onWindowResize() {
 
@@ -227,9 +234,12 @@ function loadItems(){
 	}
 }
 
+
+
 function loadItemsOffline(dropdown) {
 	loader.load(dropdown.options[dropdown.selectedIndex].value,handle_load);
 	name = dropdown.options[dropdown.selectedIndex].text;
+	objID= dropdown.selectedIndex;
 	dropdown.selectedIndex=0;
 }
 
@@ -239,6 +249,7 @@ function loadItemsOnline(dropdown) {
 	loader.load(path,handle_load);
 	console.log(path);
 	name = dropdown.options[dropdown.selectedIndex].text;
+	objID= dropdown.selectedIndex;
 	dropdown.selectedIndex=0;
 }
 
