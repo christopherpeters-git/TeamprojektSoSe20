@@ -103,7 +103,7 @@ function saveConfig() {
 }
 
 function loadRoom_render() {
-	sendPostLoadRequest("0","u^]_hd]yEC",loadRoom);
+	sendPostLoadConfig("0","u^]_hd]yEC",loadRoom);
 	render();
 }
 

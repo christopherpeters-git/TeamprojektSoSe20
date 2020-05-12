@@ -51,7 +51,7 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting load-config request...")
 
-	http.Redirect(w,r,proxyLoadConfigUrl,307)
+	http.Redirect(w,r,loadConfigUrl,307)
 
 	log.Println("Finished redirecting load-config request...")
 }
