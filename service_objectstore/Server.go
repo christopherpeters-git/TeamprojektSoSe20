@@ -14,11 +14,11 @@ const proxyGetJsonUrl = "/proxy/getJson"
 const proxyLoadConfigUrl = "/proxy/loadConfig"
 const proxySaveConfigUrl = "/proxy/saveConfig"
 
-//Service adresses
-const getObjectUrl = "http://127.0.0.1:100/api/getObjectByIndex"
-const getJsonUrl = "http://127.0.0.1:100/api/getJson"
-const loadConfigUrl = "http://127.0.0.1:99/api/config/load"
-const saveConfigUrl = "http://127.0.0.1:99/api/config/save"
+//Service adresses (Only true, if required boot order is satisfied)
+const getObjectUrl = "http://172.17.0.3:100/api/getObjectByIndex"
+const getJsonUrl = "http://172.17.0.3:100/api/getJson"
+const loadConfigUrl = "http://172.17.0.2:99/api/config/load"
+const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 	http.HandleFunc(proxyGetObjectUrl, handleGetObjectById)
 	http.HandleFunc(proxyLoadConfigUrl, handleLoadConfig)
 	http.HandleFunc(proxySaveConfigUrl, handleSaveConfig)
-	http.ListenAndServe(":12345", nil)
+	http.ListenAndServe(":101", nil)
 }
 
 func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +51,7 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting load-config request...")
 
-	http.Redirect(w,r,proxyLoadConfigUrl,307)
+	http.Redirect(w,r,loadConfigUrl,307)
 
 	log.Println("Finished redirecting load-config request...")
 }

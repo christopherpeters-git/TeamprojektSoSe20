@@ -17,6 +17,7 @@ var loadUrlPattern = "/api/config/load"
 var configSavePath = "./configs/"
 var configExtension = ".conf"
 var configJsonPath = "configs.json"
+var logFileName = "ConfigStore.log"
 var passwordLength = 10
 
 type Config struct {
@@ -31,7 +32,7 @@ func main() {
 	createConfigFolderIfNotExisting()
 	//Creates a log file
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	f, err := os.OpenFile("./log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("./" + logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
@@ -44,6 +45,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("test/")))
 	http.ListenAndServe(":99", nil)
 }
+
 
 func createConfigFolderIfNotExisting() {
 	_, err := os.Stat("configs")
