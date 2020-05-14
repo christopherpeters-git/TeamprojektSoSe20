@@ -289,11 +289,10 @@ function loadRoomItems(data, dropdown, currentIndex) {
 			return;
 		}
 		console.log("first");
-		name = dropdown[data[1][currentIndex].ID].value;
+		name = dropdown[data[1][currentIndex].ID].text;
 		objID = data[1][currentIndex].ID;
 		itemLoaded = false;
 		const path = "" + getGetObjectTargetUrl() + "/" + (data[1][currentIndex].ID - 1);
-		console.log("path: " + path);
 		loader.load(path, handle_load);
 		setTimeout(function() {loadRoomItems(data,dropdown,currentIndex + 1)}, 100);
 }

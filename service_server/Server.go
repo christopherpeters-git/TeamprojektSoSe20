@@ -41,18 +41,32 @@ func main() {
 
 func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting save-config request...")
-	body, _ := ioutil.ReadAll(r.Body)
-	log.Println("body: " + string(body))
-	http.Redirect(w, r, saveConfigUrl, 302)
+	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
 
+	defer resp.Body.Close()
+	//Reading and returning the content of the response
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	log.Println("Data: " + string(body))
+	w.Write(body)
 	log.Println("Finished redirecting save-config request...")
 }
 
 func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting load-config request...")
 
-	//http.Redirect(w,r,loadConfigUrl,302)
-	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
+	resp, err := http.Post(saveConfigUrl, "application/x-www-form-urlencoded", r.Body)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))
