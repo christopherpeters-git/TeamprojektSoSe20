@@ -1,7 +1,8 @@
 (WINDOWS)
-1. Set online mode in Communication.js to true
-2. Execute docker_containers_build.bat
-3. Execute docker_containers_run.bat
+1. instll docker desktop
+2. Set online mode in Communication.js to true
+3. Execute docker_containers_build.bat
+4. Execute docker_containers_run.bat
 
 The docker containers are now build and running
 
