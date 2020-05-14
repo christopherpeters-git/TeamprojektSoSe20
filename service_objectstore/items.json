@@ -17,17 +17,17 @@
   {
     "ID": 3,
     "Name":"Akustikabsorber-Grau",
-    "FileUrl":"akustikabsorber_Grau.glb"
+    "FileUrl":"akustikabsorber_Farbe1.glb"
   },
   {
     "ID": 4,
     "Name":"Akustikabsorber-Weiss",
-    "FileUrl":"akustikabsorber_Weiss.glb"
+    "FileUrl":"akustikabsorber_Farbe2.glb"
   },
   {
     "ID": 5,
     "Name":"Akustikabsorber-Schwarz",
-    "FileUrl":"akustikabsorber_Schwarz.glb"
+    "FileUrl":"akustikabsorber_Farbe3.glb"
   },
   {
     "ID": 6,
