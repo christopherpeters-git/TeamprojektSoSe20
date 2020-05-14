@@ -273,6 +273,7 @@ function loadRoom(config) {
 	const dropdown = document.getElementById("items-dropdown");
 	//testJsonObject
 	// let test_Object = '[{"wall1":9,"wall2":7},[{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":5},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2}]]'
+	console.log(config);
 	let data = JSON.parse(config);
 	const wall1= data[0].wall1;
 	const wall2=data[0].wall2;
@@ -291,7 +292,9 @@ function loadRoomItems(data, dropdown, currentIndex) {
 		name = dropdown[data[1][currentIndex].ID].value;
 		objID = data[1][currentIndex].ID;
 		itemLoaded = false;
-		loader.load(dropdown[data[1][currentIndex].ID].value, handle_load);
+		const path = "" + getGetObjectTargetUrl() + "/" + (data[1][currentIndex].ID - 1);
+		console.log("path: " + path);
+		loader.load(path, handle_load);
 		setTimeout(function() {loadRoomItems(data,dropdown,currentIndex + 1)}, 100);
 }
 

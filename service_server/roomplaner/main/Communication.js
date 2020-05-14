@@ -60,6 +60,7 @@ function sendPostLoadConfig(id,pass,functionToCallOnSuccess){
 	}
 	request.open("POST",getLoadConfigUrl,true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	console.log("" + id + " " + pass);
 	request.send("id="+id+"&"+"pwd="+pass);
 }
 

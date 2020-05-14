@@ -40,6 +40,8 @@ function FillListWithItems(items) {
 		//todo set icons
 		option.style.backgroundImage= "icon.png";
 		menue.add(option);
+		console.log(option);
+		console.log("ID: " + items[i].id)
 	}
 	menue.SetSelectedIndex = menue.length - 1;
 }

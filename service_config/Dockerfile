@@ -6,6 +6,8 @@ ADD ./ConfigStore.go /go/src/config_service/
 RUN go install config_service/
 #Adding the contents from src to dest
 ADD ./test/ /go/bin/test/
+ADD ./configs.json /go/bin/
+ADD ./configs/ /go/bin/configs/
 #Change the working directory (like cd)
 WORKDIR /go/bin/
 #Change permissions due to windows compilation

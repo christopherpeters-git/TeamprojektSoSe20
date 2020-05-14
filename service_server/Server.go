@@ -52,21 +52,14 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting load-config request...")
 
 	//http.Redirect(w,r,loadConfigUrl,302)
-	client := http.Client{}
-	req, err := http.NewRequest("POST", loadConfigUrl, r.Body)
+	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))
 		log.Println(err.Error())
 		return
 	}
-	resp, err := client.Do(req)
-	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
-		return
-	}
+
 	defer resp.Body.Close()
 	//Reading and returning the content of the response
 	body, err := ioutil.ReadAll(resp.Body)
@@ -76,6 +69,7 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
+	log.Println("Data: " + string(body))
 	w.Write(body)
 	log.Println("Finished redirecting load-config request...")
 }
