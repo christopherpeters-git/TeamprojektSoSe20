@@ -20,7 +20,6 @@ const getJsonUrl = "http://172.17.0.3:100/api/getJson"
 const loadConfigUrl = "http://172.17.0.2:99/api/config/load"
 const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
-
 func main() {
 	//Creates a log file
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -42,8 +41,9 @@ func main() {
 
 func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting save-config request...")
-
-	http.Redirect(w,r,saveConfigUrl,307)
+	body, _ := ioutil.ReadAll(r.Body)
+	log.Println("body: " + string(body))
+	http.Redirect(w, r, saveConfigUrl, 302)
 
 	log.Println("Finished redirecting save-config request...")
 }
@@ -51,8 +51,32 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting load-config request...")
 
-	http.Redirect(w,r,loadConfigUrl,307)
-
+	//http.Redirect(w,r,loadConfigUrl,302)
+	client := http.Client{}
+	req, err := http.NewRequest("POST", loadConfigUrl, r.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	defer resp.Body.Close()
+	//Reading and returning the content of the response
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	w.Write(body)
 	log.Println("Finished redirecting load-config request...")
 }
 
@@ -85,6 +109,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	resp, err := client.Do(req)
 	if err != nil {
 		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
 		log.Println(err.Error())
 		return
 	}
@@ -97,7 +122,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
-	w.Write([]byte(string(body)))
+	w.Write(body)
 	log.Println("Finished redirecting object request...")
 }
 
