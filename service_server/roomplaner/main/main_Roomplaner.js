@@ -295,6 +295,7 @@ function loadRoom(config) {
 
 function loadRoomItems(data, dropdown, currentIndex) {
 		if(currentIndex >= data[1].length){
+			setItemPosition(data);
 			return;
 		}
 		console.log("first");
@@ -306,3 +307,14 @@ function loadRoomItems(data, dropdown, currentIndex) {
 		setTimeout(function() {loadRoomItems(data,dropdown,currentIndex + 1)}, 100);
 }
 
+function setItemPosition(data) {
+	for (let i = 0; i < data[1].length; i++) {
+		items[i].object.position.x = data[1][i].position[0];
+		items[i].object.position.y = data[1][i].position[1];
+		items[i].object.position.z = data[1][i].position[2];
+		items[i].object.rotation.x = data[1][i].rotation[0];
+		items[i].object.rotation.y = data[1][i].rotation[1];
+		items[i].object.rotation.z = data[1][i].rotation[2];
+		render();
+	}
+}
