@@ -1,0 +1,64 @@
+[
+  {
+    "ID":0,
+    "Name":"Sofa1",
+    "FileUrl":"items/chairs/_noLicense/sofa.gltf"
+  },
+  {
+    "ID": 1,
+    "Name":"Sofa2",
+    "FileUrl":"items/sofa_DD/sofa_DD.glb"
+  },
+  {
+    "ID": 2,
+    "Name":"Screen",
+    "FileUrl":"items/screen/screen_16x9/leinwand_test.gltf"
+  },
+  {
+    "ID": 3,
+    "Name":"Tisch",
+    "FileUrl":"items/tables/Tisdh01.gltf"
+  },
+  {
+    "ID": 4,
+    "Name":"Sideboard",
+    "FileUrl":"items/closet/Sideboard.glb"
+  },
+
+  {
+    "ID": 5,
+    "Name":"Beamer_2",
+    "FileUrl":"items/beamer_sonyvw1100/Beamer_Sony_VW1100.glb"
+  },
+
+  {
+    "ID": 6,
+    "Name":"Kinositz",
+    "FileUrl":"items/kinositz/kinositz.glb"
+  },
+
+  {
+    "ID": 7,
+    "Name":"Akustikabsorber-Grau",
+    "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe1.glb"
+  },
+
+  {
+    "ID": 8,
+    "Name":"Akustikabsorber-Weiß",
+    "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe2.glb"
+  },
+
+  {
+    "ID": 9,
+    "Name":"Akustikabsorber-Schwarz",
+    "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe3.glb"
+  },
+
+  {
+    "ID": 10,
+    "Name":"Lichtabsorber",
+    "FileUrl":"items/lichtabsorber/Lichtabsorber.glb"
+  }
+
+]

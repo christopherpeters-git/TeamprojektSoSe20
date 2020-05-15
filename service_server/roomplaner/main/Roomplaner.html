@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<title>three.js webgl - glTF loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+		<link type="text/css" rel="stylesheet" href="setter.css">
+		<script type="module" src="main_Roomplaner.js"></script>
+		<script src="SaveInConfig.js"></script>
+		<script src="LoadItems.js"></script>
+		<script src="Room_settings.js"></script>
+		<script src="Communication.js"></script>
+
+	</head>
+
+	<body>
+
+		<div id="info">
+			Roomplaner
+			<select id="placed" style="float: left;visibility: hidden">
+				<option value="">Select an item</option>
+			</select>
+			<select id="items-dropdown" name="Items" style="float: right;visibility: hidden" >
+			</select>
+			<button id="test_btn" style="visibility: hidden"> test_save</button>
+
+
+			<div id="setter">
+				<div class="tab">
+					<button id="defaultOpen" class="tablinks" onclick="openSet(event, 'Room')">RoomSettings</button>
+					<button class="tablinks" onclick="openSet(event, 'load')">Load ROOm</button>
+				</div>
+			<div id="Room" class="tabcontent">
+				<br>
+				Roomsettings
+				<br><br>
+				<form >
+					<label for="wall_1">Wall 1:</label>
+					<input  type="range"min="1.0" max="15.0" value="5.0" step="0.1" id="wall_1" name="fname">
+					<p><span id="wall_1_value">5</span></p>
+					<label for="wall_2">Wall 2:</label>
+					<input  type="range"min="1" max="15" value="5" step="0.1" id="wall_2" name="fname">
+					<p><span id="wall_2_value">5</span></p>
+					<input class="setter_btn" id="save_btn" type="button" value ="Save" onclick="saveRoomSize()">
+					<br><br>
+				</form>
+			</div>
+			<div id="load"class="tabcontent">
+				<br>
+				Loader
+				<br><br>
+			<form >
+				<input type="text" id="loadConfigId">
+				<input type="text" id="loadConfigPass">
+				<input class="setter_btn" id="load_btn" type="button" value ="Load">
+				<br><br>
+			</form>
+			</div>
+		</div>
+	</div>
+		<script>
+			document.getElementById("defaultOpen").click();
+		</script>
+	</body>
+
+</html>
+
