@@ -12,7 +12,7 @@ class RoomObj{
 	}
 }
 
-function saveRoom(items) {
+function saveRoomToJsonString(items) {
 	console.log(items);
 	let room_setting=[];
 	let room_objects=[];
@@ -34,7 +34,12 @@ function saveRoom(items) {
 	}
 	room_setting.push(room_objects);
 	let data= JSON.stringify(room_setting);
-	console.log(data);
 	return data;
+}
+
+function onSaveConfigResponse(response){
+	const msg = "SaveConfigAnswer: " + response;
+	alert(msg)
+	console.log("SaveConfigAnswer: " + msg);
 }
 

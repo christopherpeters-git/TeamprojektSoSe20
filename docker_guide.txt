@@ -10,3 +10,6 @@ Test: localhost:80 in browser
 
 to stop the containers:
 docker_containers_stop.bat
+
+to copy service logs to /logs/:
+docker_containers_get_logs.bat

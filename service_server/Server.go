@@ -41,7 +41,7 @@ func main() {
 
 func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting save-config request...")
-	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
+	resp, err := http.Post(saveConfigUrl, "application/x-www-form-urlencoded", r.Body)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("Internal server error"))

@@ -2,7 +2,7 @@
 const getJsonTargetUrl = "/proxy/getJson";
 const getObjectTargetUrl = "/proxy/getObject";
 const getLoadConfigUrl = "/proxy/loadConfig"
-const getSaveConfigUrl = "/proxy/SaveConfig"
+const getSaveConfigUrl = "/proxy/saveConfig"
 //Offline URL's
 const getJsonTargetUrlOffline = "items.json";
 
@@ -48,7 +48,7 @@ function sendGetLoadJson(functionToCallOnSuccess){
 }
 
 function sendPostLoadConfig(id,pass,functionToCallOnSuccess){
-	const request = createAjaxRequest()
+	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
 		if(4 === this.readyState){
 			if(200 === this.status){
@@ -64,7 +64,7 @@ function sendPostLoadConfig(id,pass,functionToCallOnSuccess){
 	request.send("id="+id+"&"+"pwd="+pass);
 }
 
-function sendPostSaveConfig(config,functionToCallOnSuccess){
+function sendPostSaveConfig(configStr,functionToCallOnSuccess){
 	const request = createAjaxRequest();
 	request.onreadystatechange = function () {
 		if(4 === this.readyState){
@@ -77,5 +77,5 @@ function sendPostSaveConfig(config,functionToCallOnSuccess){
 	}
 	request.open("POST",getSaveConfigUrl,true);
 	request.setRequestHeader("Content-Type","application/json");
-	request.send(JSON.stringify(config));
+	request.send(configStr);
 }

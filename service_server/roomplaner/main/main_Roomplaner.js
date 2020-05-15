@@ -99,7 +99,9 @@ function init() {
 }
 
 function saveConfig() {
-	saveRoom(items);
+	const data = saveRoomToJsonString(items);
+	console.log(data);
+	sendPostSaveConfig(data, onSaveConfigResponse);
 }
 
 function loadRoom_render() {
