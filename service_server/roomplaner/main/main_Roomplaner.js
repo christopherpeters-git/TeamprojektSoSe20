@@ -103,8 +103,15 @@ function saveConfig() {
 }
 
 function loadRoom_render() {
-	sendPostLoadConfig("0","u^]_hd]yEC",loadRoom);
-	render();
+	const inputId = document.getElementById("loadConfigId");
+	const inputPass = document.getElementById("loadConfigPass");
+	console.log("id: " + inputId.value + " pass: " + inputPass.value);
+	if(!isNaN(inputId.value)){
+		sendPostLoadConfig(inputId.value,inputPass.value,loadRoom);
+		render();
+	}else{
+		alert("Input is not a number!");
+	}
 }
 
 function handle_load(gltf) {
