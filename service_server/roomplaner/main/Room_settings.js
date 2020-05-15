@@ -73,6 +73,12 @@ function itemMovment(item,room,code) {
 			case 69:
 				item.rotation.y -= 0.01;
 				break;
+			case 79: //O für oben bewegen	
+				item.position.y +=0.1;
+			 break;
+			case 85://U für unten bewegen
+				item.position.y -=0.1;
+				break;
 		}
 	}
 }
