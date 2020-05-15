@@ -2,14 +2,14 @@ import * as THREE from '../build/three.module.js';
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from './jsm/loaders/RGBELoader.js';
-var counter =0;
+let counter =0;
 class items_object{
-	constructor(name,object) {
+	constructor(name,object,objID) {
 		this.id =counter;
 		this.name = name;
+		this.object_ID= objID;
 		this.object = object;
 	}
-
 	get object_(){
 		return this.object;
 	}
@@ -17,15 +17,16 @@ class items_object{
 
 var mouse, raycaster;
 var container, controls;
-var camera, scene, renderer,name;
+var camera, scene, renderer,name,objID;
 var mesh;
 var room;
 var loader;
 var check =true;
 var items =[];
+let itemLoaded;
 //###############################Keys##################################################################
 var isRKeyDown= false;
-var w_Oben=false,s_Unten=false,a_Links=false,d_Rechts =false,q_dreh_l=false,e_dreh_r=false;
+
 //###############################################################################################
 init();
 
@@ -88,28 +89,49 @@ function init() {
 	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.getElementById("wall_1").addEventListener('input', setRoomSize, false);
+	document.getElementById("test_btn").addEventListener('click', saveConfig, false);
 	document.getElementById("wall_2").addEventListener('input', setRoomSize, false);
+	document.getElementById("load_btn").addEventListener('click', loadRoom_render, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
 
 }
 
+function saveConfig() {
+	const data = saveRoomToJsonString(items);
+	console.log(data);
+	sendPostSaveConfig(data, onSaveConfigResponse);
+}
 
+function loadRoom_render() {
+	const inputId = document.getElementById("loadConfigId");
+	const inputPass = document.getElementById("loadConfigPass");
+	console.log("id: " + inputId.value + " pass: " + inputPass.value);
+	if(!isNaN(inputId.value)){
+		sendPostLoadConfig(inputId.value,inputPass.value,loadRoom);
+		render();
+	}else{
+		alert("Input is not a number!");
+	}
+}
 
 function handle_load(gltf) {
-
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
-	items.push(new items_object(name,mesh));
-	// console.log(items);
-	//items.push(mesh);
+	items.push(new items_object(name,mesh,objID));
 	FillListWithItems(items);
+	console.log(objID);
 	counter++;
 	name =null;
+	objID=null;
+	itemLoaded = true;
+	console.log(itemLoaded)
 	render();
 }
+
+
 
 //####################################Eventhandler###########################################################################
 
@@ -128,7 +150,7 @@ function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
 
 		case 82: isRKeyDown = false; break;
-		case 65: a_Links =false; break;
+
 	}
 
 }
@@ -159,23 +181,19 @@ function  onDocumentMouseMove(event) {
 
 }
 
-function onWindowResize() {
 
+function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	render();
-
 }
 
 //Removing an object with r + mouse0
 function onDocumentMouseDown( event ) {
-
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
-
 	const intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length > 0) {
 		if (isRKeyDown) {
@@ -199,12 +217,7 @@ function onDocumentMouseDown( event ) {
 		}
 	}
 	render();
-
-	//console.log(intersect);
-	//console.log(camera);
-
 }
-
 //getting an item by index
 function selectOption() {
 	mesh =items[this.options[this.selectedIndex].value].object;
@@ -227,9 +240,12 @@ function loadItems(){
 	}
 }
 
+
+
 function loadItemsOffline(dropdown) {
 	loader.load(dropdown.options[dropdown.selectedIndex].value,handle_load);
 	name = dropdown.options[dropdown.selectedIndex].text;
+	objID= dropdown.selectedIndex;
 	dropdown.selectedIndex=0;
 }
 
@@ -239,6 +255,7 @@ function loadItemsOnline(dropdown) {
 	loader.load(path,handle_load);
 	console.log(path);
 	name = dropdown.options[dropdown.selectedIndex].text;
+	objID= dropdown.selectedIndex;
 	dropdown.selectedIndex=0;
 }
 
@@ -254,3 +271,50 @@ function removeItemByObjectScene(object){
 	return false;
 }
 
+
+//Loads items out of a Json
+function loadRoom(config) {
+	//hidding Setter Show Room
+	document.getElementById("items-dropdown").style.visibility="visible";
+	document.getElementById("placed").style.visibility="visible";
+	document.getElementById("setter").style.visibility="hidden";
+	document.getElementById("test_btn").style.visibility="visible";
+	const dropdown = document.getElementById("items-dropdown");
+	//testJsonObject
+	// let test_Object = '[{"wall1":9,"wall2":7},[{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":5},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2}]]'
+	console.log(config);
+	let data = JSON.parse(config);
+	const wall1= data[0].wall1;
+	const wall2=data[0].wall2;
+	//console.log(dropdown);
+	//console.log(data);
+	scaleRoom(getRoom(),wall1,wall2);
+	loadRoomItems(data, dropdown,0);
+	console.log("Loaded data: " + config);
+}
+
+function loadRoomItems(data, dropdown, currentIndex) {
+		if(currentIndex >= data[1].length){
+			setItemPosition(data);
+			return;
+		}
+		console.log("first");
+		name = dropdown[data[1][currentIndex].ID].text;
+		objID = data[1][currentIndex].ID;
+		itemLoaded = false;
+		const path = "" + getGetObjectTargetUrl() + "/" + (data[1][currentIndex].ID - 1);
+		loader.load(path, handle_load);
+		setTimeout(function() {loadRoomItems(data,dropdown,currentIndex + 1)}, 100);
+}
+
+function setItemPosition(data) {
+	for (let i = 0; i < data[1].length; i++) {
+		items[i].object.position.x = data[1][i].position[0];
+		items[i].object.position.y = data[1][i].position[1];
+		items[i].object.position.z = data[1][i].position[2];
+		items[i].object.rotation.x = data[1][i].rotation[0];
+		items[i].object.rotation.y = data[1][i].rotation[1];
+		items[i].object.rotation.z = data[1][i].rotation[2];
+		render();
+	}
+}

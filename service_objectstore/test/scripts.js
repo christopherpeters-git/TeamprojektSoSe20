@@ -1,6 +1,6 @@
 function sendGetLoadObject(){
     const request = new XMLHttpRequest();
-    const targetUrl = "/api/getObject"
+    const targetUrl = "/api/getObjectByIndex"
     const index = document.getElementById("index").value
     request.onreadystatechange = function () {
         if(4 === this.readyState){
@@ -11,8 +11,8 @@ function sendGetLoadObject(){
             }
         }
     }
-    console.log(targetUrl + "/?" + "index=" + index);
-    request.open("GET",targetUrl + "/?" + "index=" + index,true)
+    console.log(targetUrl + "?" + "index=" + index);
+    request.open("GET",targetUrl + "?" + "index=" + index,true)
     request.send() //TODO add to parameters
 }
 

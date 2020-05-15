@@ -19,7 +19,7 @@ function fillItemListWithJson(jsonData){
 	let option;
 	for (let i = 0; i < entries.length; i++) {
 		option = document.createElement('option');
-		option.text = entries[i].ID +"_"+entries[i].FileUrl;
+		option.text = entries[i].Name;
 		option.value = entries[i].FileUrl;
 		dropdown.add(option);
 	}
@@ -35,7 +35,7 @@ function FillListWithItems(items) {
 
 	for(let i = 0; i < items.length; i++){
 		const option = document.createElement("option");
-		option.text=items[i].name+items[i].id;
+		option.text= items[i].name;
 		option.value =items[i].id;
 		//todo set icons
 		option.style.backgroundImage= "icon.png";
