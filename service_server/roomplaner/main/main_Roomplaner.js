@@ -22,13 +22,13 @@ var camera, scene, renderer,name,objID;
 var mesh;
 var room;
 var loader;
-var check =true;
 var items =[];
 let itemLoaded;
 
 let data;
 let dropdown;
 let currentIndex;
+
 //###############################Keys##################################################################
 var isRKeyDown= false;
 
