@@ -11,52 +11,77 @@
   },
   {
     "ID": 2,
-    "Name":"Screen",
-    "FileUrl":"items/screen/screen_16x9/leinwand_test.gltf"
+    "Name":"Leinwand 1 16:9",
+    "FileUrl":"items/leinwand/leinwand_16_zu_9_120.glb"
   },
   {
     "ID": 3,
+    "Name":"Leinwand 2 16:9",
+    "FileUrl":"items/leinwand/leinwand_16_zu_9_135.glb"
+  },
+  {
+    "ID": 4,
+    "Name":"Leinwand 3 16:9",
+    "FileUrl":"items/leinwand/leinwand_16_zu_9_150.glb"
+  },
+  {
+    "ID": 5,
+    "Name":"Leinwand 4 21:9",
+    "FileUrl":"items/leinwand/leinwand_21_zu_9_125.glb"
+  },
+  {
+    "ID": 6,
+    "Name":"Leinwand 5 21:9",
+    "FileUrl":"items/leinwand/leinwand_21_zu_9_158.glb"
+  },
+  {
+    "ID": 7,
+    "Name":"Leinwand 6 21:9",
+    "FileUrl":"items/leinwand/leinwand_21_zu_9_166.glb"
+  },
+  {
+    "ID": 8,
     "Name":"Tisch",
     "FileUrl":"items/tables/Tisdh01.gltf"
   },
   {
-    "ID": 4,
+    "ID": 9,
     "Name":"Sideboard",
     "FileUrl":"items/closet/Sideboard.glb"
   },
 
   {
-    "ID": 5,
+    "ID": 10,
     "Name":"Beamer_2",
     "FileUrl":"items/beamer_sonyvw1100/Beamer_Sony_VW1100.glb"
   },
 
   {
-    "ID": 6,
+    "ID": 11,
     "Name":"Kinositz",
     "FileUrl":"items/kinositz/kinositz.glb"
   },
 
   {
-    "ID": 7,
+    "ID": 12,
     "Name":"Akustikabsorber-Grau",
     "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe1.glb"
   },
 
   {
-    "ID": 8,
+    "ID": 13,
     "Name":"Akustikabsorber-Weiß",
     "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe2.glb"
   },
 
   {
-    "ID": 9,
+    "ID": 14,
     "Name":"Akustikabsorber-Schwarz",
     "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe3.glb"
   },
 
   {
-    "ID": 10,
+    "ID": 15,
     "Name":"Lichtabsorber",
     "FileUrl":"items/lichtabsorber/Lichtabsorber.glb"
   }
