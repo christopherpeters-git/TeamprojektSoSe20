@@ -1,5 +1,9 @@
 let test;
-
+const movementSpeed =0.01;
+let factor;
+let lastKeycode;
+let timer =0;
+let counter =0;
 
 function initRoom(room) {
 	test = room;
@@ -52,34 +56,98 @@ function setVisibleWalls(wall,room){
 
 }
 
+function setMovingDirection(room){
+	if(room.children[2].visible==false||room.children[4].visible==false){
+		factor =1;
+	}
+	if(room.children[5].visible==false||room.children[3].visible==false){
+		factor =-1;
+	}
+}
+function setMovingSpeed(code){
+	if(lastKeycode==code){
+		let time_now=Date.now();
+		time_now = time_now-timer;
+		time_now = Math.floor((time_now/1000));
+		if(time_now<1&&counter<=10){
+			counter++;
+		}
+		if(counter>10){
+			factor=factor*10;
+		}
+	}
+	else{
+		counter =0;
+		factor=factor/10;
+	}
+}
+
 function itemMovment(item,room,code) {
-	if(true) {										//room.children[2].visible==false
+	if(item==null)return 0;
+	setMovingDirection(room)
+	setMovingSpeed(code);
+	if(room.children[2].visible==false||room.children[5].visible==false) {
+		timer=Date.now();
 		switch (code) {
 			case 65:
-				item.position.x -= 0.01;
+				item.position.x -= (movementSpeed * factor);
+				lastKeycode=code;
 				break;
 			case 68:
-				item.position.x += 0.01;
+				item.position.x += (movementSpeed * factor);
+				lastKeycode=code;
 				break;
 			case 83:
-				item.position.z += 0.01;
+				item.position.z += (movementSpeed * factor);
+				lastKeycode=code;
 				break;
 			case 87:
-				item.position.z -= 0.01;
+				item.position.z -= (movementSpeed * factor);
+				lastKeycode=code;
 				break;
 			case 81:
-				item.rotation.y += 0.01;
+				item.rotation.y += (movementSpeed * factor);
+				lastKeycode=code;
 				break;
 			case 69:
-				item.rotation.y -= 0.01;
+				item.rotation.y -= (movementSpeed * factor);
+				lastKeycode=code;
 				break;
-			case 79: //O für oben bewegen	
-				item.position.y +=0.1;
-			 break;
+			case 79: //O für oben bewegen
+				item.position.y += slowMove;
+				break;
 			case 85://U für unten bewegen
-				item.position.y -=0.1;
+				item.position.y -= slowMove;
 				break;
 		}
+	}else{
+		switch (code) {
+			case 65:
+				item.position.z -= (movementSpeed * factor);
+				break;
+			case 68:
+				item.position.z += (movementSpeed * factor);
+				break;
+			case 83:
+				item.position.x -= (movementSpeed * factor);
+				break;
+			case 87:
+				item.position.x += (movementSpeed * factor);
+				break;
+			case 81:
+				item.rotation.y += (movementSpeed * factor);
+				break;
+			case 69:
+				item.rotation.y -= (movementSpeed * factor);
+				break;
+			case 79: //O für oben bewegen
+				item.position.y += slowMove;
+				break;
+			case 85://U für unten bewegen
+				item.position.y -= slowMove;
+				break;
+		}
+
 	}
 }
 
