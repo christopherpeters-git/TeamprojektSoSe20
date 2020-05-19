@@ -122,6 +122,7 @@ function loadRoom_render() {
 }
 
 function handle_load(gltf) {
+
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
@@ -164,7 +165,7 @@ function onDocumentKeyDown( event ) {
 			break;
 	}
 	let code = event.keyCode;
-	itemMovment(mesh,room,code);
+	itemMovment(mesh,room,code,event);
 	render();
 }
 
@@ -188,6 +189,7 @@ function  onDocumentMouseMove(event) {
 		scene.children[0].children.forEach(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.visible = true;
+
 			}
 		})
 	}
