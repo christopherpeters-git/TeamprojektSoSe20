@@ -20,6 +20,23 @@ const getJsonUrl = "http://172.17.0.3:100/api/getJson"
 const loadConfigUrl = "http://172.17.0.2:99/api/config/load"
 const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
+var currentRequests = 0
+const maxParallelRequests = 2
+
+func decrementCurrentRequests(){
+	currentRequests--
+}
+
+func areThereTooManyConnections() bool{
+	return currentRequests > maxParallelRequests
+}
+
+func reportError (w http.ResponseWriter, statusCode int, responseMessage string, logMessage string){
+	w.WriteHeader(statusCode)
+	w.Write([]byte(responseMessage))
+	log.Println(logMessage)
+}
+
 func main() {
 	//Creates a log file
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -41,11 +58,14 @@ func main() {
 
 func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting save-config request...")
+	currentRequests++
+	defer decrementCurrentRequests()
+	if areThereTooManyConnections() {
+		return
+	}
 	resp, err := http.Post(saveConfigUrl, "application/x-www-form-urlencoded", r.Body)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 
@@ -53,9 +73,7 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	//Reading and returning the content of the response
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 	log.Println("Data: " + string(body))
@@ -65,12 +83,14 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 
 func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting load-config request...")
-
+	currentRequests++
+	defer decrementCurrentRequests()
+	if areThereTooManyConnections() {
+		return
+	}
 	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 
@@ -78,9 +98,8 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	//Reading and returning the content of the response
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
+
 		return
 	}
 	log.Println("Data: " + string(body))
@@ -90,13 +109,16 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 
 func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting object request...")
+	currentRequests++
+	defer decrementCurrentRequests()
+	if areThereTooManyConnections() {
+		return
+	}
 	//Extracting the request id
 	parts := strings.Split(r.URL.String(), "/")
 	id := parts[len(parts)-1]
 	if id == "" {
-		w.WriteHeader(400)
-		w.Write([]byte(r.URL.String()))
-		log.Println("Wrong url: " + r.URL.String())
+		reportError(w, 400, r.URL.String(), "Wrong url: " + r.URL.String())
 		return
 	}
 	log.Println("Requested id: " + id)
@@ -105,9 +127,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", getObjectUrl, nil)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 	q := req.URL.Query()
@@ -116,9 +136,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 	defer resp.Body.Close()
@@ -126,9 +144,8 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	//Reading and returning the content of the response
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		w.WriteHeader(500)
-		log.Println(err.Error())
-		return
+		reportError(w, 500, "Internal server error", err.Error())
+
 	}
 	w.Write(body)
 	log.Println("Finished redirecting object request...")
@@ -136,17 +153,20 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 
 func handleJsonRequest(w http.ResponseWriter, r *http.Request) {
 	log.Println("Started redirecting json request...")
+	currentRequests++
+	defer decrementCurrentRequests()
+	if areThereTooManyConnections() {
+		return
+	}
 	resp, err := http.Get(getJsonUrl)
 	if err != nil {
-		w.WriteHeader(500)
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		w.WriteHeader(500)
-		log.Println(err.Error())
+		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
 	w.Write(body)
