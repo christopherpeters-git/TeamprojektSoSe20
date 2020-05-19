@@ -113,11 +113,11 @@ function loadRoom_render() {
 	const inputId = document.getElementById("loadConfigId");
 	const inputPass = document.getElementById("loadConfigPass");
 	console.log("id: " + inputId.value + " pass: " + inputPass.value);
-	if(!isNaN(inputId.value)){
+	if(!isNaN(inputId.value) || inputPass.value == ""){
 		sendPostLoadConfig(inputId.value,inputPass.value,loadRoom);
 		render();
 	}else{
-		alert("Input is not a number!");
+		alert("Id is not a number or password is empty!");
 	}
 }
 

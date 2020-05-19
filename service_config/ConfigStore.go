@@ -28,8 +28,7 @@ type Config struct {
 }
 
 func reportError (w http.ResponseWriter, statusCode int, responseMessage string, logMessage string){
-	w.WriteHeader(statusCode)
-	w.Write([]byte(responseMessage))
+	http.Error(w,responseMessage,statusCode)
 	log.Println(logMessage)
 }
 

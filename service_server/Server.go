@@ -32,8 +32,7 @@ func areThereTooManyConnections() bool{
 }
 
 func reportError (w http.ResponseWriter, statusCode int, responseMessage string, logMessage string){
-	w.WriteHeader(statusCode)
-	w.Write([]byte(responseMessage))
+	http.Error(w,responseMessage,statusCode)
 	log.Println(logMessage)
 }
 
@@ -78,6 +77,7 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("Data: " + string(body))
+	w.WriteHeader(resp.StatusCode)
 	w.Write(body)
 	log.Println("Finished redirecting save-config request...")
 }
@@ -104,6 +104,7 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("Data: " + string(body))
+	w.WriteHeader(resp.StatusCode)
 	w.Write(body)
 	log.Println("Finished redirecting load-config request...")
 }
@@ -149,6 +150,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
+	w.WriteHeader(resp.StatusCode)
 	w.Write(body)
 	log.Println("Finished redirecting object request...")
 }
@@ -172,6 +174,7 @@ func handleJsonRequest(w http.ResponseWriter, r *http.Request) {
 		reportError(w, 500, "Internal server error", err.Error())
 		return
 	}
+	w.WriteHeader(resp.StatusCode)
 	w.Write(body)
 	log.Println("Finished redirecting json request")
 }
