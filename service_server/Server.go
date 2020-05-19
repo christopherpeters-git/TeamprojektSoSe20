@@ -21,7 +21,7 @@ const loadConfigUrl = "http://172.17.0.2:99/api/config/load"
 const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
 var currentRequests = 0
-const maxParallelRequests = 2
+const maxParallelRequests = 16
 
 func decrementCurrentRequests(){
 	currentRequests--
@@ -61,6 +61,7 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
+		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
 		return
 	}
 	resp, err := http.Post(saveConfigUrl, "application/x-www-form-urlencoded", r.Body)
@@ -86,6 +87,7 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
+		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
 		return
 	}
 	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
@@ -99,7 +101,6 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		reportError(w, 500, "Internal server error", err.Error())
-
 		return
 	}
 	log.Println("Data: " + string(body))
@@ -112,6 +113,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
+		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
 		return
 	}
 	//Extracting the request id
@@ -145,7 +147,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		reportError(w, 500, "Internal server error", err.Error())
-
+		return
 	}
 	w.Write(body)
 	log.Println("Finished redirecting object request...")
@@ -156,6 +158,7 @@ func handleJsonRequest(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
+		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
 		return
 	}
 	resp, err := http.Get(getJsonUrl)

@@ -27,6 +27,12 @@ type Config struct {
 	FileUrl      string
 }
 
+func reportError (w http.ResponseWriter, statusCode int, responseMessage string, logMessage string){
+	w.WriteHeader(statusCode)
+	w.Write([]byte(responseMessage))
+	log.Println(logMessage)
+}
+
 func main() {
 	//Create config-dir if not exisiting
 	createConfigFolderIfNotExisting()
@@ -46,7 +52,7 @@ func main() {
 	http.ListenAndServe(":99", nil)
 }
 
-
+//Creates a new Config folder if it doesnt exist
 func createConfigFolderIfNotExisting() {
 	_, err := os.Stat("configs")
 	if os.IsNotExist(err) {
@@ -75,8 +81,7 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	var newConfig Config
 	message, err := readRequestBody(r)
 	if err != nil {
-		log.Println("could not read the request-body: " + err.Error())
-		w.WriteHeader(400)
+		reportError(w,400,"Couldnt read the request-body","could not read the request-body: " + err.Error())
 		return
 	}
 	ConfigInit(&newConfig, uint64(len(configEntries)))
@@ -85,8 +90,7 @@ func SaveConfig(w http.ResponseWriter, r *http.Request) {
 	//write config-entry array to json
 	newJson, err := json.MarshalIndent(configEntries, "", " ")
 	if err != nil {
-		log.Print("Failed marshaling the new Config-array: " + err.Error())
-		w.WriteHeader(500)
+		reportError(w,500,"Internal server error","Failed marshaling the new Config-array: " + err.Error())
 		return
 	}
 	//save config to fileURL
@@ -108,27 +112,21 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	incomingId, err := strconv.ParseUint(r.FormValue("id"), 10, 64)
 	incomingPwd := r.FormValue("pwd")
 	if err != nil {
-		w.WriteHeader(500)
-		log.Print("Input is not a number: + " + err.Error())
-		w.Write([]byte("Input invalid"))
+		reportError(w,500,"Input invalid","Input is not a number: + " + err.Error())
 		return
 	}
 
 	//Load configs.json
 	jsonData, err := ioutil.ReadFile(configJsonPath)
 	if err != nil {
-		log.Println(err.Error())
-		w.WriteHeader(500)
-		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
+		reportError(w,500,"internal server error - see server logs" + r.URL.String(),err.Error())
 		return
 	}
 
 	var configEntries []Config
 	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
-		log.Println(err.Error())
-		w.WriteHeader(500)
-		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
+		reportError(w,500,"internal server error - see server logs" + r.URL.String(),err.Error())
 		return
 	}
 	//Search for config
@@ -143,18 +141,14 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	}
 	if foundPath == nil {
 		idStr := strconv.FormatUint(incomingId, 10)
-		w.WriteHeader(404)
-		log.Println("No Element with id and pwd for " + idStr + " found")
-		w.Write([]byte("No saved config found or wrong password for ID: " + idStr))
+		reportError(w,404,"No saved config found or wrong password for ID: " + idStr,"No Element with id and pwd for " + idStr + " found")
 		return
 	}
 	log.Println("URL found: " + *foundPath)
 	//Read and return data from found path
 	data, err := ioutil.ReadFile(*foundPath)
 	if err != nil {
-		log.Println("URL in json but not found: " + err.Error())
-		w.WriteHeader(500)
-		w.Write([]byte("internal server error - see server logs" + r.URL.String()))
+		reportError(w,500,"internal server error - see server logs" + r.URL.String(),"URL in json but not found: " + err.Error())
 		return
 	}
 	w.Write(data)
@@ -162,10 +156,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	log.Println("Answered load-request successfully...")
 }
 
-func sendDownloadLinkOfConfig() {
-	//TODO
-}
-
+//Reads the body of a given request
 func readRequestBody(r *http.Request) (string, error) {
 	message, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -200,20 +191,3 @@ func generatePassword(len int) string {
 	return string(bytes)
 }
 
-/*
-Not used yet
-//Calculates a hash depending on the date and the data
-func CalcHash(data string, time time.Time) {
-
-}
-
-func extractTimeToString(time time.Time) string{
-	stringArr := strings.Split(time.String()," ")
-	extractedTime := strings.ReplaceAll(stringArr[0] + stringArr[1],"-","")
-	extractedTime = strings.ReplaceAll(extractedTime,":","")
-	extractedTime = strings.ReplaceAll(extractedTime,".","")
-	log.Print("Extracted time-string: " + extractedTime)
-	return extractedTime
-}
-
-*/
