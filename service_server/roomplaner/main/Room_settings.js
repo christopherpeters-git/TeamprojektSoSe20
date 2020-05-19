@@ -62,6 +62,8 @@ function setMovingDirection(room){
 	}
 	if(room.children[5].visible==false||room.children[3].visible==false){
 		factor =-1;
+	}else{
+		factor=1;
 	}
 }
 function setMovingSpeed(code){
@@ -69,11 +71,14 @@ function setMovingSpeed(code){
 		let time_now=Date.now();
 		time_now = time_now-timer;
 		time_now = Math.floor((time_now/1000));
-		if(time_now<1&&counter<=10){
+		if(time_now<1&&counter<=15){
 			counter++;
 		}
 		if(counter>10){
 			factor=factor*10;
+		}
+		if(time_now>1){
+			counter =0;
 		}
 	}
 	else{
@@ -82,7 +87,7 @@ function setMovingSpeed(code){
 	}
 }
 
-function itemMovment(item,room,code) {
+function itemMovment(item,room,code,event) {
 	if(item==null)return 0;
 	setMovingDirection(room)
 	setMovingSpeed(code);
@@ -90,61 +95,85 @@ function itemMovment(item,room,code) {
 		timer=Date.now();
 		switch (code) {
 			case 65:
+				event.preventDefault();
 				item.position.x -= (movementSpeed * factor);
 				lastKeycode=code;
 				break;
 			case 68:
+				event.preventDefault();
 				item.position.x += (movementSpeed * factor);
 				lastKeycode=code;
 				break;
 			case 83:
+				event.preventDefault();
 				item.position.z += (movementSpeed * factor);
 				lastKeycode=code;
 				break;
 			case 87:
+				event.preventDefault();
 				item.position.z -= (movementSpeed * factor);
 				lastKeycode=code;
 				break;
 			case 81:
+				event.preventDefault();
 				item.rotation.y += (movementSpeed * factor);
 				lastKeycode=code;
 				break;
 			case 69:
-				item.rotation.y -= (movementSpeed * factor);
+				event.preventDefault();
 				lastKeycode=code;
+				item.rotation.y -= (movementSpeed * factor);
 				break;
 			case 79: //O für oben bewegen
-				item.position.y += slowMove;
+				event.preventDefault();
+				item.position.y += movementSpeed;
 				break;
 			case 85://U für unten bewegen
-				item.position.y -= slowMove;
+				event.preventDefault();
+				item.position.y -= movementSpeed;
 				break;
 		}
-	}else{
+	}
+	else{
+		timer=Date.now();
 		switch (code) {
 			case 65:
+				event.preventDefault();
+				lastKeycode=code;
 				item.position.z -= (movementSpeed * factor);
 				break;
 			case 68:
+				event.preventDefault();
+				lastKeycode=code;
 				item.position.z += (movementSpeed * factor);
 				break;
 			case 83:
+				event.preventDefault();
+				lastKeycode=code;
 				item.position.x -= (movementSpeed * factor);
 				break;
 			case 87:
+				event.preventDefault();
+				lastKeycode=code;
 				item.position.x += (movementSpeed * factor);
 				break;
 			case 81:
+				event.preventDefault();
+				lastKeycode=code;
 				item.rotation.y += (movementSpeed * factor);
 				break;
 			case 69:
+				event.preventDefault();
+				lastKeycode=code;
 				item.rotation.y -= (movementSpeed * factor);
 				break;
 			case 79: //O für oben bewegen
-				item.position.y += slowMove;
+				event.preventDefault();
+				item.position.y += movementSpeed;
 				break;
 			case 85://U für unten bewegen
-				item.position.y -= slowMove;
+				event.preventDefault();
+				item.position.y -= movementSpeed;
 				break;
 		}
 

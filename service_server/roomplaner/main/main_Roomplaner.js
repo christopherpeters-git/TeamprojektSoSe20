@@ -164,7 +164,7 @@ function onDocumentKeyDown( event ) {
 			break;
 	}
 	let code = event.keyCode;
-	itemMovment(mesh,room,code);
+	itemMovment(mesh,room,code,event);
 	render();
 }
 
@@ -225,14 +225,9 @@ function onDocumentMouseDown( event ) {
 	const intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length > 0) {
 		if (isRKeyDown) {
+			console.log(intersects);
 			const intersect = intersects[0];
-			let isFirstIntersectAWall = false;
-			for (let i = 0; i < room.children.length; i++) {
-				if (intersect.object == room.children[i]) {
-					isFirstIntersectAWall = true;
-					break;
-				}
-			}
+			let isFirstIntersectAWall = intersectWall(intersect);
 			if (isFirstIntersectAWall) {
 				console.log("Walls can not be deleted");
 			} else {
@@ -243,8 +238,18 @@ function onDocumentMouseDown( event ) {
 				FillListWithItems(items);
 			}
 		}
+
 	}
 	render();
+}
+
+function intersectWall(intersect){
+	for (let i = 0; i < room.children.length; i++) {
+		if (intersect.object == room.children[i]) {
+			return true;
+		}
+	}
+	return false;
 }
 //getting an item by index
 function selectOption() {
