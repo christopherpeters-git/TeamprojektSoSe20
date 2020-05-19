@@ -12,32 +12,32 @@
   {
     "ID": 2,
     "Name":"Leinwand 1 16:9",
-    "FileUrl":"items/leinwand/leinwand_16_zu_9_120.glb"
+    "FileUrl":"items/leinwand/leinwand_120.glb"
   },
   {
     "ID": 3,
     "Name":"Leinwand 2 16:9",
-    "FileUrl":"items/leinwand/leinwand_16_zu_9_135.glb"
+    "FileUrl":"items/leinwand/leinwand_135.glb"
   },
   {
     "ID": 4,
     "Name":"Leinwand 3 16:9",
-    "FileUrl":"items/leinwand/leinwand_16_zu_9_150.glb"
+    "FileUrl":"items/leinwand/leinwand_150.glb"
   },
   {
     "ID": 5,
     "Name":"Leinwand 4 21:9",
-    "FileUrl":"items/leinwand/leinwand_21_zu_9_125.glb"
+    "FileUrl":"items/leinwand/leinwand_125.glb"
   },
   {
     "ID": 6,
     "Name":"Leinwand 5 21:9",
-    "FileUrl":"items/leinwand/leinwand_21_zu_9_158.glb"
+    "FileUrl":"items/leinwand/leinwand_158.glb"
   },
   {
     "ID": 7,
     "Name":"Leinwand 6 21:9",
-    "FileUrl":"items/leinwand/leinwand_21_zu_9_166.glb"
+    "FileUrl":"items/leinwand/leinwand_166.glb"
   },
   {
     "ID": 8,
