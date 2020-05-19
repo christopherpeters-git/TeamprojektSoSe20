@@ -29,7 +29,7 @@ function scaleRoom(room,wall1=5,wall2=5) {
 	const length_Wall_1 =wall1;
 	const length_Wall_2 =wall2;
 	let parts= room.children;
-	console.log(room);
+	//console.log(room);
 	//scaling Walls
 	parts[2].scale.x = length_Wall_2;
 	parts[2].visible=false;

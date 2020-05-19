@@ -15,9 +15,12 @@ class items_object{
 		return this.object;
 	}
 }
+var dragControls;
+var enableSelectionShift = false;
+var draggroup;
 var dragObjects = [];
 var mouse, raycaster;
-var container, controls;
+var container, orbitcontrols;
 var camera, scene, renderer,name;
 var mesh;
 var room;
@@ -75,18 +78,18 @@ function init() {
 
 	var pmremGenerator = new THREE.PMREMGenerator( renderer );
 	pmremGenerator.compileEquirectangularShader();
-	controls = new OrbitControls( camera, renderer.domElement );
-	controls.addEventListener( 'change', render ); // use if there is no animation loop
-	controls.minDistance = 2;
-	controls.maxDistance = 20;
-	controls.target.set( 0, 0, - 0.2 );
-	controls.update();
+	orbitcontrols = new OrbitControls( camera, renderer.domElement );
+	orbitcontrols.addEventListener( 'change', render ); // use if there is no animation loop
+	orbitcontrols.minDistance = 2;
+	orbitcontrols.maxDistance = 20;
+	orbitcontrols.target.set( 0, 0, - 0.2 );
+	orbitcontrols.update();
 	sendFillitemListRequest();
 
-	const dragControls = new DragControls(dragObjects,camera,renderer.domElement);
-	dragControls.addEventListener('dragstart',function () { controls.enabled=false; });
-	dragControls.addEventListener('dragend',function () { controls.enabled=true; });
-	dragControls.addEventListener('drag', function (event) {event.object.position.x = 0;})
+	dragControls = new DragControls([... dragObjects],camera,renderer.domElement);
+	dragControls.addEventListener('dragstart',function () { orbitcontrols.enabled=false; });
+	dragControls.addEventListener('dragend',function () { orbitcontrols.enabled=true; });
+	dragControls.addEventListener('drag', function (event) {event.object.position.y = 0;})
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -98,6 +101,10 @@ function init() {
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
 
+	draggroup = new THREE.Group();
+	draggroup.name = "DragQueen";
+	scene.add(draggroup);
+
 }
 
 
@@ -107,7 +114,6 @@ function handle_load(gltf) {
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
-	console.log(mesh);
 	items.push(new items_object(name,mesh));
 	for(let i = 0;i < mesh.children.length;i++) {
 		if(mesh.children[i] instanceof THREE.Mesh) {
@@ -120,6 +126,7 @@ function handle_load(gltf) {
 	FillListWithItems(items);
 	counter++;
 	name =null;
+	console.log(scene);
 	render();
 }
 
@@ -130,6 +137,7 @@ function onDocumentKeyDown( event ) {
 		case 82: isRKeyDown = true;
 			// console.log("true")
 			break;
+		case 16: enableSelectionShift = true; break;
 	}
 	let code = event.keyCode;
 	itemMovment(mesh,room,code);
@@ -138,7 +146,8 @@ function onDocumentKeyDown( event ) {
 
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
-
+		case 187: console.log(scene); console.log(draggroup);console.log(dragObjects); break;
+		case 16: enableSelectionShift = false; break;
 		case 82: isRKeyDown = false; break;
 		case 65: a_Links =false; break;
 	}
@@ -151,9 +160,9 @@ function  onDocumentMouseMove(event) {
 	raycaster.setFromCamera( mouse, camera );
 	//console.log(raycaster);
 	var intersects = raycaster.intersectObjects(scene.children, true);
-	if(scene.children[0] != null) {
+	if(room != null) {
 		//console.log(intersects);
-		scene.children[0].children.forEach(function (child) {
+		room.children.forEach(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.visible = true;
 			}
@@ -188,7 +197,64 @@ function onDocumentMouseDown( event ) {
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 
+
+
+
+
+	if(enableSelectionShift) {
+		var draggableObjects = dragControls.getObjects();
+		draggableObjects.length = 0;
+		var intersections = raycaster.intersectObjects(dragObjects, true);
+		if(intersections.length > 0) {
+			var object = intersections[0].object;
+			if(draggroup.children.includes(object) === true) {
+				var lengthGroup = draggroup.children.length;
+				for(var y = 0; y<scene.children.length;y++) {
+					if(scene.children[y] instanceof THREE.Group && scene.children[y] !== draggroup && scene.children[y] !== room) {
+						if(scene.children[y].children.length === 0) {
+							for(var x = 0;x<lengthGroup;x++) {
+								scene.children[y].attach(draggroup.children[0]);
+							}
+						}
+					}
+				}
+			}else{
+				var lengthGroup = draggroup.children.length;
+				for(var y = 0; y<scene.children.length;y++) {
+					if(scene.children[y] instanceof THREE.Group && scene.children[y] !== draggroup) {
+						if(scene.children[y].children.length === 0) {
+							for(var x = 0;x<lengthGroup;x++) {
+								scene.children[y].attach(draggroup.children[0]);
+							}
+						}
+					}
+				}
+
+				//object.material.emissive.set( 0xaaaaaa );
+				var lengthChilds = object.parent.children.length;
+				var currentGroup = object.parent;
+				for(var i = 0; i<lengthChilds;i++) {
+					//console.log(currentGroup.children[0].name);
+					draggroup.attach(currentGroup.children[0]);
+				}
+			}
+			dragControls.transformGroup = true;
+			draggableObjects.push( draggroup);
+		}
+		if ( draggroup.children.length === 0 ) {
+			console.log("gruppen nicht mehr bewegbar");
+			dragControls.transformGroup = false;
+			draggableObjects.push( ...dragObjects );
+
+		}
+	}
+
+
+
+
 	const intersects = raycaster.intersectObjects( scene.children, true );
+
+
 	if (intersects.length > 0) {
 		if (isRKeyDown) {
 			const intersect = intersects[0];
