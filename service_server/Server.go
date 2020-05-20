@@ -21,18 +21,19 @@ const loadConfigUrl = "http://172.17.0.2:99/api/config/load"
 const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
 var currentRequests = 0
-const maxParallelRequests = 16
 
-func decrementCurrentRequests(){
+const maxParallelRequests = 1
+
+func decrementCurrentRequests() {
 	currentRequests--
 }
 
-func areThereTooManyConnections() bool{
+func areThereTooManyConnections() bool {
 	return currentRequests > maxParallelRequests
 }
 
-func reportError (w http.ResponseWriter, statusCode int, responseMessage string, logMessage string){
-	http.Error(w,responseMessage,statusCode)
+func reportError(w http.ResponseWriter, statusCode int, responseMessage string, logMessage string) {
+	http.Error(w, responseMessage, statusCode)
 	log.Println(logMessage)
 }
 
@@ -60,7 +61,7 @@ func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
-		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
+		reportError(w, 429, "Request overflow", "Too many requests: "+string(currentRequests))
 		return
 	}
 	resp, err := http.Post(saveConfigUrl, "application/x-www-form-urlencoded", r.Body)
@@ -87,7 +88,7 @@ func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
-		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
+		reportError(w, 429, "Request overflow", "Too many requests: "+string(currentRequests))
 		return
 	}
 	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
@@ -114,14 +115,14 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
-		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
+		reportError(w, 429, "Request overflow", "Too many requests: "+string(currentRequests))
 		return
 	}
 	//Extracting the request id
 	parts := strings.Split(r.URL.String(), "/")
 	id := parts[len(parts)-1]
 	if id == "" {
-		reportError(w, 400, r.URL.String(), "Wrong url: " + r.URL.String())
+		reportError(w, 400, r.URL.String(), "Wrong url: "+r.URL.String())
 		return
 	}
 	log.Println("Requested id: " + id)
@@ -160,7 +161,7 @@ func handleJsonRequest(w http.ResponseWriter, r *http.Request) {
 	currentRequests++
 	defer decrementCurrentRequests()
 	if areThereTooManyConnections() {
-		reportError(w,429, "Request overflow", "Too many requests: " + string(currentRequests))
+		reportError(w, 429, "Request overflow", "Too many requests: "+string(currentRequests))
 		return
 	}
 	resp, err := http.Get(getJsonUrl)
