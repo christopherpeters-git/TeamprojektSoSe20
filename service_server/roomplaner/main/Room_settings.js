@@ -56,36 +56,28 @@ function itemMovment(item,room,code,event) {
 	if(true) {										//room.children[2].visible==false
 		switch (code) {
 			case 65:
-				event.preventDefault();
 				item.position.x -= 0.01;
 				break;
 			case 68:
-				event.preventDefault();
 				item.position.x += 0.01;
 				break;
 			case 83:
-				event.preventDefault();
 				item.position.z += 0.01;
 				break;
 			case 87:
-				event.preventDefault();
 				item.position.z -= 0.01;
 				break;
 			case 81:
-				event.preventDefault();
 				item.rotation.y += 0.01;
 				break;
 			case 69:
-				event.preventDefault();
 				item.rotation.y -= 0.01;
 				break;
 			case 79: //O für oben bewegen
 				item.position.y +=0.1;
-				event.preventDefault();
 			 break;
 			case 85://U für unten bewegen
 				item.position.y -=0.1;
-				event.preventDefault();
 				break;
 		}
 	}
