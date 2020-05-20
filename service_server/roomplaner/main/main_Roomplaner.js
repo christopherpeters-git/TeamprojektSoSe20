@@ -165,7 +165,7 @@ function onDocumentKeyDown( event ) {
 			break;
 	}
 	let code = event.keyCode;
-	itemMovment(mesh,room,code,event);
+	itemMovement(mesh,room,code,event);
 	render();
 }
 
