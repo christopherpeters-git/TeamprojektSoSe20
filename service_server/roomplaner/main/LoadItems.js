@@ -19,7 +19,7 @@ function fillItemListWithJson(jsonData){
 	let option;
 	for (let i = 0; i < entries.length; i++) {
 		option = document.createElement('option');
-		option.text = entries[i].ID +"_"+entries[i].FileUrl;
+		option.text = entries[i].ID +" "+entries[i].Name;
 		option.value = entries[i].FileUrl;
 		dropdown.add(option);
 	}

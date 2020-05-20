@@ -56,10 +56,31 @@ canvas {
 	z-index: 1; /* TODO Solve this in HTML */
 }
 
+#items-dropdown {
+	position: relative;
+	font-size: 10pt;
+	font-family: Arial;
+	width: 20%;
+	background: rgba(77, 71, 73, 0.333);
+	cursor: pointer;
+	border-style: none;
+}
+
+#placed{
+	position: relative;
+	font-size: 10pt;
+	font-family: Arial;
+	width: 20%;
+	background:rgba(77, 71, 73, 0.333);
+	cursor: pointer;
+	border-style: none;
+}
+
+
 #Room{
 	width: 15em;
-	position: absolute;
-	border: 3px solid black;
+	position: absolute;s
+	border: 3px; solid black;
 	border-radius: 1em;
 	background: white;
 }
@@ -108,3 +129,4 @@ a, button, input, select {
 	color: #777777;
 	font-size: 12px;
 }
+
