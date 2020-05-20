@@ -22,7 +22,7 @@ const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
 var currentRequests = 0
 
-const maxParallelRequests = 1
+const maxParallelRequests = 16
 
 func decrementCurrentRequests() {
 	currentRequests--
