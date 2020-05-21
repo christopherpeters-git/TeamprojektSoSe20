@@ -19,12 +19,13 @@ class items_object{
 var mouse, raycaster;
 var container, controls;
 var camera, scene, renderer,name,objID;
+let pfeil;
 var mesh;
 var room;
 var loader;
 var items =[];
 let itemLoaded;
-
+let lastSeenWall;
 let data;
 let dropdown;
 let currentIndex;
@@ -62,7 +63,9 @@ function init() {
 				initRoom(room);
 				scaleRoom(room);
 				scene.add( gltf.scene );
-
+				lastSeenWall=room.children[2];
+				console.log(lastSeenWall);
+				loader.load("./items/_unuseable/test_pfeil.glb",handle_load);
 				render();
 
 			} );
@@ -93,12 +96,14 @@ function init() {
 	document.getElementById("items-dropdown").addEventListener('change', loadItems, false);
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.getElementById("wall_1").addEventListener('input', setRoomSize, false);
-	document.getElementById("test_btn").addEventListener('click', saveConfig, false);
+	document.getElementById("save_config_btn").addEventListener('click', saveConfig, false);
 	document.getElementById("wall_2").addEventListener('input', setRoomSize, false);
 	document.getElementById("load_btn").addEventListener('click', loadRoom_render, false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
+	document.addEventListener('dblclick',f,false);
+
 
 }
 
@@ -121,18 +126,30 @@ function loadRoom_render() {
 }
 
 function handle_load(gltf) {
-	mesh = gltf.scene;
-	mesh.position.y +=0.25;
-	scene.add( mesh );
-	items.push(new items_object(name,mesh,objID));
-	FillListWithItems(items);
-	console.log(objID);
-	counter++;
-	name =null;
-	objID=null;
-	itemLoaded = true;
-	console.log(itemLoaded)
-	render();
+	if(pfeil==undefined){
+		pfeil = gltf.scene
+		pfeil.position.y += 0.50;
+		pfeil.visible=false;
+		scene.add(pfeil);
+		initArrow(pfeil);
+		console.log(pfeil);
+		render();
+	}else {
+		mesh = gltf.scene;
+		mesh.position.y += 0.25;
+		pfeil.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
+		pfeil.visible=true;
+		scene.add(mesh);
+		items.push(new items_object(name, mesh, objID));
+		FillListWithItems(items);
+		console.log(objID);
+		counter++;
+		name = null;
+		objID = null;
+		itemLoaded = true;
+		console.log(itemLoaded)
+		render();
+	}
 }
 
 function handle_loadConfig(gltf) {
@@ -155,6 +172,9 @@ function handle_loadConfig(gltf) {
 
 
 //####################################Eventhandler###########################################################################
+function f(event){
+
+}
 
 function onDocumentKeyDown( event ) {
 	switch ( event.keyCode ) {
@@ -174,6 +194,7 @@ function onDocumentKeyUp( event ) {
 
 }
 function  onDocumentMouseMove(event) {
+	let setWall=true;
 	raycaster.setFromCamera( new THREE.Vector2(0,0), camera );
 	const intersects = raycaster.intersectObjects(scene.children, true);
 	if(scene.children[0] != null) {
@@ -183,14 +204,18 @@ function  onDocumentMouseMove(event) {
 			}
 		})
 	}
-
 	if(intersects.length > 0) {
 		let firstObj = intersects[0];
 		for(let i = 0;i < room.children.length;i++) {
 			if(firstObj.object === room.children[i] && "Cube005".localeCompare(firstObj.object.name)) {
 				firstObj.object.visible = false;
+				lastSeenWall=firstObj.object;
+				setWall=false;
 			}
 		}
+	}
+	if(setWall){
+		if(lastSeenWall!==undefined) lastSeenWall.visible=false;
 	}
 	render();
 
@@ -218,22 +243,28 @@ function onDocumentMouseDown( event ) {
 				console.log("Walls can not be deleted");
 			} else {
 				scene.remove(intersect.object.parent);
+				pfeil.visible=false;
 				if(!removeItemByObjectScene(intersect.object.parent)){
 					console.log("Could not find object in the item array");
 				}
 				FillListWithItems(items);
 			}
 		}
-		let test_item = firstItem(intersects);
-		console.log(test_item);
-		console.log(intersects);
+		let id_firstItem = firstItem(intersects);
+		if(id_firstItem!==-1&&event.buttons==2) {
+			mesh=intersects[id_firstItem].object.parent;
+			console.log(mesh.position);
+			pfeil.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
+			pfeil.visible=true;
+			console.log(pfeil.position);
+		}
 	}
 	render();
 }
 
 function intersectWall(intersect){
 	for (let i = 0; i < room.children.length; i++) {
-		if (intersect.object == room.children[i]) {
+		if (intersect.object == room.children[i]||intersect.object==pfeil.children[2]) {
 			return true;
 		}
 	}
@@ -256,7 +287,11 @@ function firstItem(intersects){
 
 //getting an item by index
 function selectOption() {
+	if(this.selectedIndex==0)return 0;
 	mesh =items[this.options[this.selectedIndex].value].object;
+	pfeil.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
+	render();
+
 }
 
 
@@ -314,7 +349,7 @@ function loadRoom(config) {
 	document.getElementById("items-dropdown").style.visibility="visible";
 	document.getElementById("placed").style.visibility="visible";
 	document.getElementById("setter").style.visibility="hidden";
-	document.getElementById("test_btn").style.visibility="visible";
+	document.getElementById("save_config_btn").style.visibility="visible";
 	dropdown = document.getElementById("items-dropdown");
 	//testJsonObject
 	// let test_Object = '[{"wall1":9,"wall2":7},[{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":5},{"position":[0,0.25,0],"rotation":[0,0,0],"ID":2}]]'

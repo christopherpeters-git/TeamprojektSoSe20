@@ -1,5 +1,6 @@
 
 let test;
+let arrow;
 const movementSpeed =0.01;
 let factor;
 let lastKeycode;
@@ -9,13 +10,15 @@ const lengthUnit = "m";
 
 function initRoom(room) {
 	test = room;
-
+}
+function initArrow(incArrow) {
+	arrow=incArrow;
 }
 function saveRoomSize() {
 	document.getElementById("items-dropdown").style.visibility="visible";
 	document.getElementById("placed").style.visibility="visible";
 	document.getElementById("setter").style.visibility="hidden";
-	document.getElementById("test_btn").style.visibility="visible";
+	document.getElementById("save_config_btn").style.visibility="visible";
 
 }
 function setRoomSize() {
@@ -178,8 +181,8 @@ function itemMovment(item,room,code,event) {
 				item.position.y -= movementSpeed;
 				break;
 		}
-
 	}
+	arrow.position.set(item.position.x,item.position.y+3,item.position.z);
 }
 
 function openSet(evt, Name) {
