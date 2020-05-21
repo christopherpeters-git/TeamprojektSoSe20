@@ -1,62 +1,72 @@
 [
   {
-    "ID":0,
-    "Name":"Sofa1",
-    "FileUrl":"items/chairs/_noLicense/sofa.gltf"
-  },
-  {
-    "ID": 1,
-    "Name":"Sofa2",
+    "ID": 0,
+    "Name":"Sofa",
     "FileUrl":"items/sofa_DD/sofa_DD.glb"
   },
   {
+    "ID": 1,
+    "Name":"Leinwand 1 16:9",
+    "FileUrl":"items/leinwand/leinwand_120.glb"
+  },
+  {
     "ID": 2,
-    "Name":"Screen",
-    "FileUrl":"items/screen/screen_16x9/leinwand_test.gltf"
+    "Name":"Leinwand 2 16:9",
+    "FileUrl":"items/leinwand/leinwand_135.glb"
   },
   {
     "ID": 3,
-    "Name":"Tisch",
-    "FileUrl":"items/tables/Tisdh01.gltf"
+    "Name":"Leinwand 3 16:9",
+    "FileUrl":"items/leinwand/leinwand_150.glb"
   },
   {
     "ID": 4,
-    "Name":"Sideboard",
-    "FileUrl":"items/closet/Sideboard.glb"
+    "Name":"Leinwand 4 21:9",
+    "FileUrl":"items/leinwand/leinwand_125.glb"
+  },
+  {
+    "ID": 5,
+    "Name":"Leinwand 5 21:9",
+    "FileUrl":"items/leinwand/leinwand_158.glb"
+  },
+  {
+    "ID": 6,
+    "Name":"Leinwand 6 21:9",
+    "FileUrl":"items/leinwand/leinwand_166.glb"
   },
 
   {
-    "ID": 5,
-    "Name":"Beamer_2",
+    "ID": 7,
+    "Name":"Beamer",
     "FileUrl":"items/beamer_sonyvw1100/Beamer_Sony_VW1100.glb"
   },
 
   {
-    "ID": 6,
+    "ID": 8,
     "Name":"Kinositz",
     "FileUrl":"items/kinositz/kinositz.glb"
   },
 
   {
-    "ID": 7,
+    "ID": 9,
     "Name":"Akustikabsorber-Grau",
     "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe1.glb"
   },
 
   {
-    "ID": 8,
+    "ID": 10,
     "Name":"Akustikabsorber-Weiß",
     "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe2.glb"
   },
 
   {
-    "ID": 9,
+    "ID": 11,
     "Name":"Akustikabsorber-Schwarz",
     "FileUrl":"items/Akustikabsorber/akustikabsorber_Farbe3.glb"
   },
 
   {
-    "ID": 10,
+    "ID": 12,
     "Name":"Lichtabsorber",
     "FileUrl":"items/lichtabsorber/Lichtabsorber.glb"
   }
