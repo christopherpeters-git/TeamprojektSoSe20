@@ -4,6 +4,7 @@ let factor;
 let lastKeycode;
 let timer =0;
 let counter =0;
+const lengthUnit = "m";
 
 function initRoom(room) {
 	test = room;
@@ -20,8 +21,8 @@ function setRoomSize() {
 	let wall_1 =document.getElementById("wall_1");
 	let wall_2 =document.getElementById("wall_2");
 	scaleRoom(test, parseFloat(wall_1.value), parseFloat(wall_2.value));
-	document.getElementById("wall_1_value").innerHTML=wall_1.value;
-	document.getElementById("wall_2_value").innerHTML=wall_2.value;
+	document.getElementById("wall_1_value").innerHTML=wall_1.value + " " + lengthUnit;
+	document.getElementById("wall_2_value").innerHTML=wall_2.value + " "+ lengthUnit;
 }
 function scaleRoom(room,wall1=5,wall2=5) {
 	const diff_blend = 0.1;

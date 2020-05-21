@@ -15,9 +15,8 @@
 	</head>
 
 	<body>
-
 		<div id="info">
-			Roomplaner
+			Roomplanner
 			<select id="placed" style="float: left;visibility: hidden">
 				<option value="">Select an item</option>
 			</select>
@@ -38,10 +37,10 @@
 				<form >
 					<label for="wall_1">Wall 1:</label>
 					<input  type="range"min="1.0" max="15.0" value="5.0" step="0.1" id="wall_1" name="fname">
-					<p><span id="wall_1_value">5</span></p>
+					<p><span id="wall_1_value">5 m</span></p>
 					<label for="wall_2">Wall 2:</label>
 					<input  type="range"min="1" max="15" value="5" step="0.1" id="wall_2" name="fname">
-					<p><span id="wall_2_value">5</span></p>
+					<p><span id="wall_2_value">5 m</span></p>
 					<input class="setter_btn" id="save_btn" type="button" value ="Save" onclick="saveRoomSize()">
 					<br><br>
 				</form>
@@ -51,8 +50,8 @@
 				Loader
 				<br><br>
 			<form >
-				<input type="text" id="loadConfigId">
-				<input type="text" id="loadConfigPass">
+				<input type="text" id="loadConfigId" placeholder="ID">
+				<input type="text" id="loadConfigPass" placeholder="Password">
 				<input class="setter_btn" id="load_btn" type="button" value ="Load">
 				<br><br>
 			</form>

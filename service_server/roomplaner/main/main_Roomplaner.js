@@ -22,7 +22,6 @@ var camera, scene, renderer,name,objID;
 var mesh;
 var room;
 var loader;
-let lastSeenWall;
 var items =[];
 let itemLoaded;
 
@@ -113,15 +112,16 @@ function loadRoom_render() {
 	const inputId = document.getElementById("loadConfigId");
 	const inputPass = document.getElementById("loadConfigPass");
 	console.log("id: " + inputId.value + " pass: " + inputPass.value);
-	if(!isNaN(inputId.value)){
+	if(!isNaN(inputId.value) || inputPass.value == ""){
 		sendPostLoadConfig(inputId.value,inputPass.value,loadRoom);
 		render();
 	}else{
-		alert("Input is not a number!");
+		alert("Id is not a number or password is empty!");
 	}
 }
 
 function handle_load(gltf) {
+
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
@@ -170,39 +170,30 @@ function onDocumentKeyDown( event ) {
 
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
+
 		case 82: isRKeyDown = false; break;
+
 	}
 
 }
 function  onDocumentMouseMove(event) {
-	//todo set Visible Walls
-
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-	raycaster.setFromCamera( mouse, camera );
-	//console.log(raycaster);
-	var intersects = raycaster.intersectObjects(scene.children, true);
+	raycaster.setFromCamera( new THREE.Vector2(0,0), camera );
+	const intersects = raycaster.intersectObjects(scene.children, true);
 	if(scene.children[0] != null) {
+		//console.log(intersects);
 		scene.children[0].children.forEach(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.visible = true;
+
 			}
 		})
 	}
-
 	if(intersects.length > 0) {
 		let firstObj = intersects[0];
 		for(let i = 0;i < room.children.length;i++) {
-			if(firstObj.object == room.children[i] && "Cube005".localeCompare(firstObj.object.name)) {
+			if(firstObj.object === room.children[i] && "Cube005".localeCompare(firstObj.object.name)) {
 				firstObj.object.visible = false;
-				lastSeenWall=firstObj.object;
-
 			}
-		}
-	}
-	if(intersects.length==0){
-		if(lastSeenWall!==undefined){
-			lastSeenWall.visible=false;
 		}
 	}
 	render();
@@ -225,7 +216,6 @@ function onDocumentMouseDown( event ) {
 	const intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length > 0) {
 		if (isRKeyDown) {
-			console.log(intersects);
 			const intersect = intersects[0];
 			let isFirstIntersectAWall = intersectWall(intersect);
 			if (isFirstIntersectAWall) {
@@ -238,7 +228,6 @@ function onDocumentMouseDown( event ) {
 				FillListWithItems(items);
 			}
 		}
-
 	}
 	render();
 }
