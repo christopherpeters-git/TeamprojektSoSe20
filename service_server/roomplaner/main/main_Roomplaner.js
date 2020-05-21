@@ -22,13 +22,13 @@ var camera, scene, renderer,name,objID;
 var mesh;
 var room;
 var loader;
-var check =true;
 var items =[];
 let itemLoaded;
 
 let data;
 let dropdown;
 let currentIndex;
+
 //###############################Keys##################################################################
 var isRKeyDown= false;
 
@@ -178,14 +178,9 @@ function onDocumentKeyUp( event ) {
 
 }
 function  onDocumentMouseMove(event) {
-	//todo set Visible Walls
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-	raycaster.setFromCamera( mouse, camera );
-	//console.log(raycaster);
-	var intersects = raycaster.intersectObjects(scene.children, true);
+	raycaster.setFromCamera( new THREE.Vector2(0,0), camera );
+	const intersects = raycaster.intersectObjects(scene.children, true);
 	if(scene.children[0] != null) {
-		//console.log(intersects);
 		scene.children[0].children.forEach(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.visible = true;
@@ -196,7 +191,7 @@ function  onDocumentMouseMove(event) {
 	if(intersects.length > 0) {
 		let firstObj = intersects[0];
 		for(let i = 0;i < room.children.length;i++) {
-			if(firstObj.object == room.children[i] && "Cube005".localeCompare(firstObj.object.name)) {
+			if(firstObj.object === room.children[i] && "Cube005".localeCompare(firstObj.object.name)) {
 				firstObj.object.visible = false;
 			}
 		}
