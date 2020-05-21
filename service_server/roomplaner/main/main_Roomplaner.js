@@ -121,7 +121,6 @@ function loadRoom_render() {
 }
 
 function handle_load(gltf) {
-
 	mesh = gltf.scene;
 	mesh.position.y +=0.25;
 	scene.add( mesh );
@@ -170,9 +169,7 @@ function onDocumentKeyDown( event ) {
 
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
-
 		case 82: isRKeyDown = false; break;
-
 	}
 
 }
@@ -180,14 +177,13 @@ function  onDocumentMouseMove(event) {
 	raycaster.setFromCamera( new THREE.Vector2(0,0), camera );
 	const intersects = raycaster.intersectObjects(scene.children, true);
 	if(scene.children[0] != null) {
-		//console.log(intersects);
 		scene.children[0].children.forEach(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.visible = true;
-
 			}
 		})
 	}
+
 	if(intersects.length > 0) {
 		let firstObj = intersects[0];
 		for(let i = 0;i < room.children.length;i++) {
@@ -228,6 +224,9 @@ function onDocumentMouseDown( event ) {
 				FillListWithItems(items);
 			}
 		}
+		let test_item = firstItem(intersects);
+		console.log(test_item);
+		console.log(intersects);
 	}
 	render();
 }
@@ -240,6 +239,21 @@ function intersectWall(intersect){
 	}
 	return false;
 }
+function firstItem(intersects){
+	for(let i =0;i<intersects.length;i++){
+		let chck=0;
+		for(let j=0;j<room.children.length;j++){
+			if(intersects[i].object ==room.children[j]){
+				chck =-1;
+			}
+		}
+		if(chck!==-1){
+			 return i;
+		}
+	}
+	return -1;
+}
+
 //getting an item by index
 function selectOption() {
 	mesh =items[this.options[this.selectedIndex].value].object;

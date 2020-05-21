@@ -1,3 +1,4 @@
+
 let test;
 const movementSpeed =0.01;
 let factor;
@@ -207,7 +208,6 @@ function getRoomsize() {
 	let wall_2 =document.getElementById("wall_2");
 	wall_1 = parseFloat(wall_1.value);
 	wall_2 = parseFloat(wall_2.value);
-
 	return [wall_1,wall_2];
 
 }
