@@ -24,6 +24,12 @@ type Item struct {
 	FileUrl string
 }
 
+func reportError (w http.ResponseWriter, statusCode int, responseMessage string, logMessage string){
+	w.WriteHeader(statusCode)
+	w.Write([]byte(responseMessage))
+	log.Println(logMessage)
+}
+
 func main() {
 	//Creates a log file
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -52,9 +58,7 @@ func getObjectByIndex(w http.ResponseWriter, r *http.Request) {
 	//Read the parameter of the request
 	queryResults, ok := r.URL.Query()[indexUrlParameter]
 	if !ok || len(queryResults) < 1 {
-		w.WriteHeader(400)
-		w.Write([]byte("url parameter unkown"))
-		log.Println("Cant find parameter " + indexUrlParameter)
+		reportError(w, 400,"url parameter unkown","Cant find parameter " + indexUrlParameter)
 		return
 	}
 	//Extrac index parameter
@@ -62,9 +66,7 @@ func getObjectByIndex(w http.ResponseWriter, r *http.Request) {
 	strIndex := queryResults[0]
 	incomingIndex, err := strconv.ParseUint(strIndex, 10, 64)
 	if err != nil {
-		w.WriteHeader(400)
-		w.Write([]byte("Input is not an integer"))
-		log.Println("Failed to parse uint: " + err.Error())
+		reportError(w, 400,"Input is not an integer","Failed to parse uint: " + err.Error())
 		return
 	}
 
@@ -72,40 +74,30 @@ func getObjectByIndex(w http.ResponseWriter, r *http.Request) {
 	//Read & parse the .json file
 	jsonData, err := ioutil.ReadFile(jsonName)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w,500, "Internal server error", err.Error())
 		return
 	}
 	//Parsing the json file
 	var configEntries []Item
 	err = json.Unmarshal(jsonData, &configEntries)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w,500,"Internal server error",err.Error())
 		return
 	}
 	if incomingIndex > (uint64)(len(configEntries))-1 || incomingIndex < 0 {
-		w.WriteHeader(404)
-		w.Write([]byte("Index out of range"))
-		log.Println("Index out of range")
+		reportError(w,404, "Index out of range", "Index out of range")
 		return
 	}
 	//Get fileUrl by index
 	var foundPath = &configEntries[incomingIndex].FileUrl
 	if foundPath == nil {
-		w.WriteHeader(404)
-		w.Write([]byte("Requested index not found"))
-		log.Println("Object at index " + strconv.FormatUint(incomingIndex, 10) + " not found")
+		reportError(w,404,"Requested index not found", "Object at index " + strconv.FormatUint(incomingIndex, 10) + " not found")
 		return
 	}
 	//Read data from found file
 	data, err := ioutil.ReadFile(itemFolderPath + *foundPath)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w,500, "Internal server error", err.Error())
 		return
 	}
 	//Send data
@@ -118,9 +110,7 @@ func getJson(w http.ResponseWriter, r *http.Request) {
 	//Reading json
 	data, err := ioutil.ReadFile(jsonName)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Write([]byte("Internal server error"))
-		log.Println(err.Error())
+		reportError(w,500,"Internal server error",err.Error())
 		return
 	}
 	//Sending json content

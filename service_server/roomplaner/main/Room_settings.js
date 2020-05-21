@@ -52,7 +52,7 @@ function setVisibleWalls(wall,room){
 
 }
 
-function itemMovment(item,room,code,event) {
+function itemMovement(item, room, code, event) {
 	if(true) {										//room.children[2].visible==false
 		switch (code) {
 			case 65:
