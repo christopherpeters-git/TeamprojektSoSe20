@@ -17,6 +17,8 @@ var jsonName = "items.json"
 var logName = "ObjectStore.log"
 var indexUrlParameter = "index"
 
+var serverStartFailedMsg = "Starting service failed: "
+
 type Item struct {
 	ID      uint64
 	FileUrl string
@@ -31,12 +33,17 @@ func main() {
 	}
 	defer f.Close()
 	log.SetOutput(f)
-	log.Print("Object-service has started...")
 
+	//Stopping server if item folder doesnt exist
+	_, err = os.Stat(itemFolderName)
+	if os.IsNotExist(err) {
+		log.Fatal(serverStartFailedMsg + "Couldn't find " + itemFolderName)
+	}
 	http.Handle("/", http.FileServer(http.Dir("test/")))
 	http.HandleFunc(getObjectUrl, getObjectByIndex)
 	http.HandleFunc(getJsonFileUrl, getJson)
 	http.ListenAndServe(":100", nil)
+	log.Print("Object-service has started...")
 }
 
 //writes the request object in the response-stream
@@ -51,6 +58,7 @@ func getObjectByIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//Extrac index parameter
+	log.Println(queryResults)
 	strIndex := queryResults[0]
 	incomingIndex, err := strconv.ParseUint(strIndex, 10, 64)
 	if err != nil {

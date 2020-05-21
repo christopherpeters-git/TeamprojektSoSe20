@@ -11,10 +11,14 @@ import (
 //Proxy adresses
 const proxyGetObjectUrl = "/proxy/getObject/"
 const proxyGetJsonUrl = "/proxy/getJson"
+const proxyLoadConfigUrl = "/proxy/loadConfig"
+const proxySaveConfigUrl = "/proxy/saveConfig"
 
 //Service adresses
-const getObjectUrl = "http://127.0.0.1:100/api/getObjectByIndex"
-const getJsonUrl = "http://127.0.0.1:100/api/getJson"
+const getObjectUrl = "http://172.17.0.3:100/api/getObjectByIndex"
+const getJsonUrl = "http://172.17.0.3:100/api/getJson"
+const loadConfigUrl = "http://172.17.0.2:99/api/config/load"
+const saveConfigUrl = "http://172.17.0.2:99/api/config/save"
 
 func main() {
 	//Creates a log file
@@ -30,7 +34,58 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("roomplaner/")))
 	http.HandleFunc(proxyGetJsonUrl, handleJsonRequest)
 	http.HandleFunc(proxyGetObjectUrl, handleGetObjectById)
-	http.ListenAndServe(":12345", nil)
+	http.HandleFunc(proxyLoadConfigUrl, handleLoadConfig)
+	http.HandleFunc(proxySaveConfigUrl, handleSaveConfig)
+	http.ListenAndServe(":101", nil)
+}
+
+func handleSaveConfig(w http.ResponseWriter, r *http.Request) {
+	log.Println("Started redirecting save-config request...")
+	resp, err := http.Post(saveConfigUrl, "application/x-www-form-urlencoded", r.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+	//Reading and returning the content of the response
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	log.Println("Data: " + string(body))
+	w.Write(body)
+	log.Println("Finished redirecting save-config request...")
+}
+
+func handleLoadConfig(w http.ResponseWriter, r *http.Request) {
+	log.Println("Started redirecting load-config request...")
+
+	resp, err := http.Post(loadConfigUrl, "application/x-www-form-urlencoded", r.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+	//Reading and returning the content of the response
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
+		log.Println(err.Error())
+		return
+	}
+	log.Println("Data: " + string(body))
+	w.Write(body)
+	log.Println("Finished redirecting load-config request...")
 }
 
 func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
@@ -62,6 +117,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 	resp, err := client.Do(req)
 	if err != nil {
 		w.WriteHeader(500)
+		w.Write([]byte("Internal server error"))
 		log.Println(err.Error())
 		return
 	}
@@ -74,7 +130,7 @@ func handleGetObjectById(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
-	w.Write([]byte(string(body)))
+	w.Write(body)
 	log.Println("Finished redirecting object request...")
 }
 
