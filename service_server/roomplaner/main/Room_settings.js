@@ -8,6 +8,7 @@ function initRoom(room) {
 function saveRoomSize() {
 	document.getElementById("items-dropdown").style.visibility="visible";
 	document.getElementById("placed").style.visibility="visible";
+	document.getElementById("Tasten").style.visibility="visible";
 	document.getElementById("setter").style.visibility="hidden";
 	document.getElementById("test_btn").style.visibility="visible";
 

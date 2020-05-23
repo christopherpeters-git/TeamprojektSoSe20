@@ -82,6 +82,16 @@ input[type=text]{
 	box-sizing: border-box;
 }
 
+#Tasten{
+	
+	width: 250px;
+	height: 350px;
+	position: absolute;
+	left: 5px;
+	bottom:-850px;
+
+  }
+
 
 a, button, input, select {
 	pointer-events: auto;
