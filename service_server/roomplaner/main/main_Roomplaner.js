@@ -24,13 +24,21 @@ var mesh;
 var room;
 var loader;
 var items =[];
+let mouse, raycaster;
+let container, controls;
+let camera, scene, renderer,name,objID;
+let mesh;
+let room;
+let loader;
+let items =[];
 let itemLoaded;
 let lastSeenWall;
 let data;
 let dropdown;
 let currentIndex;
+
 //###############################Keys##################################################################
-var isRKeyDown= false;
+let isRKeyDown= false;
 
 //###############################################################################################
 init();
@@ -117,7 +125,7 @@ function loadRoom_render() {
 	const inputId = document.getElementById("loadConfigId");
 	const inputPass = document.getElementById("loadConfigPass");
 	console.log("id: " + inputId.value + " pass: " + inputPass.value);
-	if(!isNaN(inputId.value) || inputPass.value == ""){
+	if(!isNaN(inputId.value) || inputPass.value === ""){
 		sendPostLoadConfig(inputId.value,inputPass.value,loadRoom);
 		render();
 	}else{
@@ -202,6 +210,7 @@ function  onDocumentMouseMove(event) {
 		scene.children[0].children.forEach(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.visible = true;
+
 			}
 		})
 	}
@@ -336,7 +345,7 @@ function loadItemsOnline(dropdown) {
 //Removes an item in the item-array, which holds the reference to object
 function removeItemByObjectScene(object){
 	for(let i = 0; i < items.length; i++){
-		if(object.uuid == items[i].object.uuid){
+		if(object.uuid === items[i].object.uuid){
 			items.splice(i,1);
 			return true;
 		}

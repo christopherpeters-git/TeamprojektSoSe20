@@ -33,8 +33,7 @@ function saveRoomToJsonString(items) {
 		room_objects.push(Roomobj);
 	}
 	room_setting.push(room_objects);
-	let data= JSON.stringify(room_setting);
-	return data;
+	return JSON.stringify(room_setting);
 }
 
 function onSaveConfigResponse(response){

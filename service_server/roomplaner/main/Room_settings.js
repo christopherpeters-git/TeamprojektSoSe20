@@ -190,7 +190,7 @@ function itemMovment(item,room,code,event) {
 
 function openSet(evt, Name) {
 	// Declare all variables
-	var i, tabcontent, tablinks;
+	let i, tabcontent, tablinks;
 
 	// Get all elements with class="tabcontent" and hide them
 	tabcontent = document.getElementsByClassName("tabcontent");
@@ -214,6 +214,7 @@ function getRoomsize() {
 	let wall_2 =document.getElementById("wall_2");
 	wall_1 = parseFloat(wall_1.value);
 	wall_2 = parseFloat(wall_2.value);
+
 	return [wall_1,wall_2];
 
 }
