@@ -3,6 +3,7 @@ let test;
 let arrow;
 const movementSpeed =0.01;
 let factor;
+let reset_factor;
 let lastKeycode;
 let timer =0;
 let counter =0;
@@ -70,6 +71,7 @@ function setMovingDirection(room){
 	}else{
 		factor=1;
 	}
+	reset_factor=factor;
 }
 function setMovingSpeed(code){
 	if(lastKeycode==code){
@@ -82,8 +84,9 @@ function setMovingSpeed(code){
 		if(counter>10){
 			factor=factor*10;
 		}
-		if(time_now>1){
+		if(time_now>=1){
 			counter =0;
+			factor=reset_factor;
 		}
 	}
 	else{
@@ -212,6 +215,10 @@ function getRoomsize() {
 	wall_1 = parseFloat(wall_1.value);
 	wall_2 = parseFloat(wall_2.value);
 	return [wall_1,wall_2];
+
+}
+
+function setColor(item){
 
 }
 
