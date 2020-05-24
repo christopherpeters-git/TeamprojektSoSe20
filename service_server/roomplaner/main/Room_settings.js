@@ -38,62 +38,62 @@ function scaleRoom(room,wall1=5,wall2=5) {
 		parts[3].position.x = length_Wall_2 + diff_blend;
 		parts[4].position.x = -(length_Wall_2 + diff_blend);
 }
-function setVisibleWalls(wall,room){
-	let parts= room.children;
-	for(let i =2;i<6;i++){
-		if(parts[i]===wall){
-			parts[i].visible=false;
-			console.log("Wall"+i+" hidden");
-		}
-		else{
-			parts[i].visible=true;
-		}
-	}
-
-}
+// function setVisibleWalls(wall,room){
+// 	let parts= room.children;
+// 	for(let i =2;i<6;i++){
+// 		if(parts[i]===wall){
+// 			parts[i].visible=false;
+// 			console.log("Wall"+i+" hidden");
+// 		}
+// 		else{
+// 			parts[i].visible=true;
+// 		}
+// 	}
+//
+// }
 
 function itemMovement(item, room, code, event) {
-	if(true) {										//room.children[2].visible==false
-		switch (code) {
-			case 65:
-				event.preventDefault();
-				item.position.x -= 0.01;
-				break;
-			case 68:
-				event.preventDefault();
-				item.position.x += 0.01;
-				break;
-			case 83:
-				event.preventDefault();
-				item.position.z += 0.01;
-				break;
-			case 87:
-				event.preventDefault();
-				item.position.z -= 0.01;
-				break;
-			case 81:
-				event.preventDefault();
-				item.rotation.y += 0.01;
-				break;
-			case 69:
-				event.preventDefault();
-				item.rotation.y -= 0.01;
-				break;
-			case 79: //O für oben bewegen
-				item.position.y +=0.1;
-				event.preventDefault();
-			 break;
-			case 85://U für unten bewegen
-				item.position.y -=0.1;
-				event.preventDefault();
-				break;
-		}
+	 //room.children[2].visible==false
+	switch (code) {
+		case 65:
+			event.preventDefault();
+			item.position.x -= 0.01;
+			break;
+		case 68:
+			event.preventDefault();
+			item.position.x += 0.01;
+			break;
+		case 83:
+			event.preventDefault();
+			item.position.z += 0.01;
+			break;
+		case 87:
+			event.preventDefault();
+			item.position.z -= 0.01;
+			break;
+		case 81:
+			event.preventDefault();
+			item.rotation.y += 0.01;
+			break;
+		case 69:
+			event.preventDefault();
+			item.rotation.y -= 0.01;
+			break;
+		case 79: //O für oben bewegen
+			item.position.y += 0.1;
+			event.preventDefault();
+			break;
+		case 85://U für unten bewegen
+			item.position.y -= 0.1;
+			event.preventDefault();
+			break;
 	}
+
 }
 
 function openSet(evt, Name) {
 	// Declare all variables
-	var i, tabcontent, tablinks;
+	let i, tabcontent, tablinks;
 
 	// Get all elements with class="tabcontent" and hide them
 	tabcontent = document.getElementsByClassName("tabcontent");
