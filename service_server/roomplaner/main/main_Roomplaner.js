@@ -16,14 +16,6 @@ class items_object{
 	}
 }
 
-var mouse, raycaster;
-var container, controls;
-var camera, scene, renderer,name,objID;
-let arrow;
-var mesh;
-var room;
-var loader;
-var items =[];
 let mouse, raycaster;
 let container, controls;
 let camera, scene, renderer,name,objID;
