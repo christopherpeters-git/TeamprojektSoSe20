@@ -33,5 +33,34 @@
     "ID": 6,
     "Name":"Lichtabsorber",
     "FileUrl":"Lichtabsorber.glb"
+  },{
+  "ID": 7,
+  "Name":"Leinwand_120",
+  "FileUrl":"leinwand_120.glb"
+},
+  {
+    "ID": 8,
+    "Name":"Leinwand_125",
+    "FileUrl":"leinwand_125.glb"
+  },
+  {
+    "ID": 9,
+    "Name":"Leinwand_135",
+    "FileUrl":"leinwand_135.glb"
+  },
+  {
+    "ID": 10,
+    "Name":"Leinwand_150",
+    "FileUrl":"leinwand_150.glb"
+  },
+  {
+    "ID": 11,
+    "Name":"Leinwand_158",
+    "FileUrl":"leinwand_158.glb"
+  },
+  {
+    "ID": 12,
+    "Name":"Leinwand_166",
+    "FileUrl":"leinwand_166.glb"
   }
 ]
