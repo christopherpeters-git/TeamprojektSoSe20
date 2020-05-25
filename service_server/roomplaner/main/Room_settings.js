@@ -1,4 +1,4 @@
-
+let room_wall_1, room_wall_2, room_wall_1_negativ, room_wall_2_negativ;
 let test;
 let arrow;
 const movementSpeed =0.01;
@@ -20,6 +20,7 @@ function saveRoomSize() {
 	document.getElementById("placed").style.visibility="visible";
 	document.getElementById("setter").style.visibility="hidden";
 	document.getElementById("save_config_btn").style.visibility="visible";
+	roomSizeRestrictions();
 
 }
 function setRoomSize() {
@@ -28,6 +29,7 @@ function setRoomSize() {
 	scaleRoom(test, parseFloat(wall_1.value), parseFloat(wall_2.value));
 	document.getElementById("wall_1_value").innerHTML=wall_1.value + " " + lengthUnit;
 	document.getElementById("wall_2_value").innerHTML=wall_2.value + " "+ lengthUnit;
+
 }
 function scaleRoom(room,wall1=5,wall2=5) {
 	const diff_blend = 0.1;
@@ -95,6 +97,13 @@ function setMovingSpeed(code){
 	}
 }
 
+function roomSizeRestrictions() {
+	room_wall_1 = document.getElementById("wall_1").value;
+	room_wall_2 = document.getElementById("wall_2").value;
+	room_wall_1_negativ = room_wall_1 * -1;
+	room_wall_2_negativ = room_wall_2 * -1;
+}
+
 function itemMovment(item,room,code,event) {
 	if(item==null)return 0;
 	setMovingDirection(room)
@@ -104,7 +113,9 @@ function itemMovment(item,room,code,event) {
 		switch (code) {
 			case 65:
 				event.preventDefault();
-				item.position.x -= (movementSpeed * factor);
+
+					item.position.x -= (movementSpeed * factor);
+
 				lastKeycode=code;
 				break;
 			case 68:
@@ -185,7 +196,19 @@ function itemMovment(item,room,code,event) {
 				break;
 		}
 	}
-	arrow.position.set(item.position.x,item.position.y+3,item.position.z);
+	if(item.position.x > room_wall_2 -0.1) {
+		item.position.x = room_wall_2 -0.1;
+	}
+	if(item.position.x < room_wall_2_negativ+0.1) {
+		item.position.x = room_wall_2_negativ+0.1 ;
+	}
+	if(item.position.z > room_wall_1-0.1) {
+		item.position.z = room_wall_1-0.1;
+	}
+	if(item.position.z < room_wall_1_negativ+0.1) {
+		item.position.z = room_wall_1_negativ+0.1;
+	}
+	arrow.position.set(item.position.x,item.position.y+5,item.position.z);
 }
 
 function openSet(evt, Name) {

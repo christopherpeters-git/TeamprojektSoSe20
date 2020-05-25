@@ -137,7 +137,7 @@ function handle_load(gltf) {
 	}else {
 		mesh = gltf.scene;
 		mesh.position.y += 0.25;
-		arrow.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
+		arrow.position.set(mesh.position.x,mesh.position.y+5,mesh.position.z);
 		arrow.visible=true;
 		scene.add(mesh);
 		items.push(new items_object(name, mesh, objID));
@@ -237,7 +237,7 @@ function onDocumentMouseDown( event ) {
 	raycaster.setFromCamera( mouse, camera );
 	const intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length > 0) {
-		if (isRKeyDown) {
+		if (isRKeyDown&& event.buttons === 1) {
 			const intersect = intersects[0];
 			let isFirstIntersectAWall = intersectWall(intersect);
 			if (isFirstIntersectAWall) {
@@ -252,9 +252,9 @@ function onDocumentMouseDown( event ) {
 			}
 		}
 		let id_firstItem = firstItem(intersects);
-		if(id_firstItem!==-1&&event.buttons==2) {
+		if(id_firstItem!==-1&&event.buttons==2 && intersects[id_firstItem].object!==arrow.children[2]) {
 			mesh=intersects[id_firstItem].object.parent;
-			arrow.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
+			arrow.position.set(mesh.position.x,mesh.position.y+5,mesh.position.z);
 			arrow.visible=true;
 		}
 		else if(event.buttons==2){
@@ -292,7 +292,7 @@ function firstItem(intersects){
 function selectOption() {
 	if(this.selectedIndex==0)return 0;
 	mesh =items[this.options[this.selectedIndex].value].object;
-	arrow.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
+	arrow.position.set(mesh.position.x,mesh.position.y+5,mesh.position.z);
 	render();
 
 }
