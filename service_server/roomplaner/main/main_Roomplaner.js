@@ -15,6 +15,7 @@ class items_object{
 		return this.object;
 	}
 }
+var room_wall_1, room_wall_2, room_wall_1_negativ,room_wall_2_negativ;
 var dragControls;
 var enableSelectionShift = false;
 var draggroup;
@@ -87,9 +88,36 @@ function init() {
 	sendFillitemListRequest();
 
 	dragControls = new DragControls([... dragObjects],camera,renderer.domElement);
-	dragControls.addEventListener('dragstart',function () { orbitcontrols.enabled=false; });
+	dragControls.addEventListener('dragstart',function () { orbitcontrols.enabled=false;});
 	dragControls.addEventListener('dragend',function () { orbitcontrols.enabled=true; });
-	dragControls.addEventListener('drag', function (event) {event.object.position.y = 0;})
+	dragControls.addEventListener('drag', function (event) {
+		mesh = event.object;
+		event.object.position.y = 0;
+		if(event.object.position.z > room_wall_1) {
+			event.object.position.z = room_wall_1;
+			console.log(room_wall_1);
+		}
+		if (event.object.position.x > room_wall_2) {
+			event.object.position.x = room_wall_2;
+			console.log(room_wall_2);
+		}
+		if(event.object.position.z < room_wall_1_negativ) {
+			event.object.position.z = room_wall_1_negativ;
+			console.log(room_wall_1_negativ);
+		}
+		if (event.object.position.x < room_wall_2_negativ) {
+			event.object.position.x = room_wall_2_negativ;
+			console.log(room_wall_2_negativ);
+		}
+		//führt zum bewegen von zwei objecten gleichzeitig
+		mesh.position.x = event.object.position.x;
+		mesh.position.z = event.object.position.z;
+		console.log(mesh.position.x);
+		console.log(event.object.position.x);
+		console.log(mesh.position.z);
+		console.log(event.object.position.z);
+
+	})
 
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -97,6 +125,8 @@ function init() {
 	document.getElementById("placed").addEventListener('change', selectOption, false);
 	document.getElementById("wall_1").addEventListener('input', setRoomSize, false);
 	document.getElementById("wall_2").addEventListener('input', setRoomSize, false);
+	document.getElementById("wall_1").addEventListener("input", updateRoomSizeHelper,false);
+	document.getElementById("wall_2").addEventListener("input", updateRoomSizeHelper,false);
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
@@ -106,7 +136,13 @@ function init() {
 	scene.add(draggroup);
 
 }
-
+function updateRoomSizeHelper() {
+	room_wall_1 = document.getElementById("wall_1").value;
+	room_wall_2 = document.getElementById("wall_2").value;
+	room_wall_1_negativ = room_wall_1 * -1;
+	room_wall_2_negativ = room_wall_2 * -1;
+	//console.log("Wall_1: " + room_wall_1 + " Wall_2: " + room_wall_2 + " Wall_1_neg: " + room_wall_1_negativ + " Wall_2_neg: " + room_wall_2_negativ);
+}
 
 
 function handle_load(gltf) {
@@ -146,7 +182,7 @@ function onDocumentKeyDown( event ) {
 
 function onDocumentKeyUp( event ) {
 	switch ( event.keyCode ) {
-		case 187: console.log(scene); console.log(draggroup);console.log(dragObjects); break;
+		case 187: var lengthWallX = document.getElementById("wall_1").value; console.log(lengthWallX); break;
 		case 16: enableSelectionShift = false; break;
 		case 82: isRKeyDown = false; break;
 		case 65: a_Links =false; break;

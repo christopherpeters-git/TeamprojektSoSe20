@@ -10,8 +10,6 @@ function saveRoomSize() {
 	document.getElementById("items-dropdown").style.visibility="visible";
 	document.getElementById("placed").style.visibility="visible";
 	document.getElementById("Room").style.visibility="hidden";
-	document.getElementById("wall_1").value=5;
-	document.getElementById("wall_2").value=5;
 }
 
 function setRoomSize() {
@@ -20,7 +18,6 @@ function setRoomSize() {
 	scaleRoom(test, parseFloat(wall_1.value), parseFloat(wall_2.value));
 	document.getElementById("wall_1_value").innerHTML=wall_1.value;
 	document.getElementById("wall_2_value").innerHTML=wall_2.value;
-
 
 }
 
