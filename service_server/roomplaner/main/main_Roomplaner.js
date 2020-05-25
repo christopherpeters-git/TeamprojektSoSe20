@@ -230,34 +230,42 @@ function onWindowResize() {
 	render();
 }
 
+//Deletes first item in interects-array on R+LeftMouse
+function DeleteItemOnClick(event, intersects, idOfFirstHitItem) {
+	if (isRKeyDown && event.buttons === 1) {
+		if(idOfFirstHitItem < 0){
+			console.log("Nothing to Remove")
+			return;
+		}
+		const parentToRemove =	intersects[idOfFirstHitItem];
+		scene.remove(parentToRemove);
+		arrow.visible = false;
+		if (!removeItemByObjectScene(parentToRemove)) {
+			console.log("Could not find object in the item array");
+		}
+		FillListWithItems(items);
+	}
+}
+
+
+
 //Removing an object with r + mouse0
 function onDocumentMouseDown( event ) {
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	raycaster.setFromCamera( mouse, camera );
 	const intersects = raycaster.intersectObjects( scene.children, true );
+	let id_firstItem = getIndexOfFirstHitItemInScene(intersects);
+	//Delete items with R + LeftMouseButton
 	if (intersects.length > 0) {
-		if (isRKeyDown) {
-			const intersect = intersects[0];
-			let isFirstIntersectAWall = intersectWall(intersect);
-			if (isFirstIntersectAWall) {
-				console.log("Walls can not be deleted");
-			} else {
-				scene.remove(intersect.object.parent);
-				arrow.visible=false;
-				if(!removeItemByObjectScene(intersect.object.parent)){
-					console.log("Could not find object in the item array");
-				}
-				FillListWithItems(items);
-			}
-		}
-		let id_firstItem = firstItem(intersects);
-		if(id_firstItem!==-1&&event.buttons==2) {
+		DeleteItemOnClick(event, intersects, id_firstItem);
+		//Select Item with RightMouseButton
+		if(id_firstItem!==-1&&event.buttons===2) {
 			mesh=intersects[id_firstItem].object.parent;
 			arrow.position.set(mesh.position.x,mesh.position.y+3,mesh.position.z);
 			arrow.visible=true;
 		}
-		else if(event.buttons==2){
+		else if(event.buttons===2){
 			arrow.visible=false;
 			mesh=null;
 		}
@@ -267,17 +275,17 @@ function onDocumentMouseDown( event ) {
 
 function intersectWall(intersect){
 	for (let i = 0; i < room.children.length; i++) {
-		if (intersect.object == room.children[i]||intersect.object==arrow.children[2]) {
+		if (intersect.object === room.children[i]||intersect.object===arrow.children[2]) {
 			return true;
 		}
 	}
 	return false;
 }
-function firstItem(intersects){
+function getIndexOfFirstHitItemInScene(intersects){
 	for(let i =0;i<intersects.length;i++){
 		let chck=0;
 		for(let j=0;j<room.children.length;j++){
-			if(intersects[i].object ==room.children[j]){
+			if(intersects[i].object ===room.children[j]){
 				chck =-1;
 			}
 		}
