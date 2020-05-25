@@ -103,6 +103,9 @@ function init() {
 	document.addEventListener( 'keyup', onDocumentKeyUp, false );
 	document.addEventListener('mousemove',onDocumentMouseMove,false);
 	document.addEventListener('dblclick',f,false);
+	window.addEventListener("beforeunload", function(event) {
+		event.returnValue = "Are you sure you want to quit?";
+	});
 
 
 }
@@ -264,6 +267,7 @@ function onDocumentMouseDown( event ) {
 	}
 	render();
 }
+//##############################################Helpers###############################################################
 
 function intersectWall(intersect){
 	for (let i = 0; i < room.children.length; i++) {
@@ -294,10 +298,11 @@ function selectOption() {
 	mesh =items[this.options[this.selectedIndex].value].object;
 	arrow.position.set(mesh.position.x,mesh.position.y+5,mesh.position.z);
 	render();
-
 }
 
-
+function exitPage(){
+	return "are you sure?";
+}
 
 //##############################################Render###############################################################
 function render() {
