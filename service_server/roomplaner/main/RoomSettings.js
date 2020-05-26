@@ -20,6 +20,7 @@ function saveRoomSize() {
 	document.getElementById("placed").style.visibility="visible";
 	document.getElementById("setter").style.visibility="hidden";
 	document.getElementById("save_config_btn").style.visibility="visible";
+	document.getElementById("Tasten").style.visibility="visible";
 	roomSizeRestrictions();
 
 }
