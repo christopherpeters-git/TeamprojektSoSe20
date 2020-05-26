@@ -241,7 +241,13 @@ function onDocumentMouseDown( event ) {
 	const intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length > 0) {
 		if (isRKeyDown&& event.buttons === 1) {
-			const intersect = intersects[0];
+			let intersect;
+			for(let i = 0; i< intersects.length;i++) {
+				if(!intersectWall(intersects[i])) {
+					 intersect = intersects[i];
+					 break;
+				}
+			}
 			let isFirstIntersectAWall = intersectWall(intersect);
 			if (isFirstIntersectAWall) {
 				console.log("Walls can not be deleted");
