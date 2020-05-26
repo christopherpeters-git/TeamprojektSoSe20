@@ -241,7 +241,19 @@ function onDocumentMouseDown( event ) {
 	const intersects = raycaster.intersectObjects( scene.children, true );
 	if (intersects.length > 0) {
 		if (isRKeyDown&& event.buttons === 1) {
-			const intersect = intersects[0];
+			let intersect;
+			for(let i = 0; i< intersects.length;i++) {
+				if(!intersectWall(intersects[i])) {
+					 intersect = intersects[i];
+					 break;
+				}else{
+					if(intersectVisible(intersects[i])) {
+						intersect = intersects[i];
+						console.log("cannot delete through visible walls!")
+						break;
+					}
+				}
+			}
 			let isFirstIntersectAWall = intersectWall(intersect);
 			if (isFirstIntersectAWall) {
 				console.log("Walls can not be deleted");
@@ -268,7 +280,12 @@ function onDocumentMouseDown( event ) {
 	render();
 }
 //##############################################Helpers###############################################################
-
+function intersectVisible(intersect) {
+	if(intersect.object.visible === true) {
+		return true;
+	}
+	return false;
+}
 function intersectWall(intersect){
 	for (let i = 0; i < room.children.length; i++) {
 		if (intersect.object == room.children[i]||intersect.object==arrow.children[2]) {
