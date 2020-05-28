@@ -116,13 +116,12 @@ input[type=text]{
 }
 
 #Tasten{
-	
 	width: 250px;
 	height: 350px;
-	position: absolute;
+	position: fixed;
 	left: 5px;
-	bottom:-850px;
-
+	bottom: -10px;
+	
   }
 
 
