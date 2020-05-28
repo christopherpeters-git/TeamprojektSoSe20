@@ -2,5 +2,3 @@
 docker rm --force cs
 docker rm --force os
 docker rm --force ss
-
-read -p "prompt"

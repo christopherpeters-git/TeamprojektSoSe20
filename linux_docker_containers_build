@@ -12,5 +12,3 @@ docker build --no-cache --tag serverservice .
 cd ..
 
 echo "REMEMBER TO SET ONLINE-MODE IN Communication.js TO true"
-
-read -p "prompt"
