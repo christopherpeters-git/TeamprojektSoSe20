@@ -6,26 +6,26 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="main.css">
 		<link type="text/css" rel="stylesheet" href="setter.css">
-		<script type="module" src="main_Roomplaner.js"></script>
+		<script type="module" src="Roomplanner.js"></script>
 		<script src="SaveInConfig.js"></script>
 		<script src="LoadItems.js"></script>
-		<script src="Room_settings.js"></script>
+		<script src="RoomSettings.js"></script>
 		<script src="Communication.js"></script>
 
 	</head>
 
 	<body>
-
 		<div id="info">
-			Roomplaner
+			Roomplanner
 			<select id="placed" style="float: left;visibility: hidden">
 				<option value="">Select an item</option>
 			</select>
 			<select id="items-dropdown" name="Items" style="float: right;visibility: hidden" >
 			</select>
-			<button id="test_btn" style="visibility: hidden"> test_save</button>
+			<button id="save_config_btn" style="visibility: hidden"></button>
 
-
+			<img id="Tasten" src="tasten1.png" width="1" height="1" style="visibility: hidden">
+			
 			<div id="setter">
 				<div class="tab">
 					<button id="defaultOpen" class="tablinks" onclick="openSet(event, 'Room')">RoomSettings</button>
@@ -38,10 +38,10 @@
 				<form >
 					<label for="wall_1">Wall 1:</label>
 					<input  type="range"min="1.0" max="15.0" value="5.0" step="0.1" id="wall_1" name="fname">
-					<p><span id="wall_1_value">5</span></p>
+					<p><span id="wall_1_value">5 m</span></p>
 					<label for="wall_2">Wall 2:</label>
 					<input  type="range"min="1" max="15" value="5" step="0.1" id="wall_2" name="fname">
-					<p><span id="wall_2_value">5</span></p>
+					<p><span id="wall_2_value">5 m</span></p>
 					<input class="setter_btn" id="save_btn" type="button" value ="Save" onclick="saveRoomSize()">
 					<br><br>
 				</form>
@@ -51,8 +51,8 @@
 				Loader
 				<br><br>
 			<form >
-				<input type="text" id="loadConfigId">
-				<input type="text" id="loadConfigPass">
+				<input type="text" id="loadConfigId" placeholder="ID">
+				<input type="text" id="loadConfigPass" placeholder="Password">
 				<input class="setter_btn" id="load_btn" type="button" value ="Load">
 				<br><br>
 			</form>
