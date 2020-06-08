@@ -105,6 +105,8 @@ function init() {
 	document.addEventListener('dblclick',f,false);
 	window.addEventListener("beforeunload", function(event) {
 		event.returnValue = "Are you sure you want to quit?";
+		document.getElementById("wall_1").value=5.0;
+		document.getElementById("wall_2").value=5.0;
 	});
 
 
@@ -264,6 +266,7 @@ function onDocumentMouseDown( event ) {
 					console.log("Could not find object in the item array");
 				}
 				FillListWithItems(items);
+				console.log(items.length);
 			}
 		}
 		let id_firstItem = firstItem(intersects);
@@ -312,7 +315,7 @@ function firstItem(intersects){
 //getting an item by index
 function selectOption() {
 	if(this.selectedIndex==0)return 0;
-	mesh =items[this.options[this.selectedIndex].value].object;
+	mesh =items[this.selectedIndex-1].object;
 	arrow.position.set(mesh.position.x,mesh.position.y+5,mesh.position.z);
 	render();
 }
@@ -331,6 +334,7 @@ function render() {
 function loadItems(){
 	if(getIsOnline()){
 		loadItemsOnline(this);
+		console.log(this);
 	}else{
 		loadItemsOffline(this);
 	}
