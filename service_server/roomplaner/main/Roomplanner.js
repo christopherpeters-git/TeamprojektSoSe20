@@ -386,6 +386,8 @@ function loadRoom(config) {
 	//console.log(dropdown);
 	//console.log(data);
 	scaleRoom(getRoom(),wall1,wall2);
+	document.getElementById("wall_1").value = wall1;
+	document.getElementById("wall_2").value=wall2;
 	roomSizeRestrictions();
 	loadRoomItems();
 	console.log("Loaded data: " + config);
