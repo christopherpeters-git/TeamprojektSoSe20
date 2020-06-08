@@ -147,12 +147,10 @@ function handle_load(gltf) {
 		scene.add(mesh);
 		items.push(new items_object(name, mesh, objID));
 		FillListWithItems(items);
-		console.log(objID);
 		counter++;
 		name = null;
 		objID = null;
 		itemLoaded = true;
-		console.log(itemLoaded)
 		render();
 	}
 }
@@ -334,7 +332,6 @@ function render() {
 function loadItems(){
 	if(getIsOnline()){
 		loadItemsOnline(this);
-		console.log(this);
 	}else{
 		loadItemsOffline(this);
 	}
@@ -353,7 +350,6 @@ function loadItemsOffline(dropdown) {
 function loadItemsOnline(dropdown) {
 	const path = "" + getGetObjectTargetUrl() + "/" + (dropdown.selectedIndex - 1);
 	loader.load(path,handle_load);
-	console.log(path);
 	name = dropdown.options[dropdown.selectedIndex].text;
 	objID= dropdown.selectedIndex;
 	dropdown.selectedIndex=0;
