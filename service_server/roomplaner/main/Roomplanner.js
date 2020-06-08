@@ -105,6 +105,8 @@ function init() {
 	document.addEventListener('dblclick',f,false);
 	window.addEventListener("beforeunload", function(event) {
 		event.returnValue = "Are you sure you want to quit?";
+		document.getElementById("wall_1").value=5.0;
+		document.getElementById("wall_2").value=5.0;
 	});
 
 
@@ -145,12 +147,10 @@ function handle_load(gltf) {
 		scene.add(mesh);
 		items.push(new items_object(name, mesh, objID));
 		FillListWithItems(items);
-		console.log(objID);
 		counter++;
 		name = null;
 		objID = null;
 		itemLoaded = true;
-		console.log(itemLoaded)
 		render();
 	}
 }
@@ -264,6 +264,7 @@ function onDocumentMouseDown( event ) {
 					console.log("Could not find object in the item array");
 				}
 				FillListWithItems(items);
+				console.log(items.length);
 			}
 		}
 		let id_firstItem = firstItem(intersects);
@@ -312,7 +313,7 @@ function firstItem(intersects){
 //getting an item by index
 function selectOption() {
 	if(this.selectedIndex==0)return 0;
-	mesh =items[this.options[this.selectedIndex].value].object;
+	mesh =items[this.selectedIndex-1].object;
 	arrow.position.set(mesh.position.x,mesh.position.y+5,mesh.position.z);
 	render();
 }
@@ -349,7 +350,6 @@ function loadItemsOffline(dropdown) {
 function loadItemsOnline(dropdown) {
 	const path = "" + getGetObjectTargetUrl() + "/" + (dropdown.selectedIndex - 1);
 	loader.load(path,handle_load);
-	console.log(path);
 	name = dropdown.options[dropdown.selectedIndex].text;
 	objID= dropdown.selectedIndex;
 	dropdown.selectedIndex=0;
